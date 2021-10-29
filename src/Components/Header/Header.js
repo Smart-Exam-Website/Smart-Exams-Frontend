@@ -1,25 +1,37 @@
 import React from 'react'
+import './Header.css'
+import Logo from '../../assets/images/logo.png'
 
 const Header = () => {
     return (
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <a className="navbar-brand" href="/">
+                <img height={66} src={Logo} alt="sss" />
+            </a>
+            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <div className="collapse navbar-collapse" id="navbarNav">
+                <ul className="navbar-nav mx-auto mainNav">
+                    <li className="nav-item active px-5 mx-2">
+                        <a className="nav-link" href="/">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
+                    <li className="nav-item px-5 mx-2">
+                        <a className="nav-link" href="/">Features</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
+                    <li className="nav-item px-5 mx-2">
+                        <a className="nav-link" href="/">Pricing</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled">Disabled</a>
+
+                </ul>
+
+                <ul className="navbar-nav d-flex justify-content-lg-center justify-content-between flex-row">
+                    <li className="nav-item mx-2 d-flex align-items-center">
+                        <a className="loginText" href="/">login</a>
+                    </li>
+
+                    <li className="nav-item mx-2">
+                        <button className="btn btn-primary">Sign up</button>
                     </li>
                 </ul>
             </div>

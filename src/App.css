@@ -1,7 +1,16 @@
 :root {
     --primary: #2F4F4F;
+    --primary-hover: #3c6464; 
     --secondary: #50303A;
     --black: #313131;
     --grey: #AEAEAE;
     --white:#fff;
+}
+
+.btn-primary{
+    background-color: var(--primary) !important;
+    border: none !important;
+}
+.btn-primary:hover{
+    background-color: var(--primary-hover) !important;
 }
