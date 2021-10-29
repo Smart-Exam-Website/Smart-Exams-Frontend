@@ -1,9 +1,11 @@
 import './App.css';
+import Home from './Views/Home/Home';
 
 function App() {
   return (
-    <div className="App">
+    <div>
       <h1 className="text-center" >init</h1>
+      <Home />
     </div>
   );
 }
