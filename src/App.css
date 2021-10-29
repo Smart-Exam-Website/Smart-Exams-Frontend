@@ -17,3 +17,9 @@
 .text-grey{
     color: var(--grey);
 }
+.badge{
+    border-radius: 15px !important;
+}
+.badge-secondary{
+    background-color: var(--secondary);
+}
