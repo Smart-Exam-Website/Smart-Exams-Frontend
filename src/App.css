@@ -14,3 +14,6 @@
 .btn-primary:hover{
     background-color: var(--primary-hover) !important;
 }
+.text-grey{
+    color: var(--grey);
+}
