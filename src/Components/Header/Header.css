@@ -1,12 +1,11 @@
-nav {
-    padding: 0 55px;
+.Navbar nav {
+    padding: 0 55px !important;
     border: 2px solid var(--primary);
     box-shadow: 4px 4px 15px 2px rgba(0, 0, 0, 0.25);
 }
 
 .mainNav .nav-item:hover {
     background-color: var(--primary);
-    border-radius: 10px;
 }
 .mainNav .nav-item:hover * {
     color: var(--white) !important;
@@ -17,7 +16,6 @@ nav {
 }
 #navbarNav .active {
     background-color: var(--primary);
-    border-radius: 10px;
 }
 
 .loginText{
@@ -32,8 +30,26 @@ nav {
 }
 
 
+/* Mobile Only */
 @media (max-width: 992px) {
-    nav {
-        padding: 0 10px;
+    .Navbar nav {
+        padding: 0 10px !important;
+    }
+    .Navbar ul{
+        margin-bottom: 10px !important;
+    }
+}
+
+/* Web Only*/
+@media (min-width: 992px) {
+    .Navbar ul{
+        height: 100%;
+    }
+    .Navbar li{
+        display: flex;
+        align-items: center;
+    }
+    #navbarNav{
+        height: 82.5px;
     }
 }
