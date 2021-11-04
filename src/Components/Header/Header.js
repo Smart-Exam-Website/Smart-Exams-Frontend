@@ -28,11 +28,11 @@ const Header = () => {
 
                     <ul className="navbar-nav d-flex justify-content-lg-center justify-content-between flex-row">
                         <li className="nav-item mx-2 d-flex align-items-center">
-                            <a className="loginText" href="/">login</a>
+                            <a className="loginText" href="/">Login</a>
                         </li>
 
                         <li className="nav-item mx-2">
-                            <button className="btn btn-primary">Sign up</button>
+                            <button className="btn btn-primary">Register</button>
                         </li>
                     </ul>
                 </div>
