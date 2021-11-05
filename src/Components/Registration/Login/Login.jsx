@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { AuthServices } from '../../../apis/Services/AuthService';
 
 class Login extends Component {
     
@@ -34,6 +35,11 @@ class Login extends Component {
         let password = this.state.password
         console.log(email)
         console.log(password)
+        AuthServices.login({email,password})
+        .then(res=>{
+            console.log(res)
+        })
+        .catch(err=>console.log(err))
         return
     }
 

@@ -1,3 +1,4 @@
+import { Provider } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import './App.css';
 import Footer from './Components/Footer/Footer';
@@ -6,14 +7,17 @@ import Login from "./Components/Registration/Login/Login";
 import SignupInquiry from "./Components/Registration/Register/RegisterInquiry";
 import SignupInstructor from "./Components/Registration/Register/RegisterInstructor/RegisterInstructor";
 import SignupStudent from "./Components/Registration/Register/RegisterStudent/RegisterStudent";
+import { store } from "./redux/store";
 import Home from './Views/Home/Home';
 import InstructorProfile from "./Views/Profiles/Instructor-Profile/InstructorProfile";
 import StudentProfile from "./Views/Profiles/Student-Profile/StudentProfile";
 
 function App() {
   return (
-    <div>
+    <Provider store={store}>
       <Header />
+
+
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />
@@ -26,9 +30,8 @@ function App() {
 
 
       <Footer />
-
-    </div>
+    </Provider>
   );
 }
 
-export default  App;
+export default App;

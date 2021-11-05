@@ -4,17 +4,20 @@
     box-shadow: 4px 4px 15px 2px rgba(0, 0, 0, 0.25);
 }
 
+.mainNav li{
+    height: 100%;
+}
+
 .mainNav .nav-item:hover {
     background-color: var(--primary);
 }
 .mainNav .nav-item:hover * {
     color: var(--white) !important;
 }
-
-#navbarNav .active a {
+#navbarNav .active span {
     color: var(--white) !important;
 }
-#navbarNav .active {
+#navbarNav .active li{
     background-color: var(--primary);
 }
 
