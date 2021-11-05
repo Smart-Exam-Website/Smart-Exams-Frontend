@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/Smart-Exams-Frontend/static/css/main.8f139e29.chunk.css",
-    "main.js": "/Smart-Exams-Frontend/static/js/main.cd491a03.chunk.js",
-    "main.js.map": "/Smart-Exams-Frontend/static/js/main.cd491a03.chunk.js.map",
+    "main.js": "/Smart-Exams-Frontend/static/js/main.ee8507fd.chunk.js",
+    "main.js.map": "/Smart-Exams-Frontend/static/js/main.ee8507fd.chunk.js.map",
     "runtime-main.js": "/Smart-Exams-Frontend/static/js/runtime-main.fa71d048.js",
     "runtime-main.js.map": "/Smart-Exams-Frontend/static/js/runtime-main.fa71d048.js.map",
     "static/css/2.0a9ec390.chunk.css": "/Smart-Exams-Frontend/static/css/2.0a9ec390.chunk.css",
@@ -22,6 +22,6 @@
     "static/css/2.0a9ec390.chunk.css",
     "static/js/2.4ba0c7c5.chunk.js",
     "static/css/main.8f139e29.chunk.css",
-    "static/js/main.cd491a03.chunk.js"
+    "static/js/main.ee8507fd.chunk.js"
   ]
 }
