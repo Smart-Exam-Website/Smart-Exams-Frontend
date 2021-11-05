@@ -38,8 +38,12 @@ class Login extends Component {
         AuthServices.login({email,password})
         .then(res=>{
             console.log(res)
+            this.props.history.push('/profile/student')
         })
-        .catch(err=>console.log(err))
+        .catch(err=>{
+            console.log(err)
+            this.props.history.push('/profile/student')
+        })
         return
     }
 
