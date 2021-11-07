@@ -3,7 +3,6 @@ import './Header.css'
 import Logo from '../../assets/images/logo.png'
 import { Link, NavLink } from 'react-router-dom'
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { COLORS } from '../../constants/Colors';
 import { useSelector } from 'react-redux';
 const Header = () => {
 
