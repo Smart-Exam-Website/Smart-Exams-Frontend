@@ -18,16 +18,16 @@ const Header = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav mx-auto mainNav">
-                        <NavLink className="nav-link p-0" activeClassName={'active'} to="/" exact>
+                        <NavLink className="nav-link p-0" activeclassname={'active'} to="/" exact>
                             <li className="nav-item px-5 mx-2">
                                 <span>Home </span>
                             </li>
                         </NavLink>
                         <li className="nav-item px-5 mx-2">
-                            <Link className="nav-link" activeClassName={'active'} to="/" exact>Features</Link>
+                            <NavLink className="nav-link" activeclassname={'active'} to="/" exact>Features</NavLink>
                         </li>
                         <li className="nav-item px-5 mx-2">
-                            <Link className="nav-link" activeClassName={'active'} to="/" exact>Pricing</Link>
+                            <NavLink className="nav-link" activeclassname={'active'} to="/" exact>Pricing</NavLink>
                         </li>
 
                     </ul>
