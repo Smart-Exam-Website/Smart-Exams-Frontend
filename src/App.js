@@ -9,6 +9,7 @@ import SignupStudent from "./Components/Registration/Register/RegisterStudent/Re
 import Home from './Views/Home/Home';
 import InstructorProfile from "./Views/Profiles/Instructor-Profile/InstructorProfile";
 import StudentProfile from "./Views/Profiles/Student-Profile/StudentProfile";
+import VerifyEmail from "./Views/VerifyEmail/VerifyEmail";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={SignupInquiry} />
+        <Route exact path="/verifyEmail" component={VerifyEmail} />
         <Route exact path="/register-student" component={SignupStudent} />
         <Route exact path="/register-instructor" component={SignupInstructor} />
         <Route exact path="/profile/student" component={StudentProfile} />

@@ -1,0 +1,8 @@
+.resent-text-purple{
+    color: var(--primary) !important;
+    cursor: pointer;
+}
+
+.resent-text-purple:hover{
+    color: var(--primary-hover);
+}

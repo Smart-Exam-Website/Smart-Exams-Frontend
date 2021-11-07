@@ -47,6 +47,7 @@ class RegisterInstructor extends Component {
         event.preventDefault()
         
         console.log(this.state)
+        this.props.history.push('/verifyEmail');
     }
 
 
