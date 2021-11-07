@@ -13,7 +13,7 @@ import VerifyEmail from "./Views/VerifyEmail/VerifyEmail";
 
 function App() {
   return (
-    <BrowserRouter basename="/Smart-Exams-Frontend">
+    <BrowserRouter>
       <Header />
 
       <Switch>
