@@ -2,8 +2,12 @@ import React from 'react'
 import './Header.css'
 import Logo from '../../assets/images/logo.png'
 import { Link, NavLink } from 'react-router-dom'
-
+import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { COLORS } from '../../constants/Colors';
+import { useSelector } from 'react-redux';
 const Header = () => {
+
+    const isAuth = useSelector(state => state.auth.userToken)
     return (
         <div className="Navbar">
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -30,13 +34,27 @@ const Header = () => {
                     </ul>
 
                     <ul className="navbar-nav d-flex justify-content-lg-center justify-content-between flex-row">
-                        <li className="nav-item mx-2 d-flex align-items-center">
-                            <Link className="loginText" to={'/login'}>Login</Link>
-                        </li>
+                        {!isAuth ?
+                            <>
+                                <li className="nav-item mx-2 d-flex align-items-center">
+                                    <Link className="loginText" to={'/login'}>Login</Link>
+                                </li>
 
-                        <li className="nav-item mx-2">
-                            <Link className="btn btn-primary" to="/register">Register</Link>
-                        </li>
+                                <li className="nav-item mx-2">
+                                    <Link className="btn btn-primary" to="/register">Register</Link>
+                                </li>
+                            </>
+                            :
+                            <>
+                                <li className="nav-item mx-2">
+                                    <LogoutOutlined className="primaryColoredIcon" />
+                                </li>
+
+                                <li className="nav-item mx-2">
+                                    <UserOutlined className="primaryColoredIcon" />
+                                </li>
+                            </>
+                        }
                     </ul>
                 </div>
             </nav>

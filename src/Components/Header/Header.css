@@ -8,6 +8,7 @@
     height: 100%;
 }
 
+
 .mainNav .nav-item:hover {
     background-color: var(--primary);
 }
@@ -32,6 +33,14 @@
     text-decoration: underline;
 }
 
+.primaryColoredIcon{
+    color: var(--primary);
+    font-size: 36px;
+    cursor: pointer;
+}
+.primaryColoredIcon:hover{
+    color: var(--primary-hover);
+}   
 
 /* Mobile Only */
 @media (max-width: 992px) {
