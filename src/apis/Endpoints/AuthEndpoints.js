@@ -2,7 +2,7 @@ import DomainUrl from "../Domain";
 
 export const AUTHENDPOINTS = {
    login: {
-      url: `${DomainUrl}/auth/login/`,
+      url: `${DomainUrl}/auth/login`,
       method: 'POST',
    },
    verifyEmail:{
