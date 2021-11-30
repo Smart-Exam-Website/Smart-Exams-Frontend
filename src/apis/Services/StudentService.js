@@ -9,4 +9,11 @@ export class StudentServices {
             method: STUDENT_ENDPOINTS.register.method,
         });
     }
+
+    // get my profile
+    static getMyProfile() {
+        return Network.fetch(STUDENT_ENDPOINTS.getMyProfile.url, {
+            method: STUDENT_ENDPOINTS.getMyProfile.method,
+        }, true);
+    }
 }

@@ -5,5 +5,9 @@ export const INSTRUCTOR_ENDPOINTS = {
         url: `${DomainUrl}/instructors/register`,
         method: 'POST',
     },
+    getMyProfile:{
+        url: `${DomainUrl}/instructors/me`,
+        method:'GET'
+    }
 };
 

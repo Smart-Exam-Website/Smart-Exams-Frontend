@@ -1,8 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './StudentProfile.css'
 import UserPhoto from '../../../assets/images/Profile Photo.png'
+import { StudentServices } from '../../../apis/Services/StudentService'
 
 const StudentProfile = () => {
+
+    const [studentData, setStudentData] = useState(null)
+    useEffect(() => {
+        StudentServices.getMyProfile()
+            .then(res => {
+                setStudentData(res.student)
+            })
+            .catch(err => console.log(err))
+
+    }, [])
     return (
         <div className="Profile_S mt-5" style={{ minHeight: '100vh' }}>
             <div className="container d-flex justify-content-center">

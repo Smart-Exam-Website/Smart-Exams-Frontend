@@ -1,8 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './InstructorProfile.css'
 import UserPhoto from '../../../assets/images/Profile Photo.png'
+import { InstructorServices } from '../../../apis/Services/InstructorService'
 
 const InstructorProfile = () => {
+
+    const [instructorData, setInstructorData] = useState(null)
+    useEffect(() => {
+        InstructorServices.getMyProfile()
+            .then(res => {
+                setInstructorData(res.instructor)
+            })
+            .catch(err => console.log(err))
+    }, [])
+
     return (
         <div className="Profile_I mt-5" style={{ minHeight: '100vh' }}>
             <div className="container d-flex justify-content-center">
