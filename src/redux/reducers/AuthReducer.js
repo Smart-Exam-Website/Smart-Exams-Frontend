@@ -1,6 +1,7 @@
 
 const initStates = {
    userToken: null,
+   userType: null
 }
 
 const AuthReducer = (state = initStates, action) => {
@@ -17,6 +18,11 @@ const AuthReducer = (state = initStates, action) => {
             data: {}
          };
 
+      case 'SET_USER_TYPE':
+         return {
+            ...state,
+            userType: action.payload,
+         };
       default:
          return state
    }

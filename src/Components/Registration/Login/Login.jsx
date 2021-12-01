@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AuthServices } from '../../../apis/Services/AuthService';
-import { signin } from '../../../redux/actions/AuthActions';
+import { setUserType, signin } from '../../../redux/actions/AuthActions';
 
 const Login = (props) => {
     const [email, setEmail] = useState(null)
@@ -26,8 +26,10 @@ const Login = (props) => {
         AuthServices.login({ email, password })
             .then(res => {
                 console.log("result =>", res)
-                localStorage.setItem('token', res.token)
-                dispatch(signin(res.token))
+                localStorage.setItem('token', res?.token)
+                localStorage.setItem('userType', res?.user?.type)
+                dispatch(signin(res?.token))
+                dispatch(setUserType(res?.user?.type))
                 props.history.push('/profile/student')
             })
             .catch(err => {

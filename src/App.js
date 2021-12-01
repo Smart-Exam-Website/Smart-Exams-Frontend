@@ -8,7 +8,7 @@ import Login from "./Components/Registration/Login/Login";
 import SignupInquiry from "./Components/Registration/Register/RegisterInquiry";
 import SignupInstructor from "./Components/Registration/Register/RegisterInstructor/RegisterInstructor";
 import SignupStudent from "./Components/Registration/Register/RegisterStudent/RegisterStudent";
-import { signin } from "./redux/actions/AuthActions";
+import { setUserType, signin } from "./redux/actions/AuthActions";
 import Home from './Views/Home/Home';
 import InstructorProfile from "./Views/Profiles/Instructor-Profile/InstructorProfile";
 import StudentProfile from "./Views/Profiles/Student-Profile/StudentProfile";
@@ -17,12 +17,22 @@ import VerifyEmail from "./Views/VerifyEmail/VerifyEmail";
 function App() {
 
   const dispatch = useDispatch(null)
-  useEffect(() => {
-    let isAuth = localStorage.getItem('token');
-    if (!isAuth) return
 
-    dispatch(signin(isAuth))
+  // Bootstrap function
+  useEffect(() => {
+    _bootstrapFunction();
   }, [])
+
+  const _bootstrapFunction = () => {
+    let isAuth = localStorage.getItem('token');
+    let userType = localStorage.getItem('userType');
+
+    if (!isAuth) return
+    if(!userType) return
+    
+    dispatch(signin(isAuth))
+    dispatch(setUserType(userType))
+  }
 
   return (
     <BrowserRouter>

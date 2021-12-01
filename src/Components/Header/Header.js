@@ -12,8 +12,9 @@ const Header = () => {
     const dispatch = useDispatch(null)
     const logoutHandler = () => {
         dispatch(logout())
+        localStorage.clear()
     }
-    
+
     return (
         <div className="Navbar">
             <nav className="navbar navbar-expand-lg navbar-light bg-light">

@@ -7,6 +7,7 @@
 .Profile_S .ProfileCard img {
     height: 198px;
     width: 198px;
+    border-radius: 50%;
 }
 
 .ProfileCard h2 {
