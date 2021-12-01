@@ -3,10 +3,17 @@ import './Header.css'
 import Logo from '../../assets/images/logo.png'
 import { Link, NavLink } from 'react-router-dom'
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
-const Header = () => {
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../redux/actions/AuthActions';
 
+
+const Header = () => {
     const isAuth = useSelector(state => state.auth.userToken)
+    const dispatch = useDispatch(null)
+    const logoutHandler = () => {
+        dispatch(logout())
+    }
+    
     return (
         <div className="Navbar">
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -45,10 +52,12 @@ const Header = () => {
                             </>
                             :
                             <>
-                                <li className="nav-item mx-2">
+                                {/* Logout */}
+                                <li onClick={logoutHandler} className="nav-item mx-2">
                                     <LogoutOutlined className="primaryColoredIcon" />
                                 </li>
 
+                                {/* Profile */}
                                 <li className="nav-item mx-2">
                                     <UserOutlined className="primaryColoredIcon" />
                                 </li>

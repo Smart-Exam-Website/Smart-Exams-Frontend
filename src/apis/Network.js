@@ -28,7 +28,7 @@ export class Network {
     };
 
     if (addAuth) {
-      headers.Authorization = `Token ${this.jwt}`;
+      headers.Authorization = `Bearer ${this.jwt}`;
     }
 
     headers = {
@@ -60,7 +60,6 @@ export class Network {
       case 401:
       case 403:
         promise = response.json().then((data) => {
-          // AsyncStorage.removeItem('Jwt')
           return Promise.reject(data);
         });
         break;
