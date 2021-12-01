@@ -30,7 +30,7 @@ const Login = (props) => {
                 localStorage.setItem('userType', res?.user?.type)
                 dispatch(signin(res?.token))
                 dispatch(setUserType(res?.user?.type))
-                props.history.push('/profile/student')
+                props.history.push(`/profile/${res?.user?.type}`)
             })
             .catch(err => {
                 console.log("ss",err)

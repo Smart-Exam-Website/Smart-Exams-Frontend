@@ -28,8 +28,8 @@ function App() {
     let userType = localStorage.getItem('userType');
 
     if (!isAuth) return
-    if(!userType) return
-    
+    if (!userType) return
+
     dispatch(signin(isAuth))
     dispatch(setUserType(userType))
   }
@@ -38,17 +38,18 @@ function App() {
     <BrowserRouter>
       <Header />
 
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/register" component={SignupInquiry} />
-        <Route exact path="/verifyEmail" component={VerifyEmail} />
-        <Route exact path="/register-student" component={SignupStudent} />
-        <Route exact path="/register-instructor" component={SignupInstructor} />
-        <Route exact path="/profile/student" component={StudentProfile} />
-        <Route exact path="/profile/instructor" component={InstructorProfile} />
-      </Switch>
-
+      <div style={{minHeight:'100vh'}}>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={SignupInquiry} />
+          <Route exact path="/verifyEmail" component={VerifyEmail} />
+          <Route exact path="/register-student" component={SignupStudent} />
+          <Route exact path="/register-instructor" component={SignupInstructor} />
+          <Route exact path="/profile/student" component={StudentProfile} />
+          <Route exact path="/profile/instructor" component={InstructorProfile} />
+        </Switch>
+      </div>
 
       <Footer />
     </BrowserRouter>

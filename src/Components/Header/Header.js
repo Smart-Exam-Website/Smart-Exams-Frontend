@@ -9,6 +9,7 @@ import { logout } from '../../redux/actions/AuthActions';
 
 const Header = () => {
     const isAuth = useSelector(state => state.auth.userToken)
+    const userType = useSelector(state => state.auth.userType)
     const dispatch = useDispatch(null)
     const logoutHandler = () => {
         dispatch(logout())
@@ -60,7 +61,9 @@ const Header = () => {
 
                                 {/* Profile */}
                                 <li className="nav-item mx-2">
-                                    <UserOutlined className="primaryColoredIcon" />
+                                    <Link to={`/profile/${userType}`}>
+                                        <UserOutlined className="primaryColoredIcon" />
+                                    </Link>
                                 </li>
                             </>
                         }

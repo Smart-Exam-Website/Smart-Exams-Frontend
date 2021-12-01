@@ -7,11 +7,13 @@
 .Profile_I .ProfileCard img {
     height: 198px;
     width: 198px;
+    border-radius: 50%;
 }
 
 .ProfileCard h2 {
     color: var(--black);
     font-size: 24px;
+    margin-bottom: 0px;
 }
 
 .ProfileCard .infoText {
