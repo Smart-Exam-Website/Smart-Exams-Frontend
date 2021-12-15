@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AuthServices } from '../../../apis/Services/AuthService';
 import { setUserType, signin } from '../../../redux/actions/AuthActions';
@@ -7,13 +7,22 @@ const Login = (props) => {
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
 
-    const forgotPasswordHandler = () => {
-        // props.history.push('/forgotPassword');
-        return
+    const forgotPasswordHandler = (event) => {
+        // this code pevents from going to another page
+        event.preventDefault()
+
+        this.props.history.push({
+            pathname: '/forgot-password',
+            state: { email: email }
+        })
+
+        props.history.push('/forgot-password')
+        // props.history.push('/reset-password')
+
     }
 
     const SignUpHandler = () => {
-        props.history.push('/signup')
+        props.history.push('/register')
     }
 
     const dispatch = useDispatch(null)
@@ -33,7 +42,7 @@ const Login = (props) => {
                 props.history.push(`/profile/${res?.user?.type}`)
             })
             .catch(err => {
-                console.log("ss",err)
+                console.log("ss", err)
             })
     }
 
@@ -48,12 +57,12 @@ const Login = (props) => {
                 <form className=" m-3">
                     <div className="form-group">
                         <label >Email address</label>
-                        <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" onChange={(e)=>setEmail(e.target.value)} placeholder="Enter email" />
+                        <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" onChange={(e) => setEmail(e.target.value)} placeholder="Enter email" />
                         <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
                     <div className="form-group">
                         <label >Password</label>
-                        <input type="password" className="form-control" id="exampleInputPassword1" onChange={(e)=>setPassword(e.target.value)} placeholder="Password" />
+                        <input type="password" className="form-control" id="exampleInputPassword1" onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
                     </div>
 
 
@@ -68,8 +77,8 @@ const Login = (props) => {
                         <button className="btn btn-primary mx-auto" onClick={LoginHandler} style={{ width: 200 }}>Login</button>
 
                         <div className="text-center">
-                            <button type="button" className="btn btn-link">Forgot password?</button>
-                            <button type="button" className="btn btn-link ">Sign up</button>
+                            <button type="button" className="btn btn-link" onClick={forgotPasswordHandler}>Forgot password?</button>
+                            <button type="button" className="btn btn-link" onClick={SignUpHandler}>Sign up</button>
                         </div>
                     </div>
 

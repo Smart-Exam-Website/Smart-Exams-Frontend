@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-
+import axios from "axios";
+import DomainUrl from '../../../../apis/Domain';
+// import DomainUrl from '../../../../apis/Domain';
 class RegisterInstructor extends Component {
 
 
     state = {
-        name: null,
+        firstName: null,
+        lastName: null,
+        gender: 'male',
         email: null,
         phone: null,
         department: null,
@@ -14,8 +18,16 @@ class RegisterInstructor extends Component {
         confirmPassword: null
     }
 
-    nameFormHandler = (event) => {
-        this.setState({ name: event.target.value })
+    firstNameFormHandler = (event) => {
+        this.setState({ firstName: event.target.value })
+    }
+    lastNameFormHandler = (event) => {
+
+        this.setState({ lastName: event.target.value })
+    }
+    genderHandler = (event) => {
+        console.log(event.target.value)
+        this.setState({ gender: event.target.value })
     }
     emailFormHandler = (event) => {
         this.setState({ email: event.target.value })
@@ -38,16 +50,49 @@ class RegisterInstructor extends Component {
     confirmPasswordFormHandler = (event) => {
         this.setState({ confirmPassword: event.target.value })
     }
-    
-    
-    
-    
-    registerHandler= (event) => {
+
+
+
+
+    registerHandler = (event) => {
         // send data into server 
         event.preventDefault()
-        
-        console.log(this.state)
-        this.props.history.push('/verifyEmail');
+
+        // console.log(this.state)
+        // generating a code
+        // var code = Math.floor(100000 + Math.random() * 900000);
+
+        var data = {
+            "firstName": this.state.firstName,
+            "lastName": this.state.lastName,
+            "description": "This is new instructor's description",
+            "email": this.state.email,
+            "password": this.state.password,
+            "gender": this.state.gender,
+            "image": "https://google.com/pepepepaaa",
+            "phone": this.state.phone,
+            "type": "instructor",
+            "degree": this.state.degree,
+            "departments": [
+                {
+                    "department_id": 1
+                }
+            ]
+        }
+        axios.post(DomainUrl+'/instructors/register', data).then((response) => {
+            console.log(response)
+            console.log("lol")
+
+        }).catch((error) => {
+            console.log(error);
+
+        })
+
+        this.props.history.push({
+            pathname: '/verifyEmail',
+            state: { email: this.state.email, userInfo: data }
+        })
+        // this.props.history.push('/verifyEmail');
     }
 
 
@@ -64,19 +109,56 @@ class RegisterInstructor extends Component {
                 <form className="m-3">
                     <div className="row m-1">
                         <div className="form-group col">
-                            <label >Name</label>
-                            <input type="text" className="form-control" onChange={this.nameFormHandler} id="inputEmail4" placeholder="Full Name" />
+                            <label >First Name</label>
+                            <input type="text" className="form-control" onChange={this.firstNameFormHandler} placeholder="First Name" />
                         </div>
                         <div className="form-group col">
-                            <label for="inputEmail4">Email</label>
-                            <input type="email" className="form-control" onChange={this.emailFormHandler} id="inputEmail4" placeholder="Email" />
+                            <label >Last Name</label>
+                            <input type="text" className="form-control" onChange={this.lastNameFormHandler} placeholder="Last Name" />
+                        </div>
+                        <div className="form-group col">
+                            <label >Gender</label>
+
+                            <div class="form-group m-2">
+
+                                <div class="form-check form-check-inline ">
+                                    <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="flexRadioDefault"
+                                        id="flexRadioDefault1"
+                                        value="male"
+                                        checked={this.state.gender === 'male'}
+                                        onChange={this.genderHandler}
+                                    />
+                                    <label class="form-check-label" for="flexRadioDefault1"> Male </label>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="flexRadioDefault"
+                                        id="flexRadioDefault2"
+                                        value="female"
+                                        checked={this.state.gender === 'female'}
+                                        onChange={this.genderHandler}
+                                    />
+                                    <label class="form-check-label" for="flexRadioDefault2"> Female</label>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
                     <div className="row m-1">
                         <div className="form-group  col">
                             <label for="inputAddress">Phone Number</label>
-                            <input type="text" className="form-control" onChange={this.phoneFormHandler} placeholder="Enter Your Phone" />
+                            <input type="text" className="form-control" onChange={this.phoneFormHandler} placeholder="Phone Number" />
+                        </div>
+                        <div className="form-group col">
+                            <label >Email</label>
+                            <input type="email" className="form-control" onChange={this.emailFormHandler} placeholder="Email Address" />
                         </div>
                     </div>
 
@@ -95,7 +177,7 @@ class RegisterInstructor extends Component {
                             <input type="text" className="form-control" onChange={this.schoolFormHandler} placeholder="School / University" />
                         </div>
                         <div className="form-group col">
-                            <label for="inputEmail4">Degree</label>
+                            <label >Degree</label>
                             <input type="text" className="form-control" onChange={this.degreeFormHandler} placeholder="Degree" />
                         </div>
                     </div>
@@ -132,3 +214,31 @@ class RegisterInstructor extends Component {
 }
 
 export default RegisterInstructor;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

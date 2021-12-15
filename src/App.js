@@ -4,10 +4,12 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import './App.css';
 import Footer from './Components/Footer/Footer';
 import Header from './Components/Header/Header';
+import ForgotPassword from "./Components/Registration/ForgotPassword/forgotPassword";
 import Login from "./Components/Registration/Login/Login";
 import SignupInquiry from "./Components/Registration/Register/RegisterInquiry";
 import SignupInstructor from "./Components/Registration/Register/RegisterInstructor/RegisterInstructor";
 import SignupStudent from "./Components/Registration/Register/RegisterStudent/RegisterStudent";
+import ResetPassword from "./Components/Registration/ResetPassword/ResetPassword";
 import { setUserType, signin } from "./redux/actions/AuthActions";
 import Home from './Views/Home/Home';
 import InstructorProfile from "./Views/Profiles/Instructor-Profile/InstructorProfile";
@@ -42,6 +44,8 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/forgot-password" component={ForgotPassword} />
+          <Route exact path="/reset-password" component={ResetPassword} />
           <Route exact path="/register" component={SignupInquiry} />
           <Route exact path="/verifyEmail" component={VerifyEmail} />
           <Route exact path="/register-student" component={SignupStudent} />
@@ -57,3 +61,7 @@ function App() {
 }
 
 export default App;
+
+
+
+
