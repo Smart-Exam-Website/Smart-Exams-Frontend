@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import CardComponent from '../../../CardComponent/CardComponent';
 import { TextField } from '@mui/material';
+import HandleErrors from '../../../../hooks/handleErrors';
 class RegisterStudent extends Component {
 
 
@@ -81,10 +82,7 @@ class RegisterStudent extends Component {
             console.log(response)
             console.log("lol")
 
-        }).catch((error) => {
-            console.log(error);
-
-        })
+        }).catch(err => HandleErrors(err))
 
         this.props.history.push({
             pathname: '/verifyEmail',

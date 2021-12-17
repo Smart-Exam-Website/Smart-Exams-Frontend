@@ -5,6 +5,7 @@ import './VerifyEmail.css'
 import useWindowWidth from '../../hooks/useWindowWidth';
 import axios from 'axios';
 import DomainUrl from '../../apis/Domain';
+import HandleErrors from '../../hooks/handleErrors';
 const VerifyEmail = (props) => {
     const onsubmit = (e) => {
         verifyEmail(e);
@@ -47,10 +48,7 @@ const VerifyEmail = (props) => {
             console.log(response)
             console.log("Success ya wlaaa")
 
-        }).catch((error) => {
-            console.log(error)
-
-        })
+        }).catch((err) => HandleErrors(err))
 
     }
 

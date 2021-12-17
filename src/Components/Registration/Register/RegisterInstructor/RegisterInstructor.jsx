@@ -3,6 +3,7 @@ import axios from "axios";
 import DomainUrl from '../../../../apis/Domain';
 import CardComponent from '../../../CardComponent/CardComponent';
 import { TextField } from '@mui/material';
+import HandleErrors from '../../../../hooks/handleErrors';
 // import DomainUrl from '../../../../apis/Domain';
 class RegisterInstructor extends Component {
 
@@ -85,10 +86,7 @@ class RegisterInstructor extends Component {
             console.log(response)
             console.log("lol")
 
-        }).catch((error) => {
-            console.log(error);
-
-        })
+        }).catch(err => HandleErrors(err))
 
         this.props.history.push({
             pathname: '/verifyEmail',
