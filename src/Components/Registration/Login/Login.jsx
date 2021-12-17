@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AuthServices } from '../../../apis/Services/AuthService';
 import { setUserType, signin } from '../../../redux/actions/AuthActions';
+import CardComponent from '../../CardComponent/CardComponent';
 
 const Login = (props) => {
     const [email, setEmail] = useState(null)
@@ -47,43 +48,29 @@ const Login = (props) => {
     }
 
     return (
-        <div className="card m-5 ">
-
-            <div className="card-header">
-                Login to Smart Exam
-            </div>
-
-            <div className="card-body">
-                <form className=" m-3">
-                    <div className="form-group">
-                        <label >Email address</label>
-                        <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" onChange={(e) => setEmail(e.target.value)} placeholder="Enter email" />
-                        <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
-                    </div>
-                    <div className="form-group">
-                        <label >Password</label>
-                        <input type="password" className="form-control" id="exampleInputPassword1" onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-                    </div>
-
-
-                    {/* <div className="form-check mx-auto">
-                            <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-                            <label className="form-check-label" for="exampleCheck1">Remember Me</label>
-                        </div> */}
-
-                    <hr />
-
-                    <div className="mx-auto" style={{ width: 200 }} >
-                        <button className="btn btn-primary mx-auto" onClick={LoginHandler} style={{ width: 200 }}>Login</button>
-
-                        <div className="text-center">
-                            <button type="button" className="btn btn-link" onClick={forgotPasswordHandler}>Forgot password?</button>
-                            <button type="button" className="btn btn-link" onClick={SignUpHandler}>Sign up</button>
+        <div className="row justify-content-center text-center my-5">
+            <div className="col-md-8 col-12">
+                <CardComponent title={'Login'}>
+                    <form className="m-3 text-start">
+                        <div className="form-group">
+                            <label >Email Address</label>
+                            <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" onChange={(e) => setEmail(e.target.value)} placeholder="Enter email" />
+                            <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
                         </div>
-                    </div>
+                        <div className="form-group">
+                            <label >Password</label>
+                            <input type="password" className="form-control" id="exampleInputPassword1" onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+                        </div>
 
-
-                </form>
+                        <div className="mx-auto mt-4 text-center">
+                            <button className="btn btn-primary mx-auto" onClick={LoginHandler}>Login</button>
+                            <div>
+                                <button type="button" className="btn btn-link" onClick={forgotPasswordHandler}>Forgot password?</button>
+                                <button type="button" className="btn btn-link" onClick={SignUpHandler}>Signup</button>
+                            </div>
+                        </div>
+                    </form>
+                </CardComponent>
             </div>
         </div>
     );

@@ -18,7 +18,7 @@ class Registerinquiry extends Component {
 
     render() {
         return (
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center mt-5">
                 <div className="card border-success mb-3" style={{ MaxWidth: 18 }}>
                     <div className="card-header">Sign up</div>
                     <div className="card-body text-success">

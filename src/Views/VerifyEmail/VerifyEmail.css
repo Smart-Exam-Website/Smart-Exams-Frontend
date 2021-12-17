@@ -6,3 +6,7 @@
 .resent-text-purple:hover{
     color: var(--primary-hover);
 }
+
+.text-green{
+    color: var(--primary)
+}

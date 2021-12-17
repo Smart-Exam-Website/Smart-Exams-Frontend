@@ -61,18 +61,16 @@ const VerifyEmail = (props) => {
             <div className="col-md-8 col-12">
                 <CardComponent title={'Verify Email'}>
                     <div className="d-flex flex-column justify-content-center align-items-center py-2">
+                        <small className='text-green'>We have sent for you a verify code.</small>
+                        <small className='text-green'>Please enter the code here</small>
                         <ReactCodeInput
                             onComplete={onsubmit}
-                            className="my-5"
+                            className="my-4 text-primary"
                             type='text'
                             autoFocus={true}
                             fieldHeight={85}
                             fieldWidth={isMobile ? screenWidth / 7 : 66}
                             fields={6} />
-                        <div>
-                            <button className="btn btn-primary">Verify</button>
-                        </div>
-                        <small>Haven’t receive the code yet? <b className="resent-text-purple text-decoration-underline" onClick={resend}>Resend again</b></small>
                     </div>
                 </CardComponent>
             </div>
