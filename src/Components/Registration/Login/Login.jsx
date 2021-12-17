@@ -1,8 +1,11 @@
+import { IconButton, InputAdornment, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AuthServices } from '../../../apis/Services/AuthService';
 import { setUserType, signin } from '../../../redux/actions/AuthActions';
 import CardComponent from '../../CardComponent/CardComponent';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Login = (props) => {
     const [email, setEmail] = useState(null)
@@ -52,14 +55,18 @@ const Login = (props) => {
             <div className="col-md-8 col-12">
                 <CardComponent title={'Login'}>
                     <form className="m-3 text-start">
-                        <div className="form-group">
-                            <label >Email Address</label>
-                            <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" onChange={(e) => setEmail(e.target.value)} placeholder="Enter email" />
-                            <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
+                        <div className='mt-4'>
+                            <TextField fullWidth id="outlined-basic" onChange={(e) => setEmail(e.target.value)} label="Email Address" variant="outlined" />
                         </div>
-                        <div className="form-group">
-                            <label >Password</label>
-                            <input type="password" className="form-control" id="exampleInputPassword1" onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+                        <div className='mt-4'>
+                            <TextField
+                                fullWidth
+                                label="Password"
+                                variant="outlined"
+                                id="outlined-adornment-password"
+                                type={'password'}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
                         </div>
 
                         <div className="mx-auto mt-4 text-center">

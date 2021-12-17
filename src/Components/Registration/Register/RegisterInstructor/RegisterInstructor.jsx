@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from "axios";
 import DomainUrl from '../../../../apis/Domain';
 import CardComponent from '../../../CardComponent/CardComponent';
+import { TextField } from '@mui/material';
 // import DomainUrl from '../../../../apis/Domain';
 class RegisterInstructor extends Component {
 
@@ -104,20 +105,18 @@ class RegisterInstructor extends Component {
                 <div className="col-md-8 col-12">
                     <CardComponent title={'Signup'}>
                         <form className="m-3">
-                            <div className="row m-1">
+                            <div className="row m-1 my-4">
                                 <div className="form-group col">
-                                    <label >First Name</label>
-                                    <input type="text" className="form-control" onChange={this.firstNameFormHandler} placeholder="First Name" />
+                                    <TextField fullWidth id="outlined-basic" onChange={this.firstNameFormHandler} label="First Name" variant="outlined" />
                                 </div>
                                 <div className="form-group col">
-                                    <label >Last Name</label>
-                                    <input type="text" className="form-control" onChange={this.lastNameFormHandler} placeholder="Last Name" />
+                                    <TextField fullWidth id="outlined-basic" onChange={this.lastNameFormHandler} label="Last Name" variant="outlined" />
                                 </div>
+                            </div>
+                            <div className="row m-1 my-4">
                                 <div className="form-group col">
                                     <label >Gender</label>
-
                                     <div class="form-group m-2">
-
                                         <div class="form-check form-check-inline ">
                                             <input
                                                 class="form-check-input"
@@ -144,51 +143,39 @@ class RegisterInstructor extends Component {
                                             <label class="form-check-label" for="flexRadioDefault2"> Female</label>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
 
-                            <div className="row m-1">
+                            <div className="row m-1 my-4">
                                 <div className="form-group  col">
-                                    <label for="inputAddress">Phone Number</label>
-                                    <input type="text" className="form-control" onChange={this.phoneFormHandler} placeholder="Phone Number" />
+                                    <TextField fullWidth id="outlined-basic" onChange={this.phoneFormHandler} label="Phone Number" variant="outlined" />
                                 </div>
                                 <div className="form-group col">
-                                    <label >Email</label>
-                                    <input type="email" className="form-control" onChange={this.emailFormHandler} placeholder="Email Address" />
+                                    <TextField fullWidth id="outlined-basic" onChange={this.emailFormHandler} label="Email" variant="outlined" />
                                 </div>
                             </div>
 
-                            <div className="row m-1">
+                            <div className="row m-1 my-4">
                                 <div className="form-group  col">
-                                    <label >Department</label>
-                                    <input type="text" className="form-control" onChange={this.departmentFormHandler} placeholder="Enter Your Department" />
-                                </div>
-
-                            </div>
-
-
-                            <div className="row m-1">
-                                <div className="form-group col">
-                                    <label >School / University</label>
-                                    <input type="text" className="form-control" onChange={this.schoolFormHandler} placeholder="School / University" />
-                                </div>
-                                <div className="form-group col">
-                                    <label >Degree</label>
-                                    <input type="text" className="form-control" onChange={this.degreeFormHandler} placeholder="Degree" />
+                                    <TextField fullWidth id="outlined-basic" onChange={this.departmentFormHandler} label="Department" variant="outlined" />
                                 </div>
                             </div>
 
-
-
                             <div className="row m-1">
                                 <div className="form-group col">
-                                    <label for="inputPassword4">Password</label>
-                                    <input type="password" className="form-control" onChange={this.passwordFormHandler} id="inputPassword4" placeholder="Password" />
+                                    <TextField fullWidth id="outlined-basic" onChange={this.schoolFormHandler} label="School / University" variant="outlined" />
                                 </div>
                                 <div className="form-group col">
-                                    <label for="inputConfirmPassword4">Confirm Password</label>
-                                    <input type="password" className="form-control" onChange={this.confirmPasswordFormHandler} id="inputConfirmPassword4" placeholder="Confirm Password" />
+                                    <TextField fullWidth id="outlined-basic" onChange={this.degreeFormHandler} label="Degree" variant="outlined" />
+                                </div>
+                            </div>
+
+                            <div className="row m-1 my-4">
+                                <div className="form-group col">
+                                    <TextField type={'password'} fullWidth id="outlined-basic" onChange={this.passwordFormHandler} label="Password" variant="outlined" />
+                                </div>
+                                <div className="form-group col">
+                                    <TextField type={'password'} fullWidth id="outlined-basic" onChange={this.confirmPasswordFormHandler} label="Confirm Passwor" variant="outlined" />
                                 </div>
                             </div>
 
