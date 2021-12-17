@@ -132,7 +132,8 @@ class RegisterStudent extends Component {
 
         const validationMessage = this.validateData()
         if (validationMessage !== 'success') {
-            alert(validationMessage)
+            // alert(validationMessage)
+            HandleErrors(validationMessage)
             return
         }
 

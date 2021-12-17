@@ -134,12 +134,11 @@ class RegisterInstructor extends Component {
 
 
         // Check data is valid
-        console.log("here lol")
-        // console.log(this.checkMail(this.state.email))
-
         const validationMessage = this.validateData()
         if (validationMessage !== 'success') {
-            alert(validationMessage)
+            // alert(validationMessage)
+            HandleErrors(validationMessage)
+
             return
         }
 
