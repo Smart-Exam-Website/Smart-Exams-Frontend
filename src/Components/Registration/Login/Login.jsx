@@ -6,6 +6,7 @@ import { setUserType, signin } from '../../../redux/actions/AuthActions';
 import CardComponent from '../../CardComponent/CardComponent';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import HandleErrors from '../../../hooks/handleErrors';
 
 const Login = (props) => {
     const [email, setEmail] = useState(null)
@@ -46,7 +47,7 @@ const Login = (props) => {
                 props.history.push(`/profile/${res?.user?.type}`)
             })
             .catch(err => {
-                console.log("ss", err)
+                HandleErrors(err)
             })
     }
 

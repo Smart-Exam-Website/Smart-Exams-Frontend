@@ -15,6 +15,7 @@ import Home from './Views/Home/Home';
 import InstructorProfile from "./Views/Profiles/Instructor-Profile/InstructorProfile";
 import StudentProfile from "./Views/Profiles/Student-Profile/StudentProfile";
 import VerifyEmail from "./Views/VerifyEmail/VerifyEmail";
+import Toast from './Components/Toast'
 
 function App() {
 
@@ -40,7 +41,7 @@ function App() {
     <BrowserRouter>
       <Header />
 
-      <div style={{minHeight:'100vh'}}>
+      <div style={{ minHeight: '100vh' }}>
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
@@ -55,6 +56,7 @@ function App() {
         </Switch>
       </div>
 
+      <Toast />
       <Footer />
     </BrowserRouter>
   );
