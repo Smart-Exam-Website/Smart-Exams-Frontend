@@ -2,7 +2,6 @@ import { showError } from '../redux/actions/AppActions'
 import { store } from '../redux/store'
 
 export default function HandleErrors(err) {
-    console.log(JSON.stringify(err))
     //Showing Toast Function
     const showErrorToast = (msg) => {
         store.dispatch(
@@ -10,7 +9,11 @@ export default function HandleErrors(err) {
         )
     }
 
-    if (err?.message) {
+    if (err?.response?.data?.message) {
+        showErrorToast(err?.response?.data?.message)
+    } else if (typeof err?.response?.data === 'string' || err?.response?.data instanceof String) {
+        showErrorToast(err?.response?.data)
+    } else if (err?.message) {
         showErrorToast(err?.message)
     } else if (typeof err === 'string' || err instanceof String) {
         showErrorToast(err)
