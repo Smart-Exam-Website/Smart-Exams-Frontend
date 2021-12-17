@@ -53,11 +53,87 @@ class RegisterStudent extends Component {
 
 
 
+    isValidEmail = (email) => {
+        return Boolean(String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            ));
+    }
+
+    isValidName = (name) => {
+        if (name === '' | name == null) {
+            return false
+        }
+        return true
+    }
+    isValidPhone = (number) => {
+        var phoneno = /^\d{11}$/;
+        if (number === '' | number == null) {
+            return false
+        }
+        if ((number.match(phoneno))) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    isPasswordMatch = (password, confirmPassword) => {
+        if (password === '' | password === null) {
+            return false
+        }
+        return (password === confirmPassword)
+    }
+
+
+    validateData = () => {
+        if (!this.isValidName(this.state.firstName)) {
+            return "Invalid First Name"
+            // return false
+        }
+        if (!this.isValidName(this.state.lastName)) {
+            return "Invalid Last Name"
+
+        }
+        if (!this.isValidPhone(this.state.phone)) {
+            return "Invalid Phone Number"
+
+        }
+        if (!this.isValidEmail(this.state.email)) {
+            return "Invalid Email"
+
+        }
+        if (!this.isValidName(this.state.department)) {
+            return "Invalid Department"
+
+        }
+        if (!this.isValidName(this.state.school)) {
+            return "Invalid School"
+
+        }
+        if (!this.isValidName(this.state.studentcode)) {
+            return "Invalid Student Code"
+
+        }
+        if (!this.isPasswordMatch(this.state.password, this.state.confirmPassword)) {
+            return "Password Mismatch"
+
+        }
+        return "success"
+    }
 
     registerHandler = (event) => {
         // send data into server 
         event.preventDefault()
 
+        const validationMessage = this.validateData()
+        if (validationMessage !== 'success') {
+            alert(validationMessage)
+            return
+        }
 
         var data = {
 

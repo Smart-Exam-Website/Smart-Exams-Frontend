@@ -54,11 +54,93 @@ class RegisterInstructor extends Component {
     }
 
 
+    isValidEmail = (email) => {
+        return Boolean(String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            ));
+    }
+
+    isValidName = (name) => {
+        if (name === '' | name == null) {
+            return false
+        }
+        return true
+    }
+    isValidPhone = (number) => {
+        var phoneno = /^\d{11}$/;
+        if (number === '' | number == null) {
+            return false
+        }
+        if ((number.match(phoneno))) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    isPasswordMatch = (password, confirmPassword) => {
+        if (password === '' | password === null) {
+            return false
+        }
+        return (password === confirmPassword)
+    }
 
 
+    validateData = () => {
+        if (!this.isValidName(this.state.firstName)) {
+            return "Invalid First Name"
+            // return false
+        }
+        if (!this.isValidName(this.state.lastName)) {
+            return "Invalid Last Name"
+
+        }
+        if (!this.isValidPhone(this.state.phone)) {
+            return "Invalid Phone Number"
+
+        }
+        if (!this.isValidEmail(this.state.email)) {
+            return "Invalid Email"
+
+        }
+        if (!this.isValidName(this.state.department)) {
+            return "Invalid Department"
+
+        }
+        if (!this.isValidName(this.state.school)) {
+            return "Invalid School"
+
+        }
+        if (!this.isValidName(this.state.degree)) {
+            return "Invalid Degree"
+
+        }
+        if (!this.isPasswordMatch(this.state.password, this.state.confirmPassword)) {
+            return "Password Mismatch"
+
+        }
+        return "success"
+    }
+
+    
     registerHandler = (event) => {
         // send data into server 
         event.preventDefault()
+
+
+        // Check data is valid
+        console.log("here lol")
+        // console.log(this.checkMail(this.state.email))
+
+        const validationMessage = this.validateData()
+        if (validationMessage !== 'success') {
+            alert(validationMessage)
+            return
+        }
 
         // console.log(this.state)
         // generating a code
@@ -82,11 +164,11 @@ class RegisterInstructor extends Component {
             ]
         }
         axios.post(DomainUrl + '/instructors/register', data).then((response) => {
-            console.log(response)
-            console.log("lol")
+            // console.log(response)
+            // console.log("lol")
 
         }).catch((error) => {
-            console.log(error);
+            // console.log(error);
 
         })
 
@@ -175,7 +257,7 @@ class RegisterInstructor extends Component {
                                     <TextField type={'password'} fullWidth id="outlined-basic" onChange={this.passwordFormHandler} label="Password" variant="outlined" />
                                 </div>
                                 <div className="form-group col">
-                                    <TextField type={'password'} fullWidth id="outlined-basic" onChange={this.confirmPasswordFormHandler} label="Confirm Passwor" variant="outlined" />
+                                    <TextField type={'password'} fullWidth id="outlined-basic" onChange={this.confirmPasswordFormHandler} label="Confirm Password" variant="outlined" />
                                 </div>
                             </div>
 
