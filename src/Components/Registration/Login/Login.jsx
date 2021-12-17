@@ -46,9 +46,7 @@ const Login = (props) => {
                 dispatch(setUserType(res?.user?.type))
                 props.history.push(`/profile/${res?.user?.type}`)
             })
-            .catch(err => {
-                HandleErrors(err)
-            })
+            .catch(err => HandleErrors(err))
     }
 
     return (
