@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import _axios from '../../../apis/axios-instance';
+import * as actionTypes from "../../../redux/actions/actionTypes"
+import { connect } from 'react-redux';
 
 const Resetpassword = (props) => {
     const [password, setPassword] = useState(null);
@@ -14,19 +16,22 @@ const Resetpassword = (props) => {
             alert("Password Mismatch")
             return
         }
-        
+        console.log("Reset")
+        console.log(props)
+
         var data = {
             password: password,
-            email:"hazemali100@outlook.com",
-            token:"nyF6TIDqT2w4deFNqprdZY9MjxttZIlzS1affhBTXNFSat9Axk4yCfLzQGP4cTJB"
+            email: localStorage.getItem("email"),
+            token: props.match.params.token
 
         }
         _axios.put("/auth/forgotPassword", data).then((response) => {
             console.log(response)
+            localStorage.removeItem("email")
+
 
         }).catch((error) => {
             console.log(error)
-
 
         })
 
@@ -65,4 +70,17 @@ const Resetpassword = (props) => {
     );
 }
 
-export default Resetpassword;
+// Import connect
+const mapStateToProps = (state) => {
+    return {
+        email_address: state.rst.email,
+    };
+
+}
+
+const mapDispatchToProps = dispatch => {
+    return 0
+
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Resetpassword);
+

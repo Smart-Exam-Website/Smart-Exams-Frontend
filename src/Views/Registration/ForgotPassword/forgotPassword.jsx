@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import _axios from '../../../apis/axios-instance';
+import { connect } from 'react-redux';
+import * as actionTypes from "../../../redux/actions/actionTypes"
 
 const Forgotpassword = (props) => {
     const [email, setEmail] = useState(null)
@@ -10,9 +12,13 @@ const Forgotpassword = (props) => {
             email: email
         }
 
+        props.saveEmail(email)
+        localStorage.setItem("email",email)
         console.log(data)
         _axios.post("/auth/forgotPassword", data).then((response) => {
             console.log(response)
+            
+
 
         }).catch((error) => {
             console.log(error)
@@ -55,4 +61,20 @@ const Forgotpassword = (props) => {
     );
 }
 
-export default Forgotpassword;
+// Import connect
+const mapStateToProps = (state) => {
+    return {
+        email_address: state.rst.email,
+    };
+
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        saveEmail: (email) => { return dispatch({ type: actionTypes.ADD_EMAIL, email: email  }) }
+
+    }
+
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Forgotpassword);
+

@@ -5,6 +5,7 @@ import { AuthServices } from '../../../apis/Services/AuthService';
 import { setUserType, signin } from '../../../redux/actions/AuthActions';
 import CardComponent from '../../../Components/CardComponent/CardComponent';
 import HandleErrors from '../../../hooks/handleErrors';
+import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
 
 const Login = (props) => {
     const [email, setEmail] = useState(null)
@@ -14,12 +15,12 @@ const Login = (props) => {
         // this code pevents from going to another page
         event.preventDefault()
 
-        this.props.history.push({
+        props.history.push({
             pathname: '/forgot-password',
             state: { email: email }
         })
 
-        props.history.push('/forgot-password')
+        // props.history.push('/forgot-password')
         // props.history.push('/reset-password')
 
     }
@@ -81,4 +82,4 @@ const Login = (props) => {
 }
 
 
-export default Login;
+export default withRouter(Login);
