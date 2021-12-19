@@ -17,7 +17,7 @@ const SuccessToast = () => {
             dispatch(showSuccess(null))
         }, 3000);
 
-    }, [successMsg])
+    }, [successMsg, dispatch])
 
     return (
         <Snackbar

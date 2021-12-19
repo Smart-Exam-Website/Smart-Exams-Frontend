@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import './StudentProfile.css'
-import UserPhoto from '../../../assets/images/Profile Photo.png'
 import { StudentServices } from '../../../apis/Services/StudentService'
 
 const StudentProfile = () => {

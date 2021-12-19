@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import DomainUrl from '../../../apis/Domain';
+import _axios from '../../../apis/axios-instance';
+
 const Resetpassword = (props) => {
     const [password, setPassword] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState(null);
@@ -21,7 +21,7 @@ const Resetpassword = (props) => {
             token:"nyF6TIDqT2w4deFNqprdZY9MjxttZIlzS1affhBTXNFSat9Axk4yCfLzQGP4cTJB"
 
         }
-        axios.put(DomainUrl + "/auth/forgotPassword", data).then((response) => {
+        _axios.put("/auth/forgotPassword", data).then((response) => {
             console.log(response)
 
         }).catch((error) => {

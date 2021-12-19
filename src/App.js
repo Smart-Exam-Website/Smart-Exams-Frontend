@@ -1,15 +1,15 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import './App.css';
 import Footer from './Components/Footer/Footer';
 import Header from './Components/Header/Header';
-import ForgotPassword from "./Components/Registration/ForgotPassword/forgotPassword";
-import Login from "./Components/Registration/Login/Login";
-import SignupInquiry from "./Components/Registration/Register/RegisterInquiry";
-import SignupInstructor from "./Components/Registration/Register/RegisterInstructor/RegisterInstructor";
-import SignupStudent from "./Components/Registration/Register/RegisterStudent/RegisterStudent";
-import ResetPassword from "./Components/Registration/ResetPassword/ResetPassword";
+import ForgotPassword from "./Views/Registration/ForgotPassword/forgotPassword";
+import Login from "./Views/Registration/Login/Login";
+import SignupInquiry from "./Views/Registration/Register/RegisterInquiry";
+import SignupInstructor from "./Views/Registration/Register/RegisterInstructor/RegisterInstructor";
+import SignupStudent from "./Views/Registration/Register/RegisterStudent/RegisterStudent";
+import ResetPassword from "./Views/Registration/ResetPassword/ResetPassword";
 import { setUserType, signin } from "./redux/actions/AuthActions";
 import Home from './Views/Home/Home';
 import InstructorProfile from "./Views/Profiles/Instructor-Profile/InstructorProfile";
@@ -21,12 +21,7 @@ function App() {
 
   const dispatch = useDispatch(null)
 
-  // Bootstrap function
-  useEffect(() => {
-    _bootstrapFunction();
-  }, [])
-
-  const _bootstrapFunction = () => {
+  const _bootstrapFunction = useCallback(() => {
     let isAuth = localStorage.getItem('token');
     let userType = localStorage.getItem('userType');
 
@@ -35,7 +30,12 @@ function App() {
 
     dispatch(signin(isAuth))
     dispatch(setUserType(userType))
-  }
+  }, [dispatch])
+
+  // Bootstrap function
+  useEffect(() => {
+    _bootstrapFunction();
+  }, [_bootstrapFunction])
 
   return (
     <BrowserRouter>

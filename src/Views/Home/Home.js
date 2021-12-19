@@ -1,6 +1,6 @@
 import React from 'react'
 import './Home.css'
-import Signupinquiry from '../../Components/Registration/Register/RegisterInquiry'
+
 const Home = () => {
     return (
         

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import CardComponent from '../../../CardComponent/CardComponent';
 import { TextField } from '@mui/material';
 import HandleErrors from '../../../../hooks/handleErrors';
-class RegisterStudent extends Component {
+import CardComponent from '../../../../Components/CardComponent/CardComponent';
+import _axios from '../../../../apis/axios-instance';
+
+class RegisterInstructor extends Component {
 
 
     state = {
@@ -13,7 +14,7 @@ class RegisterStudent extends Component {
         email: null,
         phone: null,
         department: null,
-        studentcode: null,
+        degree: null,
         school: null,
         password: null,
         confirmPassword: null
@@ -39,8 +40,8 @@ class RegisterStudent extends Component {
     departmentFormHandler = (event) => {
         this.setState({ department: event.target.value })
     }
-    studentCodeFormHandler = (event) => {
-        this.setState({ studentcode: event.target.value })
+    degreeFormHandler = (event) => {
+        this.setState({ degree: event.target.value })
     }
     schoolFormHandler = (event) => {
         this.setState({ school: event.target.value })
@@ -51,7 +52,6 @@ class RegisterStudent extends Component {
     confirmPasswordFormHandler = (event) => {
         this.setState({ confirmPassword: event.target.value })
     }
-
 
 
     isValidEmail = (email) => {
@@ -115,8 +115,8 @@ class RegisterStudent extends Component {
             return "Invalid School"
 
         }
-        if (!this.isValidName(this.state.studentcode)) {
-            return "Invalid Student Code"
+        if (!this.isValidName(this.state.degree)) {
+            return "Invalid Degree"
 
         }
         if (!this.isPasswordMatch(this.state.password, this.state.confirmPassword)) {
@@ -126,19 +126,26 @@ class RegisterStudent extends Component {
         return "success"
     }
 
+
     registerHandler = (event) => {
         // send data into server 
         event.preventDefault()
 
+
+        // Check data is valid
         const validationMessage = this.validateData()
         if (validationMessage !== 'success') {
             // alert(validationMessage)
             HandleErrors(validationMessage)
+
             return
         }
 
-        var data = {
+        // console.log(this.state)
+        // generating a code
+        // var code = Math.floor(100000 + Math.random() * 900000);
 
+        var data = {
             "firstName": this.state.firstName,
             "lastName": this.state.lastName,
             "description": "This is new instructor's description",
@@ -147,25 +154,22 @@ class RegisterStudent extends Component {
             "gender": this.state.gender,
             "image": "https://google.com/pepepepaaa",
             "phone": this.state.phone,
-            "studentCode": this.state.studentcode,
-            "type": "student",
+            "type": "instructor",
+            "degree": this.state.degree,
             "departments": [
                 {
                     "department_id": 1
                 }
             ]
         }
-        axios.post('http://3.143.249.185/api/students/register', data).then((response) => {
-            console.log(response)
-            console.log("lol")
+        _axios.post('/instructors/register', data).then((response) => {
+            this.props.history.push({
+                pathname: '/verifyEmail',
+                state: { email: this.state.email, userInfo: data }
+            })
 
         }).catch(err => HandleErrors(err))
 
-        this.props.history.push({
-            pathname: '/verifyEmail',
-            state: { email: this.state.email }
-        })
-        // this.props.history.push('/verifyEmail');
     }
 
 
@@ -187,10 +191,10 @@ class RegisterStudent extends Component {
                             <div className="row m-1 my-4">
                                 <div className="form-group col">
                                     <label >Gender</label>
-                                    <div class="form-group m-2">
-                                        <div class="form-check form-check-inline ">
+                                    <div className="form-group m-2">
+                                        <div className="form-check form-check-inline ">
                                             <input
-                                                class="form-check-input"
+                                                className="form-check-input"
                                                 type="radio"
                                                 name="flexRadioDefault"
                                                 id="flexRadioDefault1"
@@ -198,12 +202,12 @@ class RegisterStudent extends Component {
                                                 checked={this.state.gender === 'male'}
                                                 onChange={this.genderHandler}
                                             />
-                                            <label class="form-check-label" for="flexRadioDefault1"> Male </label>
+                                            <label className="form-check-label" htmlFor="flexRadioDefault1"> Male </label>
                                         </div>
 
-                                        <div class="form-check form-check-inline">
+                                        <div className="form-check form-check-inline">
                                             <input
-                                                class="form-check-input"
+                                                className="form-check-input"
                                                 type="radio"
                                                 name="flexRadioDefault"
                                                 id="flexRadioDefault2"
@@ -211,11 +215,12 @@ class RegisterStudent extends Component {
                                                 checked={this.state.gender === 'female'}
                                                 onChange={this.genderHandler}
                                             />
-                                            <label class="form-check-label" for="flexRadioDefault2"> Female</label>
+                                            <label className="form-check-label" htmlFor="flexRadioDefault2"> Female</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                             <div className="row m-1 my-4">
                                 <div className="form-group  col">
                                     <TextField fullWidth id="outlined-basic" onChange={this.phoneFormHandler} label="Phone Number" variant="outlined" />
@@ -231,13 +236,12 @@ class RegisterStudent extends Component {
                                 </div>
                             </div>
 
-
-                            <div className="row m-1 my-4">
+                            <div className="row m-1">
                                 <div className="form-group col">
                                     <TextField fullWidth id="outlined-basic" onChange={this.schoolFormHandler} label="School / University" variant="outlined" />
                                 </div>
                                 <div className="form-group col">
-                                    <TextField fullWidth id="outlined-basic" onChange={this.studentCodeFormHandler} label="Student Code" variant="outlined" />
+                                    <TextField fullWidth id="outlined-basic" onChange={this.degreeFormHandler} label="Degree" variant="outlined" />
                                 </div>
                             </div>
 
@@ -246,19 +250,49 @@ class RegisterStudent extends Component {
                                     <TextField type={'password'} fullWidth id="outlined-basic" onChange={this.passwordFormHandler} label="Password" variant="outlined" />
                                 </div>
                                 <div className="form-group col">
-                                    <TextField type={'password'} fullWidth id="outlined-basic" onChange={this.confirmPasswordFormHandler} label="Confirm Passwor" variant="outlined" />
+                                    <TextField type={'password'} fullWidth id="outlined-basic" onChange={this.confirmPasswordFormHandler} label="Confirm Password" variant="outlined" />
                                 </div>
                             </div>
 
-                            <div className="mx-auto mt-4">
-                                <button type="submit" className="btn btn-primary mx-auto" onClick={this.registerHandler}>Submit</button>
+                            <div className="mx-auto mt-4" >
+                                <button type="submit" className="btn btn-primary mx-auto" onClick={this.registerHandler} style={{ width: 200 }}>Submit</button>
                             </div>
+
                         </form>
                     </CardComponent>
                 </div>
             </div>
+
         );
     }
 }
 
-export default RegisterStudent;
+export default RegisterInstructor;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

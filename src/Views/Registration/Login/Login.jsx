@@ -1,11 +1,9 @@
-import { IconButton, InputAdornment, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AuthServices } from '../../../apis/Services/AuthService';
 import { setUserType, signin } from '../../../redux/actions/AuthActions';
-import CardComponent from '../../CardComponent/CardComponent';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import CardComponent from '../../../Components/CardComponent/CardComponent';
 import HandleErrors from '../../../hooks/handleErrors';
 
 const Login = (props) => {

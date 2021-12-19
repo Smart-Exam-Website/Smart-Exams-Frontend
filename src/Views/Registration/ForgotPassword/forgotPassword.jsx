@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import DomainUrl from '../../../apis/Domain';
+import _axios from '../../../apis/axios-instance';
 
 const Forgotpassword = (props) => {
     const [email, setEmail] = useState(null)
@@ -12,23 +11,13 @@ const Forgotpassword = (props) => {
         }
 
         console.log(data)
-        axios.post(DomainUrl + "/auth/forgotPassword", data).then((response) => {
+        _axios.post("/auth/forgotPassword", data).then((response) => {
             console.log(response)
 
         }).catch((error) => {
             console.log(error)
 
         })
-
-
-
-
-
-
-
-
-
-
     }
     return (
 

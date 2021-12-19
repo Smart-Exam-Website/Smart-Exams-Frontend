@@ -9,11 +9,8 @@ export default function HandleErrors(err) {
         )
     }
 
-    if (err?.response?.data?.message) {
-        showErrorToast(err?.response?.data?.message)
-    } else if (typeof err?.response?.data === 'string' || err?.response?.data instanceof String) {
-        showErrorToast(err?.response?.data)
-    } else if (err?.message) {
+
+    if (err?.message) {
         showErrorToast(err?.message)
     } else if (typeof err === 'string' || err instanceof String) {
         showErrorToast(err)

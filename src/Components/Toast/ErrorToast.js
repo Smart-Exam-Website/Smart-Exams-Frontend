@@ -17,7 +17,7 @@ const ErrorToast = () => {
             dispatch(showError(null))
         }, 3000);
 
-    }, [errorMsg])
+    }, [errorMsg, dispatch])
 
     return (
         <Snackbar

@@ -3,38 +3,37 @@ import CardComponent from '../../Components/CardComponent/CardComponent'
 import ReactCodeInput from 'react-verification-code-input';
 import './VerifyEmail.css'
 import useWindowWidth from '../../hooks/useWindowWidth';
-import axios from 'axios';
-import DomainUrl from '../../apis/Domain';
 import HandleErrors from '../../hooks/handleErrors';
+import _axios from '../../apis/axios-instance';
+
 const VerifyEmail = (props) => {
     const onsubmit = (e) => {
         verifyEmail(e);
     }
-    const resend = () => {
-        const data = props.location.state.userInfo
-        const type = data['type'];
-        if (type === 'instructor') {
-            axios.post(DomainUrl + '/instructors/register', data).then((response) => {
-                console.log(response)
-                console.log("lol")
+    // const resend = () => {
+    //     const data = props.location.state.userInfo
+    //     const type = data['type'];
+    //     if (type === 'instructor') {
+    //         _axios.post('/instructors/register', data).then((response) => {
+    //             console.log(response)
+    //             console.log("lol")
 
-            }).catch((error) => {
-                console.log(error);
+    //         }).catch((error) => {
+    //             console.log(error);
 
-            })
-        } else if (type === 'student') {
-            axios.post(DomainUrl + '/students/register', data).then((response) => {
-                console.log(response)
-                console.log("lol")
+    //         })
+    //     } else if (type === 'student') {
+    //         _axios.post('/students/register', data).then((response) => {
+    //             console.log(response)
+    //             console.log("lol")
 
-            }).catch((error) => {
-                console.log(error);
+    //         }).catch((error) => {
+    //             console.log(error);
 
-            })
+    //         })
 
-        }
-    }
-
+    //     }
+    // }
 
     const verifyEmail = (codeValue) => {
         //sent to server
@@ -44,7 +43,7 @@ const VerifyEmail = (props) => {
             email: props.location.state.email,
             code: codeValue
         }
-        axios.post(DomainUrl + "/verifyEmail", data).then((response) => {
+        _axios.post("/verifyEmail", data).then((response) => {
             console.log(response)
             console.log("Success ya wlaaa")
 
