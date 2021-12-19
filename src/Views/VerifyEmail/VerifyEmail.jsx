@@ -5,6 +5,7 @@ import './VerifyEmail.css'
 import useWindowWidth from '../../hooks/useWindowWidth';
 import HandleErrors from '../../hooks/handleErrors';
 import _axios from '../../apis/axios-instance';
+import showSuccessMsg from '../../hooks/showSuccessMsg';
 
 const VerifyEmail = (props) => {
     const onsubmit = (e) => {
@@ -46,6 +47,10 @@ const VerifyEmail = (props) => {
         _axios.post("/verifyEmail", data).then((response) => {
             console.log(response)
             console.log("Success ya wlaaa")
+            showSuccessMsg("Verified Successfully!")
+            props.history.push({
+                pathname: '/login',
+            })
 
         }).catch((err) => HandleErrors(err))
 
