@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import _axios from '../../../apis/axios-instance';
-import * as actionTypes from "../../../redux/actions/actionTypes"
 import { connect } from 'react-redux';
+import showSuccessMsg from '../../../hooks/showSuccessMsg';
+import HandleErrors from '../../../hooks/handleErrors';
 
 const Resetpassword = (props) => {
     const [password, setPassword] = useState(null);
@@ -13,11 +14,9 @@ const Resetpassword = (props) => {
         event.preventDefault()
 
         if (password !== confirmPassword) {
-            alert("Password Mismatch")
+            HandleErrors("Password Mismatch")
             return
         }
-        console.log("Reset")
-        console.log(props)
 
         var data = {
             password: password,
@@ -28,8 +27,8 @@ const Resetpassword = (props) => {
         _axios.put("/auth/forgotPassword", data).then((response) => {
             console.log(response)
             localStorage.removeItem("email")
-
-
+            showSuccessMsg("Password Reset Successfully")
+            props.history.push('/login')
         }).catch((error) => {
             console.log(error)
 
