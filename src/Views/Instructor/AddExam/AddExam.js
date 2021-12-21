@@ -2,11 +2,14 @@ import { Switch, TextField } from '@mui/material'
 import React from 'react'
 import CardComponent from '../../../Components/CardComponent/CardComponent'
 import { Formik } from 'formik';
+import { useHistory } from 'react-router-dom';
 
 const AddExam = () => {
 
+    const history = useHistory()
     const onAddExamHandler = (values, actions) => {
         console.log(values)
+        history.push(`/exams/${13}/set-options`)
     }
 
     return (
@@ -20,7 +23,6 @@ const AddExam = () => {
                             description: '',
                             totalMark: '',
                             duration: '',
-                            startAt: '',
                             examSubject: '',
                             startAt: '',
                             endAt: '',
@@ -129,7 +131,7 @@ const AddExam = () => {
                                 </div>
 
                                 <div className='mt-4'>
-                                    <label onClick={() => props.setFieldValue('willPuplish', !props.values.willPublish)}>Publish Exam</label>
+                                    <label onClick={() => props.setFieldValue('willPublish', !props.values.willPublish)}>Publish Exam</label>
                                     <Switch
                                         name='willPublish'
                                         checked={props.values.willPublish}
