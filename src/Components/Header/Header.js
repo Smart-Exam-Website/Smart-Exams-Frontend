@@ -27,17 +27,31 @@ const Header = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav mx-auto mainNav">
-                        <NavLink className="nav-link p-0" activeclassname={'active'} to="/" exact>
-                            <li className="nav-item px-5 mx-2">
-                                <span>Home </span>
-                            </li>
-                        </NavLink>
-                        <li className="nav-item px-5 mx-2">
-                            <NavLink className="nav-link" activeclassname={'active'} to="/" exact>Features</NavLink>
-                        </li>
-                        <li className="nav-item px-5 mx-2">
-                            <NavLink className="nav-link" activeclassname={'active'} to="/" exact>Pricing</NavLink>
-                        </li>
+                        {!isAuth ?
+                            <>
+                                <li className="nav-item px-5 mx-2">
+                                    <NavLink className="nav-link" activeclassname={'active'} to="/" exact>Home</NavLink>
+                                </li>
+                                <li className="nav-item px-5 mx-2">
+                                    <NavLink className="nav-link" activeclassname={'active'} to="/" exact>Features</NavLink>
+                                </li>
+                                <li className="nav-item px-5 mx-2">
+                                    <NavLink className="nav-link" activeclassname={'active'} to="/" exact>Pricing</NavLink>
+                                </li>
+                            </>
+                            :
+                            <>
+                                <li className="nav-item px-5 mx-2">
+                                    <NavLink className="nav-link" activeclassname={'active'} to="classes">Classes</NavLink>
+                                </li>
+                                <li className="nav-item px-5 mx-2">
+                                    <NavLink className="nav-link" activeclassname={'active'} to="exams">Exams</NavLink>
+                                </li>
+                                <li className="nav-item px-5 mx-2">
+                                    <NavLink className="nav-link" activeclassname={'active'} to="questions">Questions</NavLink>
+                                </li>
+                            </>
+                        }
 
                     </ul>
 
