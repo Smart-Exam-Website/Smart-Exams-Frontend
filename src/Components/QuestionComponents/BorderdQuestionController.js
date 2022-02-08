@@ -11,6 +11,7 @@ const Wrapper = styled.div`
     padding: 16px 36px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
   `
 const Text = styled.span`
     color: ${Colors.primary};
@@ -27,7 +28,7 @@ const BorderdQuestionController = ({ questionTitle, deleteFunction = () => { } }
     //history.push('')
   }
 
-  return <Wrapper>
+  return <Wrapper className='mb-4'>
     <ClickableView onClick={goToQuestion}>
       <Text>{questionTitle}</Text>
     </ClickableView>
