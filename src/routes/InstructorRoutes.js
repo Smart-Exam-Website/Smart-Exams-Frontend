@@ -5,6 +5,7 @@ import Exams from '../Views/Instructor/Exams/Exams'
 import Questions from '../Views/Instructor/Questions/Questions'
 import SetExamOptions from '../Views/Instructor/Exams/SetExamOptions/SetExamOptions'
 import AddQuestionScreen from '../Views/Instructor/Questions/AddQuestionScreen'
+import QuestionViewScreen from '../Views/Instructor/Questions/QuestionViewScreen'
 
 const InstructorRoutes =
     [
@@ -15,6 +16,7 @@ const InstructorRoutes =
         { path: '/exams/:examId/add-questions', component: AddExamQuestions, exact: true },
 
         { path: '/questions', component: Questions, exact: true },
-        { path: '/questions/add', component: AddQuestionScreen, exact: true }
+        { path: '/questions/add', component: AddQuestionScreen, exact: true },
+        { path: '/questions/:questionId', component: QuestionViewScreen, exact: true }
     ]
 export default InstructorRoutes

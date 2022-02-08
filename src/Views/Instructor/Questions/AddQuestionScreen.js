@@ -7,9 +7,11 @@ import MenuItem from '@mui/material/MenuItem';
 import MCQ from './QuestionTypes/MCQ';
 import { ExclamationCircleOutlined } from '@ant-design/icons/lib/icons';
 import { Colors } from '../../../constants/Colors';
+import { useHistory } from 'react-router-dom';
 
 
 const AddQuestionScreen = () => {
+    const history = useHistory()
     const [questionTypes, setQuestionTypes] = useState(null);
     const getQuestionTypes = () => {
         setQuestionTypes([
@@ -18,7 +20,6 @@ const AddQuestionScreen = () => {
     }
     useEffect(() => {
         getQuestionTypes();
-
     }, []);
 
 
@@ -42,8 +43,10 @@ const AddQuestionScreen = () => {
         </div>
     )
 
+    //let fromExamCreation = history.location.state?.fromExamCreation
     const submitQuestionHandler = (values) => {
         console.log(values);
+        history.goBack()
     }
 
     return <div className="row justify-content-center text-center my-5">
@@ -52,9 +55,9 @@ const AddQuestionScreen = () => {
                 <div className='p-4'>
                     {questionTypes && questionTypeSelectionMenuMarkup}
 
-                    { !questionType &&
+                    {!questionType &&
                         <div className='d-flex flex-row justify-content-center align-items-center mt-5'>
-                            <ExclamationCircleOutlined size={36} style={{color:Colors.danger, marginInlineEnd:'.5rem'}}/>
+                            <ExclamationCircleOutlined size={36} style={{ color: Colors.danger, marginInlineEnd: '.5rem' }} />
                             <h6 className='text-danger m-0'>Please Choose Question Type</h6>
                         </div>
                     }

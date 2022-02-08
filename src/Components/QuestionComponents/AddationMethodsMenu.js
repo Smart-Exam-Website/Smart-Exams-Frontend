@@ -44,12 +44,12 @@ const AddationMethodsMenu = ({ methods = [], anchorEl, setAnchorEl }) => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
     >
         {
-            methods?.map((method, index) => <>
+            methods?.map((method, index) => <div key={index} >
                 <MenuItem onClick={method.function}>
                     {method.displayName}
                 </MenuItem>
                 {(index !== methods.length - 1) && <Divider />}
-            </>
+            </div>
             )
         }
         

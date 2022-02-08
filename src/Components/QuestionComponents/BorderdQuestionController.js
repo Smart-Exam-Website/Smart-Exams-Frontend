@@ -20,12 +20,12 @@ const Text = styled.span`
     font-size: 21px;
   `
 
-const BorderdQuestionController = ({ questionTitle, deleteFunction = () => { } }) => {
+const BorderdQuestionController = ({ questionTitle, id, deleteFunction = () => { } }) => {
   const history = useHistory();
 
   const goToQuestion = () => {
     /** TODO */
-    //history.push('')
+    history.push('/questions/' + id)
   }
 
   return <Wrapper className='mb-4'>

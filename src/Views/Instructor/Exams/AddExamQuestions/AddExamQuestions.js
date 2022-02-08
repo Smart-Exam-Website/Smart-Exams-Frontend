@@ -15,10 +15,10 @@ const AddExamQuestions = () => {
     }
 
     const goCreateNewQuestion = () => {
-        /**TODO */
+        history.push('/questions/add', { fromExamCreation: true })
     }
     const selectQuestionFromQBank = () => {
-        /**TODO */
+        history.push('/questions', { canSelectQuestionsForExam: true })
     }
     const methods = [
         {
@@ -35,9 +35,9 @@ const AddExamQuestions = () => {
     const [questions, setQuestions] = useState(null);
     const getQuestions = () => {
         const questions = [
-            { name: 'Question 1' },
-            { name: 'Question 2' },
-            { name: 'Question 3' },
+            { name: 'Question 1', id: '1' },
+            { name: 'Question 2', id: '2' },
+            { name: 'Question 3', id: '3' },
         ]
         setQuestions([...questions])
     }
@@ -63,7 +63,7 @@ const AddExamQuestions = () => {
                         <div>
                             {
                                 questions?.map(question =>
-                                    <BorderdQuestionController key={question.name} questionTitle={question.name} />
+                                    <BorderdQuestionController id={question.id} key={question.name} questionTitle={question.name} />
                                 )
                             }
                         </div>
