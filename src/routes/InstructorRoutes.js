@@ -1,9 +1,9 @@
-import AddExam from '../Views/Instructor/AddExam/AddExam'
-import AddExamQuestions from '../Views/Instructor/AddExamQuestions/AddExamQuestions'
+import AddExam from '../Views/Instructor/Exams/AddExam/AddExam'
+import AddExamQuestions from '../Views/Instructor/Exams/AddExamQuestions/AddExamQuestions'
 import Classes from '../Views/Instructor/Classes/Classes'
 import Exams from '../Views/Instructor/Exams/Exams'
 import Questions from '../Views/Instructor/Questions/Questions'
-import SetExamOptions from '../Views/Instructor/SetExamOptions/SetExamOptions'
+import SetExamOptions from '../Views/Instructor/Exams/SetExamOptions/SetExamOptions'
 
 const InstructorRoutes =
     [

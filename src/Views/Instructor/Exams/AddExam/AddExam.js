@@ -1,6 +1,6 @@
 import { Switch, TextField } from '@mui/material'
 import React from 'react'
-import CardComponent from '../../../Components/CardComponent/CardComponent'
+import CardComponent from '../../../../Components/CardComponent/CardComponent'
 import { Formik } from 'formik';
 import { useHistory } from 'react-router-dom';
 

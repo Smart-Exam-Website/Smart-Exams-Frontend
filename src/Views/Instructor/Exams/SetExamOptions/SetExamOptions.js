@@ -1,7 +1,7 @@
 import { Switch } from '@mui/material'
 import React, { useEffect } from 'react'
 import { Formik } from 'formik';
-import CardComponent from '../../../Components/CardComponent/CardComponent';
+import CardComponent from '../../../../Components/CardComponent/CardComponent';
 import { matchPath } from 'react-router-dom';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { useState } from 'react';
