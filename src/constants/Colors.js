@@ -5,5 +5,6 @@ export const Colors = {
     black: '#313131',
     grey: '#AEAEAE',
     white: '#fff',
-    danger: '#DC3545'
+    danger: '#DC3545',
+    success: '#28A745'
 }

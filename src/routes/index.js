@@ -7,9 +7,9 @@ import MainRoutes from './MainRoutes'
 const Routes = () => {
     return (
         <Switch>
-            {MainRoutes.map(props => <Route {...props} />)}
-            {AuthRoutes.map(props => <Route {...props} />)}
-            {InstructorRoutes.map(props => <Route {...props} />)}
+            {MainRoutes.map((props,index) => <Route key={index} {...props} />)}
+            {AuthRoutes.map((props,index) => <Route key={index}{...props} />)}
+            {InstructorRoutes.map((props,index) => <Route key={index} {...props} />)}
         </Switch>
     )
 }

@@ -63,7 +63,7 @@ const AddExamQuestions = () => {
                         <div>
                             {
                                 questions?.map(question =>
-                                    <BorderdQuestionController questionTitle={question.name} />
+                                    <BorderdQuestionController key={question.name} questionTitle={question.name} />
                                 )
                             }
                         </div>
