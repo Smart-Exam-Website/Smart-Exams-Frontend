@@ -5,6 +5,9 @@ import CardComponent from '../../../../Components/CardComponent/CardComponent';
 import { matchPath } from 'react-router-dom';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { useState } from 'react';
+import { ExamServices } from '../../../../apis/Services/ExamService';
+import HandleErrors from '../../../../hooks/handleErrors';
+import showSuccessMsg from '../../../../hooks/showSuccessMsg';
 
 const SetExamOptions = () => {
 
@@ -20,10 +23,14 @@ const SetExamOptions = () => {
 
     const setOptionsHandler = (values, actions) => {
         let submittedValues = { ...values }
-        submittedValues = { ...submittedValues, examId: examId }
         submittedValues['gradingMethod'] = submittedValues['gradingMethod'] ? 'auto' : 'manual'
         console.log(submittedValues)
-        history.push(`/exams/${examId}/add-questions`)
+        ExamServices.setExamOptions(examId, submittedValues)
+            .then(res => {
+                showSuccessMsg('Exam options has been saved!')
+                history.push(`/exams/${examId}/add-questions`)
+            })
+            .catch(err => HandleErrors(err))
     }
 
     return (

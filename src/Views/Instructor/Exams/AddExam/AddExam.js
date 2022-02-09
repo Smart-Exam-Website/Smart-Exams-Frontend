@@ -3,13 +3,20 @@ import React from 'react'
 import CardComponent from '../../../../Components/CardComponent/CardComponent'
 import { Formik } from 'formik';
 import { useHistory } from 'react-router-dom';
+import { ExamServices } from '../../../../apis/Services/ExamService';
+import HandleErrors from '../../../../hooks/handleErrors';
+import showSuccessMsg from '../../../../hooks/showSuccessMsg';
 
 const AddExam = () => {
 
     const history = useHistory()
     const onAddExamHandler = (values, actions) => {
-        console.log(values)
-        history.push(`/exams/${13}/set-options`)
+        ExamServices.createNewExam(values)
+            .then(res => {
+                showSuccessMsg('Exam information has been saved!')
+                history.push(`/exams/${res.examId}/set-options`)
+            })
+            .catch(err => HandleErrors(err))
     }
 
     return (
@@ -74,19 +81,7 @@ const AddExam = () => {
                                     {props.errors.description && <div id="feedback">{props.errors.description}</div>}
                                 </div>
 
-                                <div className='mt-4'>
-                                    <TextField
-                                        name="totalMark"
-                                        fullWidth
-                                        onChange={props.handleChange}
-                                        onBlur={props.handleBlur}
-                                        value={props.values.totalMark}
-                                        type="text"
-                                        label="Total Mark"
-                                        variant="outlined"
-                                    />
-                                    {props.errors.totalMark && <div id="feedback">{props.errors.totalMark}</div>}
-                                </div>
+
 
                                 <div className='mt-4'>
                                     <TextField
@@ -128,6 +123,34 @@ const AddExam = () => {
                                         variant="outlined"
                                     />
                                     {props.errors.endAt && <div id="feedback">{props.errors.endAt}</div>}
+                                </div>
+
+                                <div className='mt-4'>
+                                    <TextField
+                                        name="totalMark"
+                                        fullWidth
+                                        onChange={props.handleChange}
+                                        onBlur={props.handleBlur}
+                                        value={props.values.totalMark}
+                                        type="text"
+                                        label="Total Mark"
+                                        variant="outlined"
+                                    />
+                                    {props.errors.totalMark && <div id="feedback">{props.errors.totalMark}</div>}
+                                </div>
+
+                                <div className='mt-4'>
+                                    <TextField
+                                        name="duration"
+                                        fullWidth
+                                        onChange={props.handleChange}
+                                        onBlur={props.handleBlur}
+                                        value={props.values.duration}
+                                        type="text"
+                                        label="Duration"
+                                        variant="outlined"
+                                    />
+                                    {props.errors.duration && <div id="feedback">{props.errors.duration}</div>}
                                 </div>
 
                                 <div className='mt-4'>
