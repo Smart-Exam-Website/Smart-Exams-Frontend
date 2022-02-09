@@ -42,7 +42,7 @@ export class ExamServices {
      * @returns {Promise<{message}>}
      */
     static addQuestionsToExam(examId, questions) {
-        return _axios.post('/exams/step2', { examId, questions });
+        return _axios.post('/exams/step3', { examId, questions });
     }
 
     /**
@@ -52,6 +52,16 @@ export class ExamServices {
      * @returns {Promise<{message}>}
      */
      static setQuestionsMarksAndDuration(examId, questions) {
-        return _axios.post('/exams/step2', { examId, questions });
+        return _axios.post('/exams/step4', { examId, questions });
     }
+
+
+    /**
+     * Get All My Exams
+     * @returns {Promise<{exams:Array}>}
+     */
+    static getMyExams(){
+        return _axios.get('/exams');
+    }
+
 }
