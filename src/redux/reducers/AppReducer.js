@@ -1,7 +1,7 @@
-
 const initStates = {
     errorMsg: null,
-    successMsg: null
+    successMsg: null,
+    alertObject: null
 }
 
 const AppReducer = (state = initStates, action) => {
@@ -16,6 +16,16 @@ const AppReducer = (state = initStates, action) => {
             return {
                 ...state,
                 successMsg: action.payload
+            };
+        case 'SHOW_ALERT':
+            return {
+                ...state,
+                alertObject: action.payload
+            };
+        case 'HIDE_ALERT':
+            return {
+                ...state,
+                alertObject: null
             };
         default:
             return state

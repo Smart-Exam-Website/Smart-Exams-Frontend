@@ -18,6 +18,9 @@ import { Menu, MenuItem } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import SettingsIcon from '@mui/icons-material/Settings';
+import showSuccessMsg from '../../../hooks/showSuccessMsg';
+import { useDispatch } from 'react-redux';
+import { hideAlert, showAlert } from '../../../redux/actions/AppActions';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -47,6 +50,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const Questions = () => {
+    const dispatch = useDispatch()
     const history = useHistory();
 
     const goToAddQuestionPageHandler = () => {
@@ -94,8 +98,21 @@ const Questions = () => {
     }
 
     const deleteQuestionHandler = () => {
-        console.log(selectedQuestion)
-        handleClose()
+        let deleteFun = () => {
+            QuestionServices.deleteQuestion(selectedQuestion)
+                .then(res => {
+                    showSuccessMsg('Question deleted successfully!')
+                })
+                .catch(err => HandleErrors(err))
+            handleClose() //for menu
+            dispatch(hideAlert()) //for alert
+        }
+        // show alert
+        dispatch(showAlert({
+            header: 'Delete this question?',
+            details: 'You are going to delete this question permanently',
+            alertFunction: deleteFun
+        }))
     }
 
     return (

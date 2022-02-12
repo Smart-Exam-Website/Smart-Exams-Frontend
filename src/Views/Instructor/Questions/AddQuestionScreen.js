@@ -76,7 +76,7 @@ const AddQuestionScreen = () => {
                 if (isFromExamCreation) {
                     dispatch(saveAQuestion({ questionText: res.questionText, id: res.id }))
                 }
-                showSuccessMsg("Question created successfully")
+                showSuccessMsg("Request done successfully")
                 history.goBack()
             })
             .catch(err => HandleErrors(err))

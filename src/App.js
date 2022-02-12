@@ -7,6 +7,7 @@ import Header from './Components/Header/Header';
 import { setUserType, signin } from "./redux/actions/AuthActions";
 import Toast from './Components/Toast'
 import Routes from "./routes";
+import Alert from "./Components/Dialogs/Alert";
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
       </div>
 
       <Toast />
+      <Alert />
       <Footer />
     </BrowserRouter>
   );
