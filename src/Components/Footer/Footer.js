@@ -13,7 +13,7 @@ const iconStyle = {
 const isMobile = window.innerWidth < 992;
 const Footer = () => {
     return (
-        <footer className="Footer container ">
+        <footer style={{marginTop:200}} className="Footer container">
             <div className="row justify-content-lg-center pl-3 p-lg-0">
                 <div className="col-lg-4 col-12 text-lg-center">
                     <img height={66} src={Logo} alt="smart exam logo" />
