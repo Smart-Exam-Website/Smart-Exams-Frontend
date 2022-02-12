@@ -4,15 +4,18 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { matchPath, useHistory } from 'react-router-dom'
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min'
 import { ExamServices } from '../../../../apis/Services/ExamService'
 import CardComponent from '../../../../Components/CardComponent/CardComponent'
 import AddationMethodsMenu from '../../../../Components/QuestionComponents/AddationMethodsMenu'
 import BorderdQuestionController from '../../../../Components/QuestionComponents/BorderdQuestionController'
 import HandleErrors from '../../../../hooks/handleErrors'
+import showSuccessMsg from '../../../../hooks/showSuccessMsg'
 import { removeAllSavedQuestions, removeSavedQuestionFromExam } from '../../../../redux/actions/ExamAction'
 
 const AddExamQuestions = () => {
     const history = useHistory()
+    const location = useLocation()
     const dispatch = useDispatch()
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -37,10 +40,16 @@ const AddExamQuestions = () => {
         }
     ]
 
+    /** Stuff for editing mode */
+    const isEditMode = Boolean(location.state?.exam)
+    const examOldData = location.state?.exam
+    const examOldQuestions = examOldData?.questions
+    console.log(examOldData)
+
     const [examId, setExamId] = useState(null)
     useEffect(() => {
         const match = matchPath(history.location.pathname, {
-            path: '/exams/:examId/set-options'
+            path: '/exams/:examId/add-questions'
         })
         console.log(match.params.examId)
         setExamId(match.params.examId)
@@ -50,7 +59,7 @@ const AddExamQuestions = () => {
     const [questions, setQuestions] = useState(null);
     const savedQuestions = useSelector(state => state.exam.examQuestions)
     const getQuestions = () => {
-        const questionss = []
+        const questionss = examOldQuestions?.length ? [...examOldQuestions] : []
         setQuestions([...questionss, ...savedQuestions])
     }
     // eslint-disable-next-line
@@ -60,11 +69,18 @@ const AddExamQuestions = () => {
 
 
     const submitExamHandler = () => {
-        ExamServices.addQuestionsToExam(examId, [...questions, ...savedQuestions])
+        if (isEditMode && examOldQuestions?.length) {
+            history.push('/exams')
+            return
+        }
+
+        let submittedQuestions = [...questions, ...savedQuestions]
+        submittedQuestions = submittedQuestions.map(item => { return { question_id: item.id } })
+        ExamServices.addQuestionsToExam(examId, submittedQuestions)
             .then(res => {
                 history.push('/exams')
                 dispatch(removeAllSavedQuestions())
-
+                showSuccessMsg('Exam has been created successfully!')
             })
             .catch(err => HandleErrors(err))
     }
@@ -76,7 +92,7 @@ const AddExamQuestions = () => {
     return (
         <div className="row justify-content-center text-center my-5">
             <div className="col-md-8 col-12">
-                <CardComponent title={'Add Question'}>
+                <CardComponent title={!isEditMode ? 'Add Questions' : 'View Questions'}>
                     <div className='p-4'>
                         <div className='d-flex justify-content-end mb-4'>
                             <button onClick={AddQuestionHandler} className='btn btn-success'>

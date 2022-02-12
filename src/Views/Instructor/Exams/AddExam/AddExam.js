@@ -2,7 +2,7 @@ import { TextField } from '@mui/material'
 import React from 'react'
 import CardComponent from '../../../../Components/CardComponent/CardComponent'
 import { Formik } from 'formik';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { ExamServices } from '../../../../apis/Services/ExamService';
 import HandleErrors from '../../../../hooks/handleErrors';
 import showSuccessMsg from '../../../../hooks/showSuccessMsg';
@@ -12,7 +12,18 @@ import moment from 'moment';
 const AddExam = () => {
 
     const history = useHistory()
+    const location = useLocation()
+
+    /** Stuff for editing mode */
+    const isEditMode = Boolean(location.state?.exam)
+    const examOldData = location.state?.exam
+
     const onAddExamHandler = (values, actions) => {
+        if (isEditMode) {
+            history.push(`/exams/${examOldData.id}/set-options`, { exam:examOldData })
+            return
+        }
+
         ExamServices.createNewExam(values)
             .then(res => {
                 showSuccessMsg('Exam information has been saved!')
@@ -24,17 +35,17 @@ const AddExam = () => {
     return (
         <div className="row justify-content-center text-center my-5">
             <div className="col-md-8 col-12">
-                <CardComponent title={'Create Exam'}>
+                <CardComponent title={!isEditMode ? 'Create Exam' : 'Edit Exam'}>
                     <Formik
                         initialValues={{
-                            name: '',
-                            numberOfTrials: '',
-                            description: '',
-                            totalMark: '',
-                            duration: '',
-                            examSubject: '',
-                            startAt: moment().format('yyyy-MM-DD hh:mm'),
-                            endAt: moment().add(7,'days').format('yyyy-MM-DD hh:mm'),
+                            name: examOldData?.name || '',
+                            numberOfTrials: examOldData?.numberOfTrials || '',
+                            description: examOldData?.description || '',
+                            totalMark: examOldData?.totalMark || '',
+                            duration: examOldData?.duration || '',
+                            examSubject: examOldData?.examSubject || '',
+                            startAt: examOldData?.startAt || moment().format('yyyy-MM-DD hh:mm'),
+                            endAt: examOldData?.endAt || moment().add(7, 'days').format('yyyy-MM-DD hh:mm'),
                         }}
                         onSubmit={onAddExamHandler}
                     >

@@ -38,7 +38,7 @@ export class ExamServices {
     /**
      * Add questions to the exam by id
      * @param {number} examId 
-     * @param {Array.<{id:number}>} questions Array of objects contain question ids
+     * @param {Array.<{question_id:number}>} questions Array of objects contain question ids
      * @returns {Promise<{message}>}
      */
     static addQuestionsToExam(examId, questions) {

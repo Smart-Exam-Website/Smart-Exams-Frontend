@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { Formik } from 'formik';
 import CardComponent from '../../../../Components/CardComponent/CardComponent';
 import { matchPath } from 'react-router-dom';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 import { useState } from 'react';
 import { ExamServices } from '../../../../apis/Services/ExamService';
 import HandleErrors from '../../../../hooks/handleErrors';
@@ -12,7 +12,16 @@ import showSuccessMsg from '../../../../hooks/showSuccessMsg';
 const SetExamOptions = () => {
 
     const history = useHistory()
+    const location = useLocation()
+
     const [examId, setExamId] = useState(null)
+
+    /** Stuff for editing mode */
+    const isEditMode = Boolean(location.state?.exam)
+    const examOldData = location.state?.exam
+    const oldExamConfig = examOldData?.config
+    console.log(oldExamConfig)
+
     useEffect(() => {
         const match = matchPath(history.location.pathname, {
             path: '/exams/:examId/set-options'
@@ -22,6 +31,11 @@ const SetExamOptions = () => {
     }, [history.location.pathname])
 
     const setOptionsHandler = (values, actions) => {
+        if (isEditMode && oldExamConfig) {
+            history.push(`/exams/${examOldData?.id}/add-questions`, { exam: examOldData })
+            return
+        }
+
         let submittedValues = { ...values }
         submittedValues['gradingMethod'] = submittedValues['gradingMethod'] ? 'auto' : 'manual'
         console.log(submittedValues)
@@ -36,15 +50,15 @@ const SetExamOptions = () => {
     return (
         <div className="row justify-content-center text-center my-5">
             <div className="col-md-8 col-12">
-                <CardComponent title={'Create Exam'}>
+                <CardComponent title={!isEditMode ? 'Create Exam' : 'Edit Exam'}>
                     <Formik
                         initialValues={{
-                            faceRecognition: false,
-                            faceDetection: false,
-                            questionsRandomOrder: false,
-                            plagiarismCheck: false,
-                            disableSwitchBrowser: false,
-                            gradingMethod: true,
+                            faceRecognition: oldExamConfig ? Boolean(oldExamConfig?.faceRecognition) : false,
+                            faceDetection: oldExamConfig ? Boolean(oldExamConfig?.faceDetection) : false,
+                            questionsRandomOrder: oldExamConfig ? Boolean(oldExamConfig?.questionsRandomOrder) : false,
+                            plagiarismCheck: oldExamConfig ? Boolean(oldExamConfig?.plagiarismCheck) : false,
+                            disableSwitchBrowser: oldExamConfig ? Boolean(oldExamConfig?.disableSwitchBrowser) : false,
+                            gradingMethod: oldExamConfig ? Boolean(oldExamConfig?.gradingMethod === 'auto') : true,
                         }}
                         onSubmit={setOptionsHandler}
                     >

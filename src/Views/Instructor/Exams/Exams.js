@@ -14,6 +14,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Colors } from '../../../constants/Colors';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { Menu, MenuItem } from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -45,19 +49,17 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const Exams = () => {
     const history = useHistory();
 
-    const addNewExamHandler = () => {
+    const addNewExamHandler = (e) => {
+        console.log(e)
         history.push('/exams/add')
     }
 
     const [exams, setExams] = useState(null)
-    function createData({ name, startAt, endAt, totalMark, duration, id }) {
-        return { name, startAt, endAt, totalMark, duration, id };
-    }
     useEffect(() => {
         ExamServices.getMyExams()
             .then(res => {
                 console.log(res)
-                setExams(res?.map(item => createData(item)))
+                setExams(res)
             })
             .catch(err => HandleErrors(err))
     }, [])
@@ -66,6 +68,34 @@ const Exams = () => {
         console.log('hiiiiiiiiiiiii')
     }
 
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [selectedExam, setSelectedExam] = React.useState(null);
+
+    const open = Boolean(anchorEl);
+    const handleClick = (event, id) => {
+        event.stopPropagation();
+        setSelectedExam(id)
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+        setSelectedExam(null)
+    };
+
+    const editExamHandler = () => {
+        console.log(selectedExam)
+        let exam = exams.find(item => item.id === selectedExam)
+        console.log(exam)
+        history.push('/exams/add', { exam })
+        handleClose()
+    }
+
+    const deleteExamHandler = () => {
+        console.log(selectedExam)
+        handleClose()
+    }
+
+    const isNotCompleted = (row) => (!row.config || !row.questions?.length)
     return (
         <div className='container'>
             <div style={{}} className='d-flex mt-4 justify-content-end'>
@@ -83,23 +113,71 @@ const Exams = () => {
                             <StyledTableCell align="right">End Date</StyledTableCell>
                             <StyledTableCell align="right">Total Marks</StyledTableCell>
                             <StyledTableCell align="right">Duration</StyledTableCell>
+                            <StyledTableCell align="right"> </StyledTableCell>
+
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {exams?.map((row) => (
-                            <StyledTableRow onClick={GoToExamDetailsHandler} key={row.id}>
-                                <StyledTableCell component="th" scope="row">
+                            <StyledTableRow className={isNotCompleted(row) ? 'bg-danger' : ''} onClick={GoToExamDetailsHandler} key={row.id}>
+                                {/* NAME */}
+                                <StyledTableCell className={isNotCompleted(row) ? 'text-light' : ''} component="th" scope="row">
                                     {row.name}
                                 </StyledTableCell>
-                                <StyledTableCell align="right">{row.startAt}</StyledTableCell>
-                                <StyledTableCell align="right">{row.endAt}</StyledTableCell>
-                                <StyledTableCell align="right">{row.totalMark}</StyledTableCell>
-                                <StyledTableCell align="right">{row.duration}</StyledTableCell>
+                                {/* STARE DATE */}
+                                <StyledTableCell className={isNotCompleted(row) ? 'text-light' : ''} align="right">
+                                    {row.startAt}
+                                </StyledTableCell>
+                                {/* END DATE */}
+                                <StyledTableCell className={isNotCompleted(row) ? 'text-light' : ''} align="right">
+                                    {row.endAt}
+                                </StyledTableCell>
+                                {/* TOTAL MARK */}
+                                <StyledTableCell className={isNotCompleted(row) ? 'text-light' : ''} align="right">
+                                    {row.totalMark}
+                                </StyledTableCell>
+                                {/* DURATION */}
+                                <StyledTableCell className={isNotCompleted(row) ? 'text-light' : ''} align="right">
+                                    {row.duration}
+                                </StyledTableCell>
+                                {/* OPTIONS */}
+                                <StyledTableCell className={isNotCompleted(row) ? 'text-light' : ''} onClick={(e) => handleClick(e, row.id)} align="right">
+                                    <SettingsIcon fontSize='medium' color='secondary' />
+                                </StyledTableCell>
+
                             </StyledTableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
+
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                autoFocus={false}
+                onClose={handleClose}
+                MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                }}
+            >
+                <MenuItem onClick={editExamHandler}>
+                    <EditIcon />
+                    Edit
+                </MenuItem>
+                <MenuItem color='error' onClick={deleteExamHandler}>
+                    <DeleteForeverIcon color='error' />
+                    Delete
+                </MenuItem>
+            </Menu>
         </div>
     )
 }

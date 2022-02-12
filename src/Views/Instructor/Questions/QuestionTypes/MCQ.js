@@ -31,7 +31,6 @@ const MCQ = ({ getQuestionCreationRequest = () => { } }) => {
     const submitQuestionHandler = (values) => {
         let creationRequest = QuestionServices.createMcqQuestion({
             questionText: values.questionText,
-            mark: '1',
             correctAnswer: values.correctAnswer,
             answers: [values.correctAnswer, values.choise1, values.choise2, values.choise3]
         })
