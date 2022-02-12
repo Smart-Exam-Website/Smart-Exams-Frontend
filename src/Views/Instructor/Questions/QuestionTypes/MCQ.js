@@ -5,9 +5,6 @@ import styled from 'styled-components';
 import { Colors } from '../../../../constants/Colors';
 import * as yup from 'yup';
 import { QuestionServices } from '../../../../apis/Services/QuestionService';
-import HandleErrors from '../../../../hooks/handleErrors';
-import showSuccessMsg from '../../../../hooks/showSuccessMsg';
-import { useHistory } from 'react-router-dom';
 
 const Label = styled.label`
     display: block;
@@ -22,7 +19,7 @@ const SuccessLabel = styled(Label)`
     color: ${Colors.success};
 `
 
-const MCQ = () => {
+const MCQ = ({ getQuestionCreationRequest = () => { } }) => {
     const MCQSCHEMA = yup.object().shape({
         questionText: yup.string().required('This is a required field'),
         correctAnswer: yup.string().required('This is a required field'),
@@ -31,20 +28,15 @@ const MCQ = () => {
         choise3: yup.string().required('This is a required field'),
     });
 
-    const history = useHistory()
-
     const submitQuestionHandler = (values) => {
-        QuestionServices.createMcqQuestion({
+        let creationRequest = QuestionServices.createMcqQuestion({
             questionText: values.questionText,
             mark: '1',
             correctAnswer: values.correctAnswer,
             answers: [values.correctAnswer, values.choise1, values.choise2, values.choise3]
         })
-            .then(res => {
-                showSuccessMsg('Question added successfully')
-                history.goBack()
-            })
-            .catch(err => HandleErrors(err))
+        // pass the request outside the component
+        getQuestionCreationRequest(creationRequest)
     }
 
     return <Formik

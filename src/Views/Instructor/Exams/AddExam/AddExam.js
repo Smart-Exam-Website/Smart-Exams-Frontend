@@ -1,4 +1,4 @@
-import { Switch, TextField } from '@mui/material'
+import { TextField } from '@mui/material'
 import React from 'react'
 import CardComponent from '../../../../Components/CardComponent/CardComponent'
 import { Formik } from 'formik';
@@ -35,7 +35,6 @@ const AddExam = () => {
                             examSubject: '',
                             startAt: moment().format('yyyy-MM-DD hh:mm'),
                             endAt: moment().add(7,'days').format('yyyy-MM-DD hh:mm'),
-                            willPublish: true
                         }}
                         onSubmit={onAddExamHandler}
                     >
@@ -162,16 +161,6 @@ const AddExam = () => {
                                         variant="outlined"
                                     />
                                     {props.errors.duration && <div id="feedback">{props.errors.duration}</div>}
-                                </div>
-
-                                <div className='mt-4'>
-                                    <label onClick={() => props.setFieldValue('willPublish', !props.values.willPublish)}>Publish Exam</label>
-                                    <Switch
-                                        name='willPublish'
-                                        checked={props.values.willPublish}
-                                        onChange={props.handleChange}
-                                        color='primary'
-                                    />
                                 </div>
 
                                 <button className="btn btn-primary mx-auto mt-4" type="submit">Next</button>

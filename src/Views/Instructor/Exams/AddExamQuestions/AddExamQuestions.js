@@ -1,6 +1,7 @@
 import { PlusCircleOutlined } from '@ant-design/icons'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import CardComponent from '../../../../Components/CardComponent/CardComponent'
 import AddationMethodsMenu from '../../../../Components/QuestionComponents/AddationMethodsMenu'
@@ -33,20 +34,28 @@ const AddExamQuestions = () => {
 
     /** Get Questions of this exam */
     const [questions, setQuestions] = useState(null);
+    const savedQuestions = useSelector(state => state.exam.examQuestions)
     const getQuestions = () => {
-        const questions = [
-            { name: 'Question 1', id: '1' },
-            { name: 'Question 2', id: '2' },
-            { name: 'Question 3', id: '3' },
+        const questionss = [
+            { questionText: 'Question 1', id: '1' },
+            { questionText: 'Question 2', id: '2' },
+            { questionText: 'Question 3', id: '3' },
         ]
-        setQuestions([...questions])
+        setQuestions([...questionss, ...savedQuestions])
     }
+    // eslint-disable-next-line
     useEffect(() => {
         getQuestions();
-    }, []);
+        console.log("hii")
+    }, [savedQuestions]);
+
 
     const submitExamHandler = () => {
         history.push('/exams')
+    }
+
+    const removeQuestionFromListHandler = (id) => {
+
     }
     return (
         <div className="row justify-content-center text-center my-5">
@@ -63,7 +72,11 @@ const AddExamQuestions = () => {
                         <div>
                             {
                                 questions?.map(question =>
-                                    <BorderdQuestionController id={question.id} key={question.name} questionTitle={question.name} />
+                                    <BorderdQuestionController
+                                        deleteFunction={() => removeQuestionFromListHandler(question.id)}
+                                        id={question.id} key={question.id}
+                                        questionTitle={question.questionText}
+                                    />
                                 )
                             }
                         </div>

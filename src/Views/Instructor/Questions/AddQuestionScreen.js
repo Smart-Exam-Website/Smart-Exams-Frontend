@@ -7,9 +7,18 @@ import MenuItem from '@mui/material/MenuItem';
 import MCQ from './QuestionTypes/MCQ';
 import { ExclamationCircleOutlined } from '@ant-design/icons/lib/icons';
 import { Colors } from '../../../constants/Colors';
+import HandleErrors from '../../../hooks/handleErrors';
+import showSuccessMsg from '../../../hooks/showSuccessMsg';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { saveAQuestion } from '../../../redux/actions/ExamAction';
 
 
 const AddQuestionScreen = () => {
+    const history = useHistory()
+    const location = useLocation()
+    const dispatch = useDispatch()
+
     const [questionTypes, setQuestionTypes] = useState(null);
     const getQuestionTypes = () => {
         setQuestionTypes([
@@ -41,6 +50,21 @@ const AddQuestionScreen = () => {
         </div>
     )
 
+    const createQuestionHandler = (request) => {
+        request
+            .then(res => {
+                console.log("Question request", res)
+                
+                let isFromExamCreation = location.state?.fromExamCreation
+                if (isFromExamCreation) {
+                    dispatch(saveAQuestion({ questionText: res.questionText, id: res.id }))
+                }
+                showSuccessMsg("Question created successfully")
+                history.goBack()
+            })
+            .catch(err => HandleErrors(err))
+    }
+
     return <div className="row justify-content-center text-center my-5">
         <div className="col-md-8 col-12">
             <CardComponent title={'Add Question'}>
@@ -56,7 +80,7 @@ const AddQuestionScreen = () => {
 
                     {questionType === 'MCQ' &&
                         <div>
-                            <MCQ  />
+                            <MCQ getQuestionCreationRequest={createQuestionHandler} />
                         </div>
                     }
                 </div>
