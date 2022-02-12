@@ -86,7 +86,7 @@ const Exams = () => {
         console.log(selectedExam)
         let exam = exams.find(item => item.id === selectedExam)
         console.log(exam)
-        history.push('/exams/add', { exam })
+        history.push('/exams/edit', { exam })
         handleClose()
     }
 

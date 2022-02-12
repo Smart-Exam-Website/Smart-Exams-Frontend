@@ -19,7 +19,7 @@ const SuccessLabel = styled(Label)`
     color: ${Colors.success};
 `
 
-const MCQ = ({ getQuestionCreationRequest = () => { } }) => {
+const MCQ = ({ initValues, getQuestionCreationRequest = () => { } }) => {
     const MCQSCHEMA = yup.object().shape({
         questionText: yup.string().required('This is a required field'),
         correctAnswer: yup.string().required('This is a required field'),
@@ -27,25 +27,41 @@ const MCQ = ({ getQuestionCreationRequest = () => { } }) => {
         choise2: yup.string().required('This is a required field'),
         choise3: yup.string().required('This is a required field'),
     });
-
+    console.log(initValues)
     const submitQuestionHandler = (values) => {
-        let creationRequest = QuestionServices.createMcqQuestion({
-            questionText: values.questionText,
-            correctAnswer: values.correctAnswer,
-            answers: [values.correctAnswer, values.choise1, values.choise2, values.choise3]
-        })
-        // pass the request outside the component
-        getQuestionCreationRequest(creationRequest)
+        if (!initValues) {
+            let creationRequest = QuestionServices.createMcqQuestion({
+                questionText: values.questionText,
+                correctAnswer: values.correctAnswer,
+                answers: [values.correctAnswer, values.choise1, values.choise2, values.choise3]
+            })
+            // pass the request outside the component
+            getQuestionCreationRequest(creationRequest)
+        }
+        //EDIT MODE
+        else {
+            let editRequest = QuestionServices.editQuestion(initValues?.id, {
+                questionText: values.questionText,
+                correctAnswer: values.correctAnswer,
+                answers: [values.correctAnswer, values.choise1, values.choise2, values.choise3]
+            })
+
+            // pass the request outside the component
+            getQuestionCreationRequest(editRequest)
+        }
+
     }
+
 
     return <Formik
         initialValues={{
-            questionText: '',
+            questionText: initValues?.questionText || '',
             correctAnswer: '',
             choise1: '',
             choise2: '',
             choise3: ''
         }}
+        enableReinitialize={true}
         validationSchema={MCQSCHEMA}
         onSubmit={submitQuestionHandler}
     >

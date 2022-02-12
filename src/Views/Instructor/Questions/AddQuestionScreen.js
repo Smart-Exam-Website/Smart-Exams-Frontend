@@ -12,6 +12,7 @@ import showSuccessMsg from '../../../hooks/showSuccessMsg';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { saveAQuestion } from '../../../redux/actions/ExamAction';
+import { QuestionServices } from '../../../apis/Services/QuestionService';
 
 
 const AddQuestionScreen = () => {
@@ -19,10 +20,25 @@ const AddQuestionScreen = () => {
     const location = useLocation()
     const dispatch = useDispatch()
 
+    /** Stuff for editing mode */
+    const isEditMode = Boolean(location.state?.question)
+    const oldQuestion = location.state?.question
+
+    /** get question details */
+    const [oldQuestionDetails, setOldQuestionDetails] = useState(null)
+    useEffect(() => {
+        if (!oldQuestion?.id) return
+        QuestionServices.getQuestionDetails(oldQuestion?.id)
+            .then(res => {
+                setOldQuestionDetails(res?.question)
+            })
+            .catch(err => HandleErrors(err))
+    }, [])
+
     const [questionTypes, setQuestionTypes] = useState(null);
     const getQuestionTypes = () => {
         setQuestionTypes([
-            { id: '123', value: 'MCQ' }
+            { id: '123', value: 'mcq' }
         ])
     }
     useEffect(() => {
@@ -30,7 +46,7 @@ const AddQuestionScreen = () => {
     }, []);
 
 
-    const [questionType, setQuestionType] = useState('');
+    const [questionType, setQuestionType] = useState(oldQuestion?.type || '');
     const questionTypeSelectionMenuMarkup = (
         <div className='w-50 mx-auto'>
             <TextField
@@ -40,6 +56,7 @@ const AddQuestionScreen = () => {
                 label="Question Type"
                 value={questionType}
                 onChange={(event) => setQuestionType(event.target.value)}
+                disabled={isEditMode}
             >
                 {questionTypes?.map((type) => (
                     <MenuItem key={type.id} value={type.value}>
@@ -54,7 +71,7 @@ const AddQuestionScreen = () => {
         request
             .then(res => {
                 console.log("Question request", res)
-                
+
                 let isFromExamCreation = location.state?.fromExamCreation
                 if (isFromExamCreation) {
                     dispatch(saveAQuestion({ questionText: res.questionText, id: res.id }))
@@ -67,7 +84,7 @@ const AddQuestionScreen = () => {
 
     return <div className="row justify-content-center text-center my-5">
         <div className="col-md-8 col-12">
-            <CardComponent title={'Add Question'}>
+            <CardComponent title={!isEditMode ? 'Add Question' : 'Edit Question'}>
                 <div className='p-4'>
                     {questionTypes && questionTypeSelectionMenuMarkup}
 
@@ -78,9 +95,12 @@ const AddQuestionScreen = () => {
                         </div>
                     }
 
-                    {questionType === 'MCQ' &&
+                    {questionType === 'mcq' &&
                         <div>
-                            <MCQ getQuestionCreationRequest={createQuestionHandler} />
+                            <MCQ
+                                initValues={oldQuestion?.type === 'mcq' ? oldQuestionDetails : null}
+                                getQuestionCreationRequest={createQuestionHandler}
+                            />
                         </div>
                     }
                 </div>

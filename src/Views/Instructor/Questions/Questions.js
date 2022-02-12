@@ -14,6 +14,10 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Colors } from '../../../constants/Colors';
 import { useState } from 'react';
+import { Menu, MenuItem } from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -69,6 +73,31 @@ const Questions = () => {
 
     }
 
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [selectedQuestion, setSelectedQuestion] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event, id) => {
+        event.stopPropagation();
+        setSelectedQuestion(id)
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+        setSelectedQuestion(null)
+    };
+
+    const editQuestionHandler = () => {
+        console.log(selectedQuestion)
+        let question = questions.find(item => item.id === selectedQuestion)
+        history.push('/questions/edit', { question })
+        handleClose()
+    }
+
+    const deleteQuestionHandler = () => {
+        console.log(selectedQuestion)
+        handleClose()
+    }
+
     return (
         <div className='container'>
             <div className='d-flex mt-4 justify-content-end'>
@@ -84,6 +113,7 @@ const Questions = () => {
                             <StyledTableCell>Question Header</StyledTableCell>
                             <StyledTableCell align="right">Type</StyledTableCell>
                             <StyledTableCell align="right">Created Date</StyledTableCell>
+                            <StyledTableCell align="right"> </StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -94,11 +124,43 @@ const Questions = () => {
                                 </StyledTableCell>
                                 <StyledTableCell align="right">{row.type}</StyledTableCell>
                                 <StyledTableCell align="right">{row.created_at}</StyledTableCell>
+                                <StyledTableCell onClick={(e) => handleClick(e, row.id)} align="right">
+                                    <SettingsIcon fontSize='medium' color='secondary' />
+                                </StyledTableCell>
+
                             </StyledTableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
+
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                autoFocus={false}
+                onClose={handleClose}
+                MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                }}
+            >
+                <MenuItem onClick={editQuestionHandler}>
+                    <EditIcon />
+                    Edit
+                </MenuItem>
+                <MenuItem color='error' onClick={deleteQuestionHandler}>
+                    <DeleteForeverIcon color='error' />
+                    Delete
+                </MenuItem>
+            </Menu>
         </div>
     )
 }

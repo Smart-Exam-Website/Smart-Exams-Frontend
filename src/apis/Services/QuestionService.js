@@ -19,8 +19,8 @@ export class QuestionServices {
      * @param {*} id Question id
      * @returns 
      */
-    static getQuestionDetails(id){
-        return _axios.get('/questions', { params: { id } });
+    static getQuestionDetails(id) {
+        return _axios.get(`/questions/${id}`);
     }
 
     /**
@@ -30,7 +30,7 @@ export class QuestionServices {
      * @returns 
      */
     static editQuestion(id, question) {
-        return _axios.put('/questions', { ...question }, { params: { id } });
+        return _axios.put(`/questions/${id}`, { ...question });
     }
 
     /**
@@ -38,8 +38,8 @@ export class QuestionServices {
      * @param {*} id question id
      * @returns 
      */
-     static deleteQuestion(id) {
-        return _axios.delete('/questions', { params: { id } });
+    static deleteQuestion(id) {
+        return _axios.delete(`/questions/${id}`);
     }
 
     /**
