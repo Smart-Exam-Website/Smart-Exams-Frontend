@@ -44,7 +44,7 @@ export class QuestionServices {
 
     /**
      * Get All My Exams
-     * @returns {Promise<{Questions:Array}>}
+     * @returns {Promise<Array>}
      */
     static getMyQuestions() {
         return _axios.get('/questions');

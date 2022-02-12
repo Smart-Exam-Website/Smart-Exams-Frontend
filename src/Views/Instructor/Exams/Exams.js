@@ -24,7 +24,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.body}`]: {
         fontSize: 16,
     },
-    [`&.${tableCellClasses.body}:first-child`]: {
+    [`&.${tableCellClasses.body}:first-of-type`]: {
         fontWeight: 700
     },
 }));
