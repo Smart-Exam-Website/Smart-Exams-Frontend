@@ -10,10 +10,15 @@ import { store } from './redux/store';
 import { ThemeProvider } from '@mui/material';
 import { theme } from './Theme/MaterialUiTheme';
 
+import DateAdapter from '@mui/lab/AdapterMoment';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+
 ReactDOM.render(
   <Provider store={store}>
     <ThemeProvider theme={theme}>
-      <App />
+      <LocalizationProvider dateAdapter={DateAdapter}>
+        <App />
+      </LocalizationProvider>
     </ThemeProvider>
   </Provider>,
   document.getElementById('root')

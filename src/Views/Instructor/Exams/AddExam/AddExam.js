@@ -6,6 +6,8 @@ import { useHistory } from 'react-router-dom';
 import { ExamServices } from '../../../../apis/Services/ExamService';
 import HandleErrors from '../../../../hooks/handleErrors';
 import showSuccessMsg from '../../../../hooks/showSuccessMsg';
+import MobileDateTimePicker from '@mui/lab/MobileDateTimePicker';
+import moment from 'moment';
 
 const AddExam = () => {
 
@@ -31,8 +33,8 @@ const AddExam = () => {
                             totalMark: '',
                             duration: '',
                             examSubject: '',
-                            startAt: '',
-                            endAt: '',
+                            startAt: moment().format('yyyy-MM-DD hh:mm'),
+                            endAt: moment().add(7,'days').format('yyyy-MM-DD hh:mm'),
                             willPublish: true
                         }}
                         onSubmit={onAddExamHandler}
@@ -81,8 +83,7 @@ const AddExam = () => {
                                     {props.errors.description && <div id="feedback">{props.errors.description}</div>}
                                 </div>
 
-
-
+                                {/* Exam Subject */}
                                 <div className='mt-4'>
                                     <TextField
                                         name="examSubject"
@@ -97,30 +98,40 @@ const AddExam = () => {
                                     {props.errors.examSubject && <div id="feedback">{props.errors.examSubject}</div>}
                                 </div>
 
+                                {/* Start Date */}
                                 <div className='mt-4'>
-                                    <TextField
-                                        name="startAt"
-                                        fullWidth
-                                        onChange={props.handleChange}
-                                        onBlur={props.handleBlur}
-                                        value={props.values.startAt}
-                                        type="text"
+                                    <MobileDateTimePicker
                                         label="Start Date"
-                                        variant="outlined"
+                                        inputFormat={'yyyy-MM-DD hh:mm'}
+                                        value={props.values.startAt}
+                                        onClose={() => {
+                                            props.setFieldTouched('startAt', true)
+                                        }}
+                                        onChange={(date) => {
+                                            let selectedDate = moment(date).format('yyyy-MM-DD HH:mm')
+                                            console.log(selectedDate)
+                                            props.setFieldValue('startAt', selectedDate)
+                                        }}
+                                        renderInput={(params) => <TextField {...params} fullWidth />}
                                     />
                                     {props.errors.startAt && <div id="feedback">{props.errors.startAt}</div>}
                                 </div>
 
+                                {/* End Date */}
                                 <div className='mt-4'>
-                                    <TextField
-                                        name="endAt"
-                                        fullWidth
-                                        onChange={props.handleChange}
-                                        onBlur={props.handleBlur}
-                                        value={props.values.endAt}
-                                        type="text"
+                                    <MobileDateTimePicker
                                         label="End Date"
-                                        variant="outlined"
+                                        inputFormat={'yyyy-MM-DD hh:mm'}
+                                        value={props.values.endAt}
+                                        onClose={() => {
+                                            props.setFieldTouched('endAt', true)
+                                        }}
+                                        onChange={(date) => {
+                                            let selectedDate = moment(date).format('yyyy-MM-DD HH:mm')
+                                            console.log(selectedDate)
+                                            props.setFieldValue('endAt', selectedDate)
+                                        }}
+                                        renderInput={(params) => <TextField {...params} fullWidth />}
                                     />
                                     {props.errors.endAt && <div id="feedback">{props.errors.endAt}</div>}
                                 </div>
