@@ -7,11 +7,9 @@ import MenuItem from '@mui/material/MenuItem';
 import MCQ from './QuestionTypes/MCQ';
 import { ExclamationCircleOutlined } from '@ant-design/icons/lib/icons';
 import { Colors } from '../../../constants/Colors';
-import { useHistory } from 'react-router-dom';
 
 
 const AddQuestionScreen = () => {
-    const history = useHistory()
     const [questionTypes, setQuestionTypes] = useState(null);
     const getQuestionTypes = () => {
         setQuestionTypes([
@@ -43,12 +41,6 @@ const AddQuestionScreen = () => {
         </div>
     )
 
-    //let fromExamCreation = history.location.state?.fromExamCreation
-    const submitQuestionHandler = (values) => {
-        console.log(values);
-        history.goBack()
-    }
-
     return <div className="row justify-content-center text-center my-5">
         <div className="col-md-8 col-12">
             <CardComponent title={'Add Question'}>
@@ -64,7 +56,7 @@ const AddQuestionScreen = () => {
 
                     {questionType === 'MCQ' &&
                         <div>
-                            <MCQ getQuestionDetails={submitQuestionHandler} />
+                            <MCQ  />
                         </div>
                     }
                 </div>
