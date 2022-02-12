@@ -9,15 +9,16 @@ const ExamReducer = (state = initStates, action) => {
                 ...state,
                 examQuestions: [...state.examQuestions, action.payload],
             };
-        case 'REMOVE_QUESTION':
+        case 'REMOVE_QUESTION': {
             let newExamQuestions = state?.examQuestions
             let newExamQuestion = newExamQuestions.filter(item => {
-                return item.id !== action.payload.id
+                return item.id !== action.payload
             })
             return {
                 ...state,
                 examQuestions: [...newExamQuestion],
             };
+        }
         case 'REMOVE_ALL':
             return {
                 ...state,

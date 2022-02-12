@@ -1,14 +1,19 @@
 import { PlusCircleOutlined } from '@ant-design/icons'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { matchPath, useHistory } from 'react-router-dom'
+import { ExamServices } from '../../../../apis/Services/ExamService'
 import CardComponent from '../../../../Components/CardComponent/CardComponent'
 import AddationMethodsMenu from '../../../../Components/QuestionComponents/AddationMethodsMenu'
 import BorderdQuestionController from '../../../../Components/QuestionComponents/BorderdQuestionController'
+import HandleErrors from '../../../../hooks/handleErrors'
+import { removeAllSavedQuestions, removeSavedQuestionFromExam } from '../../../../redux/actions/ExamAction'
 
 const AddExamQuestions = () => {
     const history = useHistory()
+    const dispatch = useDispatch()
 
     const [anchorEl, setAnchorEl] = useState(null);
     const AddQuestionHandler = (event) => {
@@ -32,31 +37,42 @@ const AddExamQuestions = () => {
         }
     ]
 
+    const [examId, setExamId] = useState(null)
+    useEffect(() => {
+        const match = matchPath(history.location.pathname, {
+            path: '/exams/:examId/set-options'
+        })
+        console.log(match.params.examId)
+        setExamId(match.params.examId)
+    }, [history.location.pathname])
+
     /** Get Questions of this exam */
     const [questions, setQuestions] = useState(null);
     const savedQuestions = useSelector(state => state.exam.examQuestions)
     const getQuestions = () => {
-        const questionss = [
-            { questionText: 'Question 1', id: '1' },
-            { questionText: 'Question 2', id: '2' },
-            { questionText: 'Question 3', id: '3' },
-        ]
+        const questionss = []
         setQuestions([...questionss, ...savedQuestions])
     }
     // eslint-disable-next-line
     useEffect(() => {
         getQuestions();
-        console.log("hii")
     }, [savedQuestions]);
 
 
     const submitExamHandler = () => {
-        history.push('/exams')
+        ExamServices.addQuestionsToExam(examId, [...questions, ...savedQuestions])
+            .then(res => {
+                history.push('/exams')
+                dispatch(removeAllSavedQuestions())
+
+            })
+            .catch(err => HandleErrors(err))
     }
 
     const removeQuestionFromListHandler = (id) => {
-
+        dispatch(removeSavedQuestionFromExam(id))
     }
+
     return (
         <div className="row justify-content-center text-center my-5">
             <div className="col-md-8 col-12">

@@ -18,7 +18,7 @@ const saveAQuestion = (questionData) => {
  * @param {{id:string}} param0 
  * @returns 
  */
-const removeSavedQuestionFromExam = ({ id }) => {
+const removeSavedQuestionFromExam = (id) => {
     return {
         type: REMOVE_QUESTION,
         payload: id
