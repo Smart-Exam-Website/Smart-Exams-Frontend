@@ -98,7 +98,7 @@ const AddQuestionScreen = () => {
                     {questionType === 'mcq' &&
                         <div>
                             <MCQ
-                                initValues={oldQuestion?.type === 'mcq' ? oldQuestionDetails : null}
+                                initValues={oldQuestionDetails?.type === 'mcq' ? oldQuestionDetails : null}
                                 getQuestionCreationRequest={createQuestionHandler}
                             />
                         </div>

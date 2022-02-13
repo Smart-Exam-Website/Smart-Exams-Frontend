@@ -27,7 +27,6 @@ const MCQ = ({ initValues, getQuestionCreationRequest = () => { } }) => {
         choise2: yup.string().required('This is a required field'),
         choise3: yup.string().required('This is a required field'),
     });
-    console.log(initValues)
     const submitQuestionHandler = (values) => {
         if (!initValues) {
             let creationRequest = QuestionServices.createMcqQuestion({
@@ -52,14 +51,15 @@ const MCQ = ({ initValues, getQuestionCreationRequest = () => { } }) => {
 
     }
 
-
+    const mcqChoices = initValues?.mcq?.mcq_answers?.filter(item=>!item.isCorrect)
+    const mcqCorrectAnswer = initValues?.mcq?.mcq_answers?.find(item=>item.isCorrect)
     return <Formik
         initialValues={{
             questionText: initValues?.questionText || '',
-            correctAnswer: '',
-            choise1: '',
-            choise2: '',
-            choise3: ''
+            correctAnswer: mcqCorrectAnswer?.option.value || '',
+            choise1: mcqChoices?.[0].option.value || '',
+            choise2: mcqChoices?.[1].option.value || '',
+            choise3: mcqChoices?.[2].option.value || ''
         }}
         enableReinitialize={true}
         validationSchema={MCQSCHEMA}

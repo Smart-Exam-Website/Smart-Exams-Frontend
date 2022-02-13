@@ -102,6 +102,9 @@ const Questions = () => {
             QuestionServices.deleteQuestion(selectedQuestion)
                 .then(res => {
                     showSuccessMsg('Question deleted successfully!')
+                    let newQuestions = [...questions]
+                    newQuestions = newQuestions.filter(item=>item.id !== selectedQuestion)
+                    setQuestions(newQuestions)
                 })
                 .catch(err => HandleErrors(err))
             handleClose() //for menu
