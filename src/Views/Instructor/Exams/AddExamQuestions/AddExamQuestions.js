@@ -62,9 +62,9 @@ const AddExamQuestions = () => {
         const questionss = examOldQuestions?.length ? [...examOldQuestions] : []
         setQuestions([...questionss, ...savedQuestions])
     }
-    // eslint-disable-next-line
     useEffect(() => {
         getQuestions();
+        // eslint-disable-next-line
     }, [savedQuestions]);
 
 

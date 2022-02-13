@@ -33,7 +33,7 @@ const AddQuestionScreen = () => {
                 setOldQuestionDetails(res?.question)
             })
             .catch(err => HandleErrors(err))
-    }, [])
+    }, [oldQuestion?.id])
 
     const [questionTypes, setQuestionTypes] = useState(null);
     const getQuestionTypes = () => {
