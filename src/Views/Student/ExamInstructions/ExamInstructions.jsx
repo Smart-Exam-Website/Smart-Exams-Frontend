@@ -10,18 +10,16 @@ import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
 
 const Examinstructions = (props) => {
     const exam = props.location.state.exam
-
     const goToExamHandler = (event) => {
         // this code pevents from going to another page
         event.preventDefault()
 
         props.history.push({
-            pathname: '/take-exam',
+            pathname: `/exams/${exam.id}`,
             state: { exam: exam }
         })
-
-
     }
+
     return (
         <div>
             <div className="row justify-content-center text-center my-5">

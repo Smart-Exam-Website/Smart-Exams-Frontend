@@ -15,7 +15,7 @@ const AuthReducer = (state = initStates, action) => {
          return {
             ...state,
             userToken: null,
-            data: {}
+            userType: null
          };
 
       case 'SET_USER_TYPE':
