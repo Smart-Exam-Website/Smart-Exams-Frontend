@@ -23,7 +23,7 @@ const ShowExams = (props) => {
         //event.preventDefault()
 
         props.history.push({
-            pathname: `/exams/instructions/${exam.id}`,
+            pathname: `/exams/${exam.id}`,
             state: { exam: exam }
         })
     }
@@ -35,7 +35,7 @@ const ShowExams = (props) => {
     useEffect(() => {
         ExamServices.getMyExams()
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 setExams(res)
             })
             .catch(err => HandleErrors(err))

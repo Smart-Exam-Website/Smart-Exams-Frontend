@@ -51,7 +51,7 @@ export class ExamServices {
      * @param {Array.<{id:number, mark:number, duration:string}>} questions Array of objects contain question ids
      * @returns {Promise<{message}>}
      */
-     static setQuestionsMarksAndDuration(examId, questions) {
+    static setQuestionsMarksAndDuration(examId, questions) {
         return _axios.post('/exams/step4', { examId, questions });
     }
 
@@ -60,8 +60,36 @@ export class ExamServices {
      * Get All My Exams
      * @returns {Promise<{exams:Array}>}
      */
-    static getMyExams(){
+    static getMyExams() {
         return _axios.get('/exams');
+    }
+
+
+    /**
+     * Get a specific Exam
+     * @param {number} examId 
+     * @returns Promise<{Exam:Object}>
+     */
+    static getExamQuestions(examId) {
+        return _axios.get(`/exams/${examId}/questions`);
+    }
+
+
+    
+    /**
+     * Post a question answer to 
+     * @param {object} answerData 
+     * Example Object
+     * {
+     " studentAnswer": "seven"
+     " option_id": 1,
+     " question_id": 1,
+     " exam_id": 1,
+     * } 
+     * @returns Promise<{message}>
+     */
+    static addAnswer(answerData) {
+        return _axios.post(`/answers`, answerData);
     }
 
 }

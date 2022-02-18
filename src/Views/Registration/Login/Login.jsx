@@ -34,8 +34,6 @@ const Login = (props) => {
         // this code pevents from going to another page
         event.preventDefault()
 
-        console.log(email)
-        console.log(password)
         AuthServices.login({ email, password })
             .then(res => {
                 console.log("result =>", res)

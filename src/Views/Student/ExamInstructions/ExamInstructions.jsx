@@ -15,7 +15,7 @@ const Examinstructions = (props) => {
         event.preventDefault()
 
         props.history.push({
-            pathname: `/exams/${exam.id}`,
+            pathname: `/exams/${exam.id}/start`,
             state: { exam: exam }
         })
     }
