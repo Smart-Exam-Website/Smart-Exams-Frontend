@@ -29,6 +29,7 @@ const TakeExam = (props) => {
         // // this code pevents from going to another page
         // event.preventDefault()
 
+
         // Add this answer to backend
         const answerData = {
             "option_id": chosenOptionID,
@@ -37,6 +38,9 @@ const TakeExam = (props) => {
             "exam_id": exam.id
 
         }
+
+        // adding choice to localstorage for backward saving
+        localStorage.setItem(currentQuestionNumber, chosenOptionID)
 
         ExamServices.addAnswer(answerData)
             .then(() => {
@@ -51,7 +55,7 @@ const TakeExam = (props) => {
         // Go to next question by increasing currentQuestionNumber (if it's not in the last question) 
         const newQuestionNumber = currentQuestionNumber + 1
 
-        
+
         // If we are in the last question, then we should refer to the Done Page
         if (newQuestionNumber === questions.length) {
             props.history.push({
@@ -79,6 +83,9 @@ const TakeExam = (props) => {
         // Go to next question by increasing currentQuestionNumber (if it's not in the last question) 
 
         setCurrentQuestionNumber(currentQuestionNumber - 1)
+
+        // retrieving old choice from localstorage
+
         // console.log(currentQuestionNumber)
 
 
@@ -86,10 +93,31 @@ const TakeExam = (props) => {
 
     }
 
-    const My_Questions_Markup = questions?.map((question, index) => {
+
+    const getAnswer = (questionIndex, chosenOptionID, chosenAnswer) => {
+
+        setQuestions((prevState) => {
+            let newQuestions = [...prevState]
+            newQuestions[questionIndex - 1] = {
+                ...newQuestions[questionIndex - 1],
+                studentAnswer: {
+                    chosenOptionID,
+                    chosenAnswer
+                }
+            }
+    
+            return newQuestions
+        })
+        
+    
+    }
+    let My_Questions_Markup = questions?.map((question, index) => {
         return (
             <MCQ
-                question_index={index + 1}
+                questionIndex={index + 1}
+
+                currentQuestionNumber={currentQuestionNumber}
+                key={props.questionIndex}
 
                 questionText={question.questionText}
                 answers={question.answers}
@@ -99,6 +127,11 @@ const TakeExam = (props) => {
 
                 previousButtonDisabled={currentQuestionNumber === 0}
                 changeNextNameIntoFinish={index === questions.length - 1}
+
+                studentAnswerFunction={getAnswer}
+
+                savedStudentAnswer={question?.studentAnswer}
+
             >
 
             </MCQ>
