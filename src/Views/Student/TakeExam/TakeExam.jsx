@@ -21,7 +21,7 @@ const TakeExam = (props) => {
             }).catch((error) => {
                 HandleErrors(error)
             })
-    }, []);
+    }, [exam.id]);
 
 
 
