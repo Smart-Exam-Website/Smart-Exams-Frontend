@@ -92,4 +92,13 @@ export class ExamServices {
         return _axios.post(`/answers`, answerData);
     }
 
+     /**
+     * Delete specific exam
+     * @param {number} examId 
+     * @returns 
+     */
+      static deleteExam(examId) {
+        return _axios.delete(`/exams/${examId}`);
+    }
+
 }

@@ -103,12 +103,14 @@ const Questions = () => {
                 .then(res => {
                     showSuccessMsg('Question deleted successfully!')
                     let newQuestions = [...questions]
-                    newQuestions = newQuestions.filter(item=>item.id !== selectedQuestion)
+                    newQuestions = newQuestions.filter(item => item.id !== selectedQuestion)
                     setQuestions(newQuestions)
                 })
                 .catch(err => HandleErrors(err))
-            handleClose() //for menu
-            dispatch(hideAlert()) //for alert
+                .finally(() => {
+                    handleClose() //for menu
+                    dispatch(hideAlert()) //for alert
+                })
         }
         // show alert
         dispatch(showAlert({

@@ -18,6 +18,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { Menu, MenuItem } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
+import showSuccessMsg from '../../../hooks/showSuccessMsg';
+import { useDispatch } from 'react-redux';
+import { hideAlert, showAlert } from '../../../redux/actions/AppActions';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -48,6 +51,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const Exams = () => {
     const history = useHistory();
+    const dispatch = useDispatch();
 
     const addNewExamHandler = (e) => {
         console.log(e)
@@ -91,8 +95,25 @@ const Exams = () => {
     }
 
     const deleteExamHandler = () => {
-        console.log(selectedExam)
-        handleClose()
+        let deleteFun = () => {
+            ExamServices.deleteExam(selectedExam)
+                .then(res => {
+                    showSuccessMsg('Exam deleted successfully!')
+                    let newExams = [...exams]
+                    newExams = newExams.filter(item => item.id !== selectedExam)
+                    setExams(newExams)
+                })
+                .catch(err => HandleErrors(err))
+                .finally(() => {
+                    handleClose() //for menu
+                    dispatch(hideAlert()) //for alert
+                })
+        }
+        dispatch(showAlert({
+            header: 'Delete this exam?',
+            details: 'You are going to delete this exam permanently',
+            alertFunction: deleteFun
+        }))
     }
 
     const isNotCompleted = (row) => (!row.config || !row.questions?.length)
