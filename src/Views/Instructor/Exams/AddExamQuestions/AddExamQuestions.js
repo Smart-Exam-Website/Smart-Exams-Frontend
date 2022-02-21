@@ -43,8 +43,7 @@ const AddExamQuestions = () => {
     /** Stuff for editing mode */
     const isEditMode = Boolean(location.state?.exam)
     const examOldData = location.state?.exam
-    const examOldQuestions = examOldData?.questions
-    console.log(examOldData)
+    const examOldQuestions = examOldData?.questions || []
 
     const [examId, setExamId] = useState(null)
     useEffect(() => {
@@ -59,22 +58,16 @@ const AddExamQuestions = () => {
     const [questions, setQuestions] = useState(null);
     const savedQuestions = useSelector(state => state.exam.examQuestions)
     const getQuestions = () => {
-        const questionss = examOldQuestions?.length ? [...examOldQuestions] : []
-        setQuestions([...questionss, ...savedQuestions])
+        setQuestions([...examOldQuestions, ...savedQuestions])
     }
     useEffect(() => {
         getQuestions();
         // eslint-disable-next-line
-    }, [savedQuestions]);
+    }, []);
 
 
     const submitExamHandler = () => {
-        if (isEditMode && examOldQuestions?.length) {
-            history.push('/exams')
-            return
-        }
-
-        let submittedQuestions = [...questions, ...savedQuestions]
+        let submittedQuestions = [...questions]
         submittedQuestions = submittedQuestions.map(item => { return { question_id: item.id } })
         ExamServices.addQuestionsToExam(examId, submittedQuestions)
             .then(res => {
@@ -87,6 +80,10 @@ const AddExamQuestions = () => {
 
     const removeQuestionFromListHandler = (id) => {
         dispatch(removeSavedQuestionFromExam(id))
+        setQuestions(prevState => {
+            console.log(prevState, id)
+            return prevState.filter(item => item.id !== id)
+        })
     }
 
     return (
