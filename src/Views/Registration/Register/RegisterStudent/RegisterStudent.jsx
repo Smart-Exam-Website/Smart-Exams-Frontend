@@ -146,7 +146,7 @@ class RegisterStudent extends Component {
             "email": this.state.email,
             "password": this.state.password,
             "gender": this.state.gender,
-            "image": "https://google.com/pepepepaaa",
+            "image": "https://icon-library.com/images/icon-for-user/icon-for-user-4.jpg",
             "phone": this.state.phone,
             "studentCode": this.state.studentcode,
             "type": "student",
