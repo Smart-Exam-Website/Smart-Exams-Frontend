@@ -68,7 +68,7 @@ export class ExamServices {
      * Get All published exam
      * @returns {Promise<Array>}
      */
-    static getAllPublishedExams(){
+    static getAllPublishedExams() {
         return _axios.get('/exams');
     }
 
@@ -82,7 +82,7 @@ export class ExamServices {
     }
 
 
-    
+
     /**
      * Post a question answer to 
      * @param {object} answerData 
@@ -99,13 +99,31 @@ export class ExamServices {
         return _axios.post(`/answers`, answerData);
     }
 
-     /**
-     * Delete specific exam
+    /**
+    * Delete specific exam
+    * @param {number} examId 
+    * @returns 
+    */
+    static deleteExam(examId) {
+        return _axios.delete(`/exams/${examId}`);
+    }
+
+    /**
+     * Make an exam publish
      * @param {number} examId 
      * @returns 
      */
-      static deleteExam(examId) {
-        return _axios.delete(`/exams/${examId}`);
+    static makeExamPublished(examId) {
+        return _axios.post(`exams/${examId}/publish`, { "isPublished": true })
+    }
+
+    /**
+     * Make an exam unpublish
+     * @param {number} examId 
+     * @returns 
+     */
+     static makeExamUnPublished(examId) {
+        return _axios.post(`exams/${examId}/publish`, { "isPublished": false })
     }
 
 }

@@ -15,12 +15,14 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Colors } from '../../../constants/Colors';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Menu, MenuItem } from '@mui/material';
+import { Chip, Menu, MenuItem } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import showSuccessMsg from '../../../hooks/showSuccessMsg';
 import { useDispatch } from 'react-redux';
 import { hideAlert, showAlert } from '../../../redux/actions/AppActions';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import PublishIcon from '@mui/icons-material/Publish';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -59,13 +61,16 @@ const Exams = () => {
     }
 
     const [exams, setExams] = useState(null)
-    useEffect(() => {
+    const getExamsHandler = () => {
         ExamServices.getMyExams()
             .then(res => {
                 console.log(res)
                 setExams(res)
             })
             .catch(err => HandleErrors(err))
+    }
+    useEffect(() => {
+        getExamsHandler()
     }, [])
 
     const GoToExamDetailsHandler = () => {
@@ -116,7 +121,28 @@ const Exams = () => {
         }))
     }
 
-    const isNotCompleted = (row) => (!row.config || !row.questions?.length)
+    const makePublishHandler = (isWantToBePublish) => {
+        let selectedExamObject = exams.find(item => item.id === selectedExam)
+        let examName = selectedExamObject?.name
+        let request = isWantToBePublish ? ExamServices.makeExamPublished(selectedExam) : ExamServices.makeExamUnPublished(selectedExam)
+        request
+            .then(res => {
+                showSuccessMsg(`Your Exam (${examName}) has been ${isWantToBePublish ? 'published' : 'unpublished'} successfully!`)
+            })
+            .catch(err => HandleErrors(err))
+            .finally(() => {
+                handleClose() //for menu
+                getExamsHandler()
+            })
+    }
+
+    const isExamNotCompleted = (row) => (!row.config || !row.questions?.length)
+    const isSelectedExamPublished = () => {
+        if (!exams?.length) return null
+        let selectedExamObject = exams.find(item => item.id === selectedExam)
+        return selectedExamObject?.isPublished
+    }
+
     return (
         <div className='container'>
             <div style={{}} className='d-flex mt-4 justify-content-end'>
@@ -140,29 +166,32 @@ const Exams = () => {
                     </TableHead>
                     <TableBody>
                         {exams?.map((row) => (
-                            <StyledTableRow className={isNotCompleted(row) ? 'bg-danger' : ''} onClick={GoToExamDetailsHandler} key={row.id}>
+                            <StyledTableRow className={isExamNotCompleted(row) ? 'bg-danger' : ''} onClick={GoToExamDetailsHandler} key={row.id}>
                                 {/* NAME */}
-                                <StyledTableCell className={isNotCompleted(row) ? 'text-light' : ''} component="th" scope="row">
+                                <StyledTableCell className={isExamNotCompleted(row) ? 'text-light' : ''} component="th" scope="row">
                                     {row.name}
+                                    {row.isPublished &&
+                                        < Chip className='ms-2' size='small' color="success" icon={<DoneAllIcon />} label="Published" />
+                                    }
                                 </StyledTableCell>
                                 {/* STARE DATE */}
-                                <StyledTableCell className={isNotCompleted(row) ? 'text-light' : ''} align="right">
+                                <StyledTableCell className={isExamNotCompleted(row) ? 'text-light' : ''} align="right">
                                     {row.startAt}
                                 </StyledTableCell>
                                 {/* END DATE */}
-                                <StyledTableCell className={isNotCompleted(row) ? 'text-light' : ''} align="right">
+                                <StyledTableCell className={isExamNotCompleted(row) ? 'text-light' : ''} align="right">
                                     {row.endAt}
                                 </StyledTableCell>
                                 {/* TOTAL MARK */}
-                                <StyledTableCell className={isNotCompleted(row) ? 'text-light' : ''} align="right">
+                                <StyledTableCell className={isExamNotCompleted(row) ? 'text-light' : ''} align="right">
                                     {row.totalMark}
                                 </StyledTableCell>
                                 {/* DURATION */}
-                                <StyledTableCell className={isNotCompleted(row) ? 'text-light' : ''} align="right">
+                                <StyledTableCell className={isExamNotCompleted(row) ? 'text-light' : ''} align="right">
                                     {row.duration}
                                 </StyledTableCell>
                                 {/* OPTIONS */}
-                                <StyledTableCell className={isNotCompleted(row) ? 'text-light' : ''} onClick={(e) => handleClick(e, row.id)} align="right">
+                                <StyledTableCell className={isExamNotCompleted(row) ? 'text-light' : ''} onClick={(e) => handleClick(e, row.id)} align="right">
                                     <SettingsIcon fontSize='medium' color='secondary' />
                                 </StyledTableCell>
 
@@ -172,33 +201,39 @@ const Exams = () => {
                 </Table>
             </TableContainer>
 
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                autoFocus={false}
-                onClose={handleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                }}
-            >
-                <MenuItem onClick={editExamHandler}>
-                    <EditIcon />
-                    Edit
-                </MenuItem>
-                <MenuItem color='error' onClick={deleteExamHandler}>
-                    <DeleteForeverIcon color='error' />
-                    Delete
-                </MenuItem>
-            </Menu>
+            {selectedExam &&
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    autoFocus={false}
+                    onClose={handleClose}
+                    MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    <MenuItem onClick={() => makePublishHandler(!isSelectedExamPublished())}>
+                        <PublishIcon />
+                        {isSelectedExamPublished() ? 'UnPublish' : 'Publish'}
+                    </MenuItem>
+                    <MenuItem onClick={editExamHandler}>
+                        <EditIcon />
+                        Edit
+                    </MenuItem>
+                    <MenuItem color='error' onClick={deleteExamHandler}>
+                        <DeleteForeverIcon color='error' />
+                        Delete
+                    </MenuItem>
+                </Menu>
+            }
         </div>
     )
 }
