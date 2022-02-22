@@ -1,4 +1,5 @@
 import { showError } from '../redux/actions/AppActions'
+import { logout } from '../redux/actions/AuthActions'
 import { store } from '../redux/store'
 
 export default function HandleErrors(err) {
@@ -16,5 +17,10 @@ export default function HandleErrors(err) {
         showErrorToast(err)
     } else {
         showErrorToast("UNKNOWN_ERROR")
+    }
+
+    if (err?.message?.includes("Unauthenticated")) {
+        store.dispatch(logout())
+        localStorage.clear()
     }
 }
