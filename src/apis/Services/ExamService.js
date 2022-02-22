@@ -57,13 +57,20 @@ export class ExamServices {
 
 
     /**
-     * Get All My Exams
-     * @returns {Promise<{exams:Array}>}
+     * Get Instrunctor Own Exams
+     * @returns {Promise<Array>}
      */
     static getMyExams() {
-        return _axios.get('/exams');
+        return _axios.get('/instructors/myExams');
     }
 
+    /**
+     * Get All published exam
+     * @returns {Promise<Array>}
+     */
+    static getAllPublishedExams(){
+        return _axios.get('/exams');
+    }
 
     /**
      * Get a specific Exam

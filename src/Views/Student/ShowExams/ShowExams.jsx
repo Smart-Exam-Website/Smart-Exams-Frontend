@@ -33,7 +33,7 @@ const ShowExams = (props) => {
      */
     const [exams, setExams] = useState(null)
     useEffect(() => {
-        ExamServices.getMyExams()
+        ExamServices.getAllPublishedExams()
             .then(res => {
                 // console.log(res)
                 setExams(res)

@@ -1,7 +1,7 @@
 import { PlusCircleOutlined } from '@ant-design/icons'
 import React from 'react'
 import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { QuestionServices } from '../../../apis/Services/QuestionService';
 import HandleErrors from '../../../hooks/handleErrors';
 import { styled } from '@mui/material/styles';
@@ -14,13 +14,14 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Colors } from '../../../constants/Colors';
 import { useState } from 'react';
-import { Menu, MenuItem } from '@mui/material';
+import { Checkbox, Menu, MenuItem } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import SettingsIcon from '@mui/icons-material/Settings';
 import showSuccessMsg from '../../../hooks/showSuccessMsg';
 import { useDispatch } from 'react-redux';
 import { hideAlert, showAlert } from '../../../redux/actions/AppActions';
+import { saveAQuestion } from '../../../redux/actions/ExamAction';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -51,7 +52,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const Questions = () => {
     const dispatch = useDispatch()
-    const history = useHistory();
+    const history = useHistory()
+    const location = useLocation()
+
+    const isSelectionMode = location.state?.canSelectQuestionsForExam
 
     const goToAddQuestionPageHandler = () => {
         history.push(`${history.location.pathname}/add`)
@@ -120,35 +124,95 @@ const Questions = () => {
         }))
     }
 
+    // #### SELECTION MODE STUFF ####
+
+    const isAllSelected = questions?.every(item => item.isSelected)
+    const selectedQuestions = questions?.filter(item => item.isSelected)
+    /**
+     * Mark needed question to be selected for an exam in [selection mode]
+     */
+    const onCheckHandler = (index, isSelected) => {
+        setQuestions(prevState => {
+            let newQuestions = [...prevState]
+            newQuestions[index].isSelected = isSelected
+            return newQuestions
+        })
+    }
+    const selectAllQuestions = () => {
+        setQuestions(prevState => {
+            let newQuestions = [...prevState]
+            return newQuestions.map(item => { return { ...item, isSelected: true } })
+        })
+    }
+    const deselectAllQuestions = () => {
+        setQuestions(prevState => {
+            let newQuestions = [...prevState]
+            return newQuestions.map(item => { return { ...item, isSelected: false } })
+        })
+    }
+    const sentSelectedQuestionHandler = () => {
+        dispatch(saveAQuestion(selectedQuestions))
+        history.goBack()
+    }
+
+
     return (
         <div className='container'>
             <div className='d-flex mt-4 justify-content-end'>
-                <button onClick={goToAddQuestionPageHandler} className='btn btn-success'>
-                    <PlusCircleOutlined className='primaryColoredIcon' style={{ color: '#fff' }} />
-                </button>
+                {!isSelectionMode ?
+                    <button onClick={goToAddQuestionPageHandler} className='btn btn-success'>
+                        <PlusCircleOutlined className='primaryColoredIcon' style={{ color: '#fff' }} />
+                    </button>
+                    :
+                    <button onClick={sentSelectedQuestionHandler} className='btn btn-success'>
+                        Confirm Selection ({selectedQuestions?.length})
+                    </button>
+                }
             </div>
 
-            <TableContainer className='mt-5' component={Paper}>
+            <TableContainer className='mt-4' component={Paper}>
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                     <TableHead>
                         <TableRow>
+                            {isSelectionMode &&
+                                <StyledTableCell>
+                                    <Checkbox
+                                        style={{ backgroundColor: '#fff' }}
+                                        checked={isAllSelected}
+                                        onChange={isAllSelected ? deselectAllQuestions : selectAllQuestions}
+                                    />
+                                </StyledTableCell>
+                            }
                             <StyledTableCell>Question Header</StyledTableCell>
                             <StyledTableCell align="right">Type</StyledTableCell>
                             <StyledTableCell align="right">Created Date</StyledTableCell>
-                            <StyledTableCell align="right"> </StyledTableCell>
+                            {!isSelectionMode &&
+                                <StyledTableCell align="right"> </StyledTableCell>
+                            }
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {questions?.map((row) => (
-                            <StyledTableRow onClick={()=>GoToQuestionDetailsHandler(row.id)} key={row.id}>
+                        {questions?.map((row, index) => (
+                            <StyledTableRow onClick={() => GoToQuestionDetailsHandler(row.id)} key={row.id}>
+                                {isSelectionMode &&
+                                    <StyledTableCell onClick={(e) => e.stopPropagation()} component="th" scope="row">
+                                        <Checkbox
+                                            color="primary"
+                                            checked={Boolean(row.isSelected)}
+                                            onChange={(e) => onCheckHandler(index, e.target.checked)}
+                                        />
+                                    </StyledTableCell>
+                                }
                                 <StyledTableCell component="th" scope="row">
                                     {row.questionText}
                                 </StyledTableCell>
                                 <StyledTableCell align="right">{row.type}</StyledTableCell>
                                 <StyledTableCell align="right">{row.created_at}</StyledTableCell>
-                                <StyledTableCell onClick={(e) => handleClick(e, row.id)} align="right">
-                                    <SettingsIcon fontSize='medium' color='secondary' />
-                                </StyledTableCell>
+                                {!isSelectionMode &&
+                                    <StyledTableCell onClick={(e) => handleClick(e, row.id)} align="right">
+                                        <SettingsIcon fontSize='medium' color='secondary' />
+                                    </StyledTableCell>
+                                }
 
                             </StyledTableRow>
                         ))}

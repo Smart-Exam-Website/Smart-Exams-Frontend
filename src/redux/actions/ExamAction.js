@@ -4,7 +4,7 @@ const REMOVE_ALL = 'REMOVE_ALL'
 
 /**
  * 
- * @param {{questionText:string, id:string}} questionData 
+ * @param {Array.<{questionText:string, id:string}>} questionData 
  * @returns 
  */
 const saveAQuestion = (questionData) => {

@@ -7,7 +7,7 @@ const ExamReducer = (state = initStates, action) => {
         case 'ADD_QUESTION':
             return {
                 ...state,
-                examQuestions: [...state.examQuestions, action.payload],
+                examQuestions: [...state.examQuestions, ...action.payload],
             };
         case 'REMOVE_QUESTION': {
             let newExamQuestions = state?.examQuestions
