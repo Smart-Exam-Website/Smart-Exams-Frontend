@@ -73,8 +73,8 @@ const Questions = () => {
         getAllQuestions();
     }, [])
 
-    const GoToQuestionDetailsHandler = () => {
-
+    const GoToQuestionDetailsHandler = (questionId) => {
+        history.push(`${history.location.pathname}/${questionId}`)
     }
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -140,7 +140,7 @@ const Questions = () => {
                     </TableHead>
                     <TableBody>
                         {questions?.map((row) => (
-                            <StyledTableRow onClick={GoToQuestionDetailsHandler} key={row.id}>
+                            <StyledTableRow onClick={()=>GoToQuestionDetailsHandler(row.id)} key={row.id}>
                                 <StyledTableCell component="th" scope="row">
                                     {row.questionText}
                                 </StyledTableCell>
