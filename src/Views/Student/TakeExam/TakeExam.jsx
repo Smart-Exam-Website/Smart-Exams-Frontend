@@ -7,29 +7,24 @@ import { useState } from 'react';
 import HandleErrors from '../../../hooks/handleErrors';
 const TakeExam = (props) => {
     const exam = props.location.state.exam
-    // console.log("Exam")
-    // console.log(exam.name)
     const [questions, setQuestions] = useState(null);
     const [currentQuestionNumber, setCurrentQuestionNumber] = useState(0);
-
 
     useEffect(() => {
         ExamServices.getExamQuestions(exam.id)
             .then((response) => {
                 setQuestions(response.questions.map((question) => { return question }))
-
-            }).catch((error) => {
+                return ExamServices.getStudentExamAnswers(exam.id)
+            })
+            .then(res => {
+                console.log("Student Answers =>", res?.answers)
+            })
+            .catch((error) => {
                 HandleErrors(error)
             })
     }, [exam.id]);
 
-
-
     const clickedNextHandler = (chosenOptionID, chosenAnswer) => {
-        // // this code pevents from going to another page
-        // event.preventDefault()
-
-
         // Add this answer to backend
         const answerData = {
             "option_id": chosenOptionID,
@@ -39,9 +34,6 @@ const TakeExam = (props) => {
 
         }
 
-        // adding choice to localstorage for backward saving
-        localStorage.setItem(currentQuestionNumber, chosenOptionID)
-
         ExamServices.addAnswer(answerData)
             .then(() => {
                 // Answer Added to backend
@@ -50,11 +42,8 @@ const TakeExam = (props) => {
                 HandleErrors(error)
             })
 
-
-
         // Go to next question by increasing currentQuestionNumber (if it's not in the last question) 
         const newQuestionNumber = currentQuestionNumber + 1
-
 
         // If we are in the last question, then we should refer to the Done Page
         if (newQuestionNumber === questions.length) {
@@ -68,34 +57,14 @@ const TakeExam = (props) => {
 
         // advance to the next question
         setCurrentQuestionNumber(newQuestionNumber)
-
-        // console.log(currentQuestionNumber)
-
-
-
-
     }
+
     const clickedPreviousHandler = () => {
-
-        // Add this answer to backend
-
-
         // Go to next question by increasing currentQuestionNumber (if it's not in the last question) 
-
         setCurrentQuestionNumber(currentQuestionNumber - 1)
-
-        // retrieving old choice from localstorage
-
-        // console.log(currentQuestionNumber)
-
-
-
-
     }
-
 
     const getAnswer = (questionIndex, chosenOptionID, chosenAnswer) => {
-
         setQuestions((prevState) => {
             let newQuestions = [...prevState]
             newQuestions[questionIndex - 1] = {
@@ -105,12 +74,10 @@ const TakeExam = (props) => {
                     chosenAnswer
                 }
             }
-    
             return newQuestions
         })
-        
-    
     }
+
     let My_Questions_Markup = questions?.map((question, index) => {
         return (
             <MCQ
@@ -131,9 +98,7 @@ const TakeExam = (props) => {
                 studentAnswerFunction={getAnswer}
 
                 savedStudentAnswer={question?.studentAnswer}
-
             >
-
             </MCQ>
         )
 

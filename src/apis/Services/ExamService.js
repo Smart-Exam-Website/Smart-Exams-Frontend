@@ -125,5 +125,9 @@ export class ExamServices {
      static makeExamUnPublished(examId) {
         return _axios.post(`exams/${examId}/publish`, { "isPublished": false })
     }
+    
+    static getStudentExamAnswers(examId){
+        return _axios.get(`exams/${examId}/answers`)
+    }
 
 }
