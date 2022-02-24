@@ -11,13 +11,28 @@ const TakeExam = (props) => {
     const [currentQuestionNumber, setCurrentQuestionNumber] = useState(0);
 
     useEffect(() => {
+        let responseQuestions;
         ExamServices.getExamQuestions(exam.id)
             .then((response) => {
-                setQuestions(response.questions.map((question) => { return question }))
+                responseQuestions = response.questions
                 return ExamServices.getStudentExamAnswers(exam.id)
             })
             .then(res => {
-                console.log("Student Answers =>", res?.answers)
+                // Formatting answer array stage
+                let formatedAnswers = {}
+                res?.answers.forEach((answer) => {
+                    formatedAnswers[answer.question_id] = { chosenOptionID: answer.option_id, chosenAnswer: answer.studentAnswer }
+                })
+                console.log("ANSWERS", formatedAnswers)
+                //formated question stage
+                let formatedQuestions = responseQuestions.map((question) => {
+                    let thisQuestionAnswer = formatedAnswers?.[question.id]
+                    if (!thisQuestionAnswer) return question
+
+                    let formatedQuestion = { ...question, studentAnswer: thisQuestionAnswer }
+                    return formatedQuestion
+                })
+                setQuestions([...formatedQuestions])
             })
             .catch((error) => {
                 HandleErrors(error)
