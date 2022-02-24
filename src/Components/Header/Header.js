@@ -1,7 +1,7 @@
 import React from 'react'
 import './Header.css'
 import Logo from '../../assets/images/logo.png'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useHistory } from 'react-router-dom'
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../redux/actions/AuthActions';
@@ -10,10 +10,13 @@ import { logout } from '../../redux/actions/AuthActions';
 const Header = () => {
     const isAuth = useSelector(state => state.auth.userToken)
     const userType = useSelector(state => state.auth.userType)
+    const history = useHistory()
+
     const dispatch = useDispatch(null)
     const logoutHandler = () => {
         dispatch(logout())
         localStorage.clear()
+        history.push('/login')
     }
 
     return (

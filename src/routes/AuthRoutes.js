@@ -1,5 +1,3 @@
-import InstructorProfile from '../Views/Profiles/Instructor-Profile/InstructorProfile'
-import StudentProfile from '../Views/Profiles/Student-Profile/StudentProfile'
 import forgotPassword from '../Views/Registration/ForgotPassword/forgotPassword'
 import Login from '../Views/Registration/Login/Login'
 import RegisterInquiry from '../Views/Registration/Register/RegisterInquiry'
@@ -17,8 +15,7 @@ const AuthRoutes =
         { path: "/verifyEmail", component: VerifyEmail, exact: true },
         { path: "/register-student", component: RegisterStudent, exact: true },
         { path: "/register-instructor", component: RegisterInstructor, exact: true },
-        { path: "/profile/student", component: StudentProfile, exact: true },
-        { path: "/profile/instructor", component: InstructorProfile, exact: true }
+       
     ]
 
 export default AuthRoutes

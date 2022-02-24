@@ -19,7 +19,8 @@ function App() {
 
     if (!isAuth) return
     if (!userType) return
-
+    
+    // TODO: Check token with an endpoint
     dispatch(signin(isAuth))
     dispatch(setUserType(userType))
   }, [dispatch])
