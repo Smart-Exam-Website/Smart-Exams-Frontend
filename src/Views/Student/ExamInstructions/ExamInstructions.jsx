@@ -6,10 +6,22 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CardComponent from '../../../Components/CardComponent/CardComponent';
 import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import TakePhoto from '../TakePhoto/TakePhoto';
+import { useState } from 'react';
+import showSuccessMsg from '../../../hooks/showSuccessMsg';
+
+
 
 
 const Examinstructions = (props) => {
     const exam = props.location.state.exam
+
+    const [isPhotoTaken, setIsPhotoTaken] = useState(false);
+    const [studentImage, setStudentImage] = useState(null);
+
+
     const goToExamHandler = (event) => {
         // this code pevents from going to another page
         event.preventDefault()
@@ -19,6 +31,16 @@ const Examinstructions = (props) => {
             state: { exam: exam }
         })
     }
+
+    const photoTakenHandler = (img) => {
+        
+        setIsPhotoTaken(true)
+        setStudentImage(img)
+        showSuccessMsg("Photo Taken Successfully")
+        // console.log(img)
+        return
+    }
+
 
     return (
         <div>
@@ -35,6 +57,10 @@ const Examinstructions = (props) => {
                                     </Typography>
                                     <Typography variant="body3">
                                         <ul>
+                                            <li className='text-danger font-weight-bold'>
+                                                Verify your identity with a photo before entering the exam.
+
+                                            </li>
                                             <li>
                                                 Don't use internet for getting information.
 
@@ -60,12 +86,48 @@ const Examinstructions = (props) => {
                                 </CardContent>
                                 <CardActions className='d-flex m-2 justify-content-end'>
 
+                                    <Popup
+                                        trigger={
+                                            <Button
+                                                className='btn m-2 p-2 text-white'
+                                                size="large"
+                                                variant="contained"
+                                                color='warning'
+                                            >
+                                                Take Photo
+                                            </Button>
+                                        }
+                                        
+                                        modal
+                                        lockScroll
+                                        position="top center"
+
+                                    >
+                                        {close => (
+                                            <CardComponent title={'Take a nice photo'}>
+
+                                                <h4 className="d-flex justify-content-center">
+                                                    Make sure the place is well lit :)
+                                                </h4>
+                                                <TakePhoto
+                                                    captured={photoTakenHandler}
+                                                    clicked={close}
+                                                ></TakePhoto>
+                                            </CardComponent>
+
+                                        )}
+
+
+                                    </Popup>
+
                                     <Button
                                         className='btn m-2 p-2 text-white'
                                         size="small"
                                         variant="contained"
                                         color='success'
                                         onClick={goToExamHandler}
+
+                                        disabled={!isPhotoTaken}
                                     >
                                         Start Exam Now
                                     </Button>
