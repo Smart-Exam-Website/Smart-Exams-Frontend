@@ -49,8 +49,8 @@ const AddExam = () => {
                             totalMark: examOldData?.totalMark || '',
                             duration: examOldData?.duration || '',
                             examSubject: examOldData?.examSubject || '',
-                            startAt: examOldData?.startAt || moment().format('yyyy-MM-DD hh:mm'),
-                            endAt: examOldData?.endAt || moment().add(7, 'days').format('yyyy-MM-DD hh:mm'),
+                            startAt: examOldData?.startAt || moment(new Date().setMinutes(0)).format('yyyy-MM-DD hh:mm'),
+                            endAt: examOldData?.endAt || moment(new Date().setMinutes(0)).add(7, 'days').format('yyyy-MM-DD hh:mm'),
                         }}
                         onSubmit={onAddExamHandler}
                     >
@@ -117,6 +117,7 @@ const AddExam = () => {
                                 <div className='mt-4'>
                                     <MobileDateTimePicker
                                         label="Start Date"
+                                        minutesStep={5}
                                         inputFormat={'yyyy-MM-DD hh:mm'}
                                         value={props.values.startAt}
                                         onClose={() => {
@@ -136,6 +137,7 @@ const AddExam = () => {
                                 <div className='mt-4'>
                                     <MobileDateTimePicker
                                         label="End Date"
+                                        minutesStep={5}
                                         inputFormat={'yyyy-MM-DD hh:mm'}
                                         value={props.values.endAt}
                                         onClose={() => {
@@ -168,6 +170,7 @@ const AddExam = () => {
                                 <div className='mt-4'>
                                     <TextField
                                         name="duration"
+                                        placeholder='Ex: 01:30:00'
                                         fullWidth
                                         onChange={props.handleChange}
                                         onBlur={props.handleBlur}
