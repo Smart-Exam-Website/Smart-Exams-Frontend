@@ -170,8 +170,10 @@ const Exams = () => {
                                 {/* NAME */}
                                 <StyledTableCell className={isExamNotCompleted(row) ? 'text-light' : ''} component="th" scope="row">
                                     {row.name}
-                                    {row.isPublished &&
+                                    {row.isPublished ?
                                         < Chip className='ms-2' size='small' color="success" icon={<DoneAllIcon />} label="Published" />
+                                        :
+                                        null
                                     }
                                 </StyledTableCell>
                                 {/* STARE DATE */}
