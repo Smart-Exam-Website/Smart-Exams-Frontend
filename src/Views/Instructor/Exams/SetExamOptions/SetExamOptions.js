@@ -20,7 +20,6 @@ const SetExamOptions = () => {
     const isEditMode = Boolean(location.state?.exam)
     const examOldData = location.state?.exam
     const oldExamConfig = examOldData?.config
-    console.log(oldExamConfig)
 
     useEffect(() => {
         const match = matchPath(history.location.pathname, {
@@ -32,7 +31,12 @@ const SetExamOptions = () => {
 
     const setOptionsHandler = (values, actions) => {
         if (isEditMode && oldExamConfig) {
-            history.push(`/exams/${examOldData?.id}/add-questions`, { exam: examOldData })
+            ExamServices.editExamOptions(values)
+                .then(res => {
+                    showSuccessMsg('Exam options has been edited!')
+                    history.push(`/exams/${examOldData?.id}/add-questions`, { exam: examOldData })
+                })
+                .catch(err => HandleErrors(err))
             return
         }
 

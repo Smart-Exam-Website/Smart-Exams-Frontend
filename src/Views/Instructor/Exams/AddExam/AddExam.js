@@ -20,7 +20,12 @@ const AddExam = () => {
 
     const onAddExamHandler = (values, actions) => {
         if (isEditMode) {
-            history.push(`/exams/${examOldData.id}/set-options`, { exam:examOldData })
+            ExamServices.editExamMainInfo(values)
+                .then(res => {
+                    showSuccessMsg('Edited exam information successfully!')
+                    history.push(`/exams/${examOldData.id}/set-options`, { exam: examOldData })
+                })
+                .catch(err => HandleErrors(err))
             return
         }
 

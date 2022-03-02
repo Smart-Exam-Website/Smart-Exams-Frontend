@@ -17,6 +17,23 @@ export class ExamServices {
     static createNewExam(examMainInfo) {
         return _axios.post('/exams/step1', examMainInfo);
     }
+    
+    /**
+     * edit exam main info
+     * @param {Object} examMainInfo Information about the exam.
+     * @param {string} examMainInfo.name Name of the exam
+     * @param {number} examMainInfo.numberOfTrials The number allowed to retake the exam
+     * @param {string} examMainInfo.description
+     * @param {number} examMainInfo.totalMark
+     * @param {string} examMainInfo.duration hh:mm:ss
+     * @param {string} examMainInfo.startAt yyyy-mm-dd hh:mm:ss
+     * @param {string} examMainInfo.endAt yyyy-mm-dd hh:mm:ss
+     * @param {string} examMainInfo.examSubject
+     * @returns {Promise<{message, examId}>}
+     */
+    static editExamMainInfo(examMainInfo){
+        return _axios.put('/exams/step1', examMainInfo);
+    }
 
 
     /**
@@ -32,7 +49,21 @@ export class ExamServices {
      */
     static setExamOptions(examId, options) {
         return _axios.post('/exams/step2', { examId, ...options });
+    }
 
+    /**
+     * Edit exam Options by exam id
+     * @param {number} examId
+     * @param {Object} options Exam options.
+     * @param {boolean} options.faceRecognition
+     * @param {boolean} options.questionsRandomOrder
+     * @param {boolean} options.plagiarismCheck
+     * @param {boolean} options.disableSwitchBrowser
+     * @param {('manual'|'auto')} options.gradingMethod 
+     * @returns {Promise<{message}>}
+     */
+     static editExamOptions(examId, options) {
+        return _axios.put('/exams/step2', { examId, ...options });
     }
 
     /**
