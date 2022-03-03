@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import { TextField } from '@mui/material';
+import { IconButton, TextField, Typography } from '@mui/material';
 import HandleErrors from '../../../../hooks/handleErrors';
 import CardComponent from '../../../../Components/CardComponent/CardComponent';
 import _axios from '../../../../apis/axios-instance';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { styled } from '@mui/material/styles';
+import { UploadServices } from '../../../../apis/Services/UploadService';
 
+const Input = styled('input')({
+    display: 'none',
+});
 class RegisterInstructor extends Component {
-
 
     state = {
         firstName: null,
@@ -121,58 +126,64 @@ class RegisterInstructor extends Component {
         }
         if (!this.isPasswordMatch(this.state.password, this.state.confirmPassword)) {
             return "Password Mismatch"
-
+        }
+        if (!this.state.selectedFile) {
+            return "Image is required"
         }
         return "success"
     }
 
 
     registerHandler = (event) => {
-        // send data into server 
-        event.preventDefault()
-
-
-        // Check data is valid
         const validationMessage = this.validateData()
         if (validationMessage !== 'success') {
-            // alert(validationMessage)
             HandleErrors(validationMessage)
-
             return
         }
-
-        // console.log(this.state)
-        // generating a code
-        // var code = Math.floor(100000 + Math.random() * 900000);
-
-        var data = {
-            "firstName": this.state.firstName,
-            "lastName": this.state.lastName,
-            "description": "This is new instructor's description",
-            "email": this.state.email,
-            "password": this.state.password,
-            "gender": this.state.gender,
-            "image": "https://icon-library.com/images/icon-for-user/icon-for-user-4.jpg",
-            "phone": this.state.phone,
-            "type": "instructor",
-            "degree": this.state.degree,
-            "departments": [
-                {
-                    "department_id": 1
+        var data;
+        UploadServices.uploadImage(this.state.selectedFile)
+            .then(res => {
+                data = {
+                    "firstName": this.state.firstName,
+                    "lastName": this.state.lastName,
+                    "description": "This is new instructor's description",
+                    "email": this.state.email,
+                    "password": this.state.password,
+                    "gender": this.state.gender,
+                    "image": res.image,
+                    "phone": this.state.phone,
+                    "type": "instructor",
+                    "degree": this.state.degree,
+                    "departments": [
+                        {
+                            "department_id": 1
+                        }
+                    ]
                 }
-            ]
-        }
-        _axios.post('/instructors/register', data).then((response) => {
-            this.props.history.push({
-                pathname: '/verifyEmail',
-                state: { email: this.state.email, userInfo: data }
+                return _axios.post('/instructors/register', data)
             })
-
-        }).catch(err => HandleErrors(err))
-
+            .then((response) => {
+                this.props.history.push({
+                    pathname: '/verifyEmail',
+                    state: { email: this.state.email, userInfo: data }
+                })
+            })
+            .catch(err => HandleErrors(err))
     }
 
-
+    handleUploadClick = event => {
+        console.log("hiiiii")
+        var file = event.target.files[0];
+        const reader = new FileReader();
+        let url = reader.readAsDataURL(file)
+        reader.onloadend = function (e) {
+            this.setState({
+                photoName: file.name,
+                selectedFile: file,
+                personalImageUrl: e.target.result
+            });
+        }.bind(this);
+    };
 
     render() {
         return (
@@ -253,9 +264,31 @@ class RegisterInstructor extends Component {
                                     <TextField type={'password'} fullWidth id="outlined-basic" onChange={this.confirmPasswordFormHandler} label="Confirm Password" variant="outlined" />
                                 </div>
                             </div>
-
+                            <div className="row justify-content-center">
+                                <div className="col-12 justify-content-center align-items-center d-flex flex-row">
+                                    <Typography className='fw-bolder' color={'primary'}>{this.state?.photoName || 'Upload your personal photo'}</Typography>
+                                    <label htmlFor="icon-button-file">
+                                        <Input onChange={this.handleUploadClick} accept="image/*" id="icon-button-file" type="file" />
+                                        <IconButton color="primary" aria-label="upload picture" component="span">
+                                            <PhotoCamera />
+                                        </IconButton>
+                                    </label>
+                                </div>
+                                {this.state?.personalImageUrl ?
+                                    <div className="col-8 justify-content-center align-items-center">
+                                        <img
+                                            style={{ width: 200 }}
+                                            src={`${this.state?.personalImageUrl}`}
+                                            alt={'Personal image'}
+                                            loading="lazy"
+                                        />
+                                    </div>
+                                    :
+                                    null
+                                }
+                            </div>
                             <div className="mx-auto mt-4" >
-                                <button type="submit" className="btn btn-primary mx-auto" onClick={this.registerHandler} style={{ width: 200 }}>Submit</button>
+                                <button type="button" className="btn btn-primary mx-auto" onClick={this.registerHandler} style={{ width: 200 }}>Submit</button>
                             </div>
 
                         </form>

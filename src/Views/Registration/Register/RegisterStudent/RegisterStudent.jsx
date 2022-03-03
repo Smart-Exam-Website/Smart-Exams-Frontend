@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-import { TextField } from '@mui/material';
+import { IconButton, TextField, Typography } from '@mui/material';
 import HandleErrors from '../../../../hooks/handleErrors';
 import CardComponent from '../../../../Components/CardComponent/CardComponent';
 import _axios from '../../../../apis/axios-instance';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { styled } from '@mui/material/styles';
+import { UploadServices } from '../../../../apis/Services/UploadService';
 
+const Input = styled('input')({
+    display: 'none',
+});
 class RegisterStudent extends Component {
-
-
     state = {
         firstName: null,
         lastName: null,
@@ -122,51 +126,63 @@ class RegisterStudent extends Component {
         }
         if (!this.isPasswordMatch(this.state.password, this.state.confirmPassword)) {
             return "Password Mismatch"
-
+        }
+        if (!this.state.selectedFile) {
+            return "Image is required"
         }
         return "success"
     }
 
     registerHandler = (event) => {
-        // send data into server 
-        event.preventDefault()
-
         const validationMessage = this.validateData()
         if (validationMessage !== 'success') {
-            // alert(validationMessage)
             HandleErrors(validationMessage)
             return
         }
 
-        var data = {
-
-            "firstName": this.state.firstName,
-            "lastName": this.state.lastName,
-            "description": "This is new instructor's description",
-            "email": this.state.email,
-            "password": this.state.password,
-            "gender": this.state.gender,
-            "image": "https://icon-library.com/images/icon-for-user/icon-for-user-4.jpg",
-            "phone": this.state.phone,
-            "studentCode": this.state.studentcode,
-            "type": "student",
-            "departments": [
-                {
-                    "department_id": 1
+        UploadServices.uploadImage(this.state.selectedFile)
+            .then(res => {
+                var data = {
+                    "firstName": this.state.firstName,
+                    "lastName": this.state.lastName,
+                    "description": "This is new instructor's description",
+                    "email": this.state.email,
+                    "password": this.state.password,
+                    "gender": this.state.gender,
+                    "image": res.image,
+                    "phone": this.state.phone,
+                    "studentCode": this.state.studentcode,
+                    "type": "student",
+                    "departments": [
+                        {
+                            "department_id": 1
+                        }
+                    ]
                 }
-            ]
-        }
-        _axios.post('/students/register', data)
+                return _axios.post('/students/register', data)
+            })
             .then((response) => {
                 this.props.history.push({
                     pathname: '/verifyEmail',
                     state: { email: this.state.email }
                 })
-
-            }).catch(err => HandleErrors(err))
+            })
+            .catch(err => HandleErrors(err))
     }
 
-
+    handleUploadClick = event => {
+        console.log("hiiiii")
+        var file = event.target.files[0];
+        const reader = new FileReader();
+        let url = reader.readAsDataURL(file)
+        reader.onloadend = function (e) {
+            this.setState({
+                photoName: file.name,
+                selectedFile: file,
+                personalImageUrl: e.target.result
+            });
+        }.bind(this);
+    };
 
     render() {
         return (
@@ -244,12 +260,36 @@ class RegisterStudent extends Component {
                                     <TextField type={'password'} fullWidth id="outlined-basic" onChange={this.passwordFormHandler} label="Password" variant="outlined" />
                                 </div>
                                 <div className="form-group col">
-                                    <TextField type={'password'} fullWidth id="outlined-basic" onChange={this.confirmPasswordFormHandler} label="Confirm Passwor" variant="outlined" />
+                                    <TextField type={'password'} fullWidth id="outlined-basic" onChange={this.confirmPasswordFormHandler} label="Confirm Password" variant="outlined" />
                                 </div>
                             </div>
 
+                            <div className="row justify-content-center">
+                                <div className="col-12 justify-content-center align-items-center d-flex flex-row">
+                                    <Typography className='fw-bolder' color={'primary'}>{this.state?.photoName || 'Upload your personal photo'}</Typography>
+                                    <label htmlFor="icon-button-file">
+                                        <Input onChange={this.handleUploadClick} accept="image/*" id="icon-button-file" type="file" />
+                                        <IconButton color="primary" aria-label="upload picture" component="span">
+                                            <PhotoCamera />
+                                        </IconButton>
+                                    </label>
+                                </div>
+                                {this.state?.personalImageUrl ?
+                                    <div className="col-8 justify-content-center align-items-center">
+                                        <img
+                                            style={{ width: 200 }}
+                                            src={`${this.state?.personalImageUrl}`}
+                                            alt={'Personal image'}
+                                            loading="lazy"
+                                        />
+                                    </div>
+                                    :
+                                    null
+                                }
+                            </div>
+
                             <div className="mx-auto mt-4">
-                                <button type="submit" className="btn btn-primary mx-auto" onClick={this.registerHandler}>Submit</button>
+                                <button type='button' className="btn btn-primary mx-auto" onClick={this.registerHandler}>Submit</button>
                             </div>
                         </form>
                     </CardComponent>
