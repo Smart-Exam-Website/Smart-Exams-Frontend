@@ -30,8 +30,11 @@ const SetExamOptions = () => {
     }, [history.location.pathname])
 
     const setOptionsHandler = (values, actions) => {
+        let submittedValues = { ...values }
+        submittedValues['gradingMethod'] = submittedValues['gradingMethod'] ? 'auto' : 'manual'
+
         if (isEditMode && oldExamConfig) {
-            ExamServices.editExamOptions(values)
+            ExamServices.editExamOptions(examId, submittedValues)
                 .then(res => {
                     showSuccessMsg('Exam options has been edited!')
                     history.push(`/exams/${examOldData?.id}/add-questions`, { exam: examOldData })
@@ -40,9 +43,6 @@ const SetExamOptions = () => {
             return
         }
 
-        let submittedValues = { ...values }
-        submittedValues['gradingMethod'] = submittedValues['gradingMethod'] ? 'auto' : 'manual'
-        console.log(submittedValues)
         ExamServices.setExamOptions(examId, submittedValues)
             .then(res => {
                 showSuccessMsg('Exam options has been saved!')

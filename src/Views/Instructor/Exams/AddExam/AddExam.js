@@ -17,10 +17,10 @@ const AddExam = () => {
     /** Stuff for editing mode */
     const isEditMode = Boolean(location.state?.exam)
     const examOldData = location.state?.exam
-
+    console.log(examOldData)
     const onAddExamHandler = (values, actions) => {
         if (isEditMode) {
-            ExamServices.editExamMainInfo(values)
+            ExamServices.editExamMainInfo(values, examOldData.id)
                 .then(res => {
                     showSuccessMsg('Edited exam information successfully!')
                     history.push(`/exams/${examOldData.id}/set-options`, { exam: examOldData })

@@ -31,8 +31,8 @@ export class ExamServices {
      * @param {string} examMainInfo.examSubject
      * @returns {Promise<{message, examId}>}
      */
-    static editExamMainInfo(examMainInfo){
-        return _axios.put('/exams/step1', examMainInfo);
+    static editExamMainInfo(examMainInfo, examId){
+        return _axios.put(`/exams/${examId}}/step1`, examMainInfo);
     }
 
 
@@ -63,7 +63,7 @@ export class ExamServices {
      * @returns {Promise<{message}>}
      */
      static editExamOptions(examId, options) {
-        return _axios.put('/exams/step2', { examId, ...options });
+        return _axios.put(`/exams/${examId}/step2`, { ...options });
     }
 
     /**
