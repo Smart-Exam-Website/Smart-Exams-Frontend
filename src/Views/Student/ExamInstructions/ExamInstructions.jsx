@@ -11,33 +11,94 @@ import 'reactjs-popup/dist/index.css';
 import TakePhoto from '../TakePhoto/TakePhoto';
 import { useState } from 'react';
 import showSuccessMsg from '../../../hooks/showSuccessMsg';
-
-
+import { ExamServices } from '../../../apis/Services/ExamService';
+import moment from 'moment';
 
 
 const Examinstructions = (props) => {
     const exam = props.location.state.exam
 
     const [isPhotoTaken, setIsPhotoTaken] = useState(false);
-    const [studentImage, setStudentImage] = useState(null);
+    const [noOfFaces, setNoOfFaces] = useState(null);
+    const [photoVerified, setPhotoVerified] = useState(null);
+    // const [studentImage, setStudentImage] = useState(null);
 
 
     const goToExamHandler = (event) => {
         // this code pevents from going to another page
         event.preventDefault()
 
-        props.history.push({
-            pathname: `/exams/${exam.id}/start`,
-            state: { exam: exam }
-        })
+
+        let startExamData = {
+            "startTime": moment(new Date(Date.now())).format('yyyy-MM-DD hh:mm:ss'),
+            "numberOfFaces": noOfFaces,
+            "isVerified": photoVerified
+        }
+        ExamServices.startExam(exam.id, startExamData)
+            .then((response) => {
+                console.log("Starting Exam")
+                console.log(response)
+
+                props.history.push({
+                    pathname: `/exams/${exam.id}/start`,
+                    state: { exam: exam }
+                })
+            }).catch((error) => {
+                console.log(error)
+
+
+            })
+
     }
 
     const photoTakenHandler = (img) => {
-        
+
         setIsPhotoTaken(true)
-        setStudentImage(img)
+        // setStudentImage(img)
         showSuccessMsg("Photo Taken Successfully")
-        // console.log(img)
+
+        // Data to be passed to ML apis
+        let faceDetectionData = {
+
+            "image": img,
+            "examId": exam.id
+
+        }
+        let faceVerificationData = {
+
+            "image1": img,
+            "examId": exam.id
+
+        }
+
+        // let numberOfFaces;
+        // let verified; // faceVerified or not
+        ExamServices.applyFaceDetection(faceDetectionData)
+            .then((response) => {
+                console.log("from face detection")
+                
+                setNoOfFaces(response.numberOfFaces)
+
+
+
+            }).catch((error) => {
+                console.log(error)
+
+
+            })
+
+        ExamServices.applyFaceVerification(faceVerificationData)
+            .then((response) => {
+                
+                setPhotoVerified(response.verified)
+
+            }).catch((error) => {
+                console.log(error)
+
+
+            })
+
+
         return
     }
 
@@ -97,7 +158,7 @@ const Examinstructions = (props) => {
                                                 Take Photo
                                             </Button>
                                         }
-                                        
+
                                         modal
                                         lockScroll
                                         position="top center"
@@ -107,7 +168,7 @@ const Examinstructions = (props) => {
                                             <CardComponent title={'Take a nice photo'}>
 
                                                 <h4 className="d-flex justify-content-center">
-                                                    Make sure the place is well lit :)
+                                                    Make sure the place is well lit..!
                                                 </h4>
                                                 <TakePhoto
                                                     captured={photoTakenHandler}

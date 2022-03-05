@@ -160,5 +160,16 @@ export class ExamServices {
     static getStudentExamAnswers(examId){
         return _axios.get(`exams/${examId}/answers`)
     }
+    
+    
+    static applyFaceDetection(data){
+        return _axios.post(`/faceDetection`,data)
+    }
+    static applyFaceVerification(data){
+        return _axios.post(`/faceVerification`,data)
+    }
+    static startExam(examId,data){
+        return _axios.post(`exams/${examId}/start`,data)
+    }
 
 }
