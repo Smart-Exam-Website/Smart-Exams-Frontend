@@ -5,10 +5,15 @@ import Questions from '../Views/Instructor/Questions/Questions'
 import SetExamOptions from '../Views/Instructor/Exams/SetExamOptions/SetExamOptions'
 import AddQuestionScreen from '../Views/Instructor/Questions/AddQuestionScreen'
 import QuestionViewScreen from '../Views/Instructor/Questions/QuestionViewScreen'
+import ExamView from '../Views/Instructor/Exams/ExamView'
+import StudentSolvedExam from '../Views/Instructor/Exams/ExamView/StudentSolvedExam'
 
 const InstructorRoutes =
     [
         { path: '/exams', component: Exams, exact: true },
+        { path: '/exams/:examId', component: ExamView, exact: true },
+        { path: '/exams/:examId/:studentId', component: StudentSolvedExam, exact: true },
+
         { path: '/exams/add', component: AddExam, exact: true },
         { path: '/exams/edit', component: AddExam, exact: true },
         { path: '/exams/:examId/set-options', component: SetExamOptions, exact: true },

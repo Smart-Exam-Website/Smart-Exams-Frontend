@@ -11,7 +11,7 @@ const McqAnswer = ({ questionText, choices }) => {
     const formatedAnswer = (answer) => {
         return {
             id: answer?.id,
-            displayText: answer?.option.value
+            displayText: (answer?.option?.value||answer?.value)
         }
     }
     return (

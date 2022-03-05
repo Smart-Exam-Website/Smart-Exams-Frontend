@@ -73,8 +73,8 @@ const Exams = () => {
         getExamsHandler()
     }, [])
 
-    const GoToExamDetailsHandler = () => {
-        console.log('hiiiiiiiiiiiii')
+    const GoToExamDetailsHandler = (examId) => {
+        history.push(`/exams/${examId}`)
     }
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -166,7 +166,7 @@ const Exams = () => {
                     </TableHead>
                     <TableBody>
                         {exams?.map((row) => (
-                            <StyledTableRow className={isExamNotCompleted(row) ? 'bg-danger' : ''} onClick={GoToExamDetailsHandler} key={row.id}>
+                            <StyledTableRow className={isExamNotCompleted(row) ? 'bg-danger' : ''} onClick={() => GoToExamDetailsHandler(row.id)} key={row.id}>
                                 {/* NAME */}
                                 <StyledTableCell className={isExamNotCompleted(row) ? 'text-light' : ''} component="th" scope="row">
                                     {row.name}

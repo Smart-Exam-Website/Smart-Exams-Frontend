@@ -17,7 +17,7 @@ export class ExamServices {
     static createNewExam(examMainInfo) {
         return _axios.post('/exams/step1', examMainInfo);
     }
-    
+
     /**
      * edit exam main info
      * @param {Object} examMainInfo Information about the exam.
@@ -31,7 +31,7 @@ export class ExamServices {
      * @param {string} examMainInfo.examSubject
      * @returns {Promise<{message, examId}>}
      */
-    static editExamMainInfo(examMainInfo, examId){
+    static editExamMainInfo(examMainInfo, examId) {
         return _axios.put(`/exams/${examId}}/step1`, examMainInfo);
     }
 
@@ -62,7 +62,7 @@ export class ExamServices {
      * @param {('manual'|'auto')} options.gradingMethod 
      * @returns {Promise<{message}>}
      */
-     static editExamOptions(examId, options) {
+    static editExamOptions(examId, options) {
         return _axios.put(`/exams/${examId}/step2`, { ...options });
     }
 
@@ -153,23 +153,28 @@ export class ExamServices {
      * @param {number} examId 
      * @returns 
      */
-     static makeExamUnPublished(examId) {
+    static makeExamUnPublished(examId) {
         return _axios.post(`exams/${examId}/publish`, { "isPublished": false })
     }
+
+    static getStudentExamAnswers(examId) {
+        return _axios.get(`exams/${examId}/my-answers`)
+    }
+
+    static submitExam(examId){
+        return _axios.post(`exams/${examId}/submit`)
+    }
+
+    static applyFaceDetection(data) {
+        return _axios.post(`/faceDetection`, data)
+    }
+    static applyFaceVerification(data) {
+        return _axios.post(`/faceVerification`, data)
+    }
+    static startExam(examId, data) {
+        return _axios.post(`exams/${examId}/start`, data)
+    }
+
     
-    static getStudentExamAnswers(examId){
-        return _axios.get(`exams/${examId}/answers`)
-    }
-    
-    
-    static applyFaceDetection(data){
-        return _axios.post(`/faceDetection`,data)
-    }
-    static applyFaceVerification(data){
-        return _axios.post(`/faceVerification`,data)
-    }
-    static startExam(examId,data){
-        return _axios.post(`exams/${examId}/start`,data)
-    }
 
 }

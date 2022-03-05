@@ -5,6 +5,7 @@ import MCQ from '../Questions/MCQ/MCQ';
 import { ExamServices } from '../../../apis/Services/ExamService';
 import { useState } from 'react';
 import HandleErrors from '../../../hooks/handleErrors';
+import showSuccessMsg from '../../../hooks/showSuccessMsg';
 const TakeExam = (props) => {
     const exam = props.location.state.exam
     const [questions, setQuestions] = useState(null);
@@ -62,11 +63,15 @@ const TakeExam = (props) => {
 
         // If we are in the last question, then we should refer to the Done Page
         if (newQuestionNumber === questions.length) {
-            props.history.push({
-                pathname: '/done',
-                state: { examName: exam.name }
-            })
-
+            ExamServices.submitExam(exam.id)
+                .then(res => {
+                    showSuccessMsg("Exam has been submitted successfully")
+                    props.history.push({
+                        pathname: '/done',
+                        state: { examName: exam.name }
+                    })
+                })
+                .catch(err => HandleErrors(err))
             return
         }
 
