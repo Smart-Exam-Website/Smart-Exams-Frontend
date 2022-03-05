@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './InstructorProfile.css'
 import { InstructorServices } from '../../../apis/Services/InstructorService'
+import useImageResolver from '../../../hooks/useImageResolver'
 
 const InstructorProfile = () => {
 
@@ -13,12 +14,13 @@ const InstructorProfile = () => {
             .catch(err => console.log(err))
     }, [])
 
+    const imageResolver = useImageResolver()
     return ( instructorData &&
         <div className="Profile_I mt-5" style={{ minHeight: '100vh' }}>
             <div className="container d-flex justify-content-center">
                 <div className="d-flex flex-column align-items-center ProfileCard w-100 p-3">
                     {/* IMAGE AND NAME */}
-                    <img src={instructorData?.user?.image} alt="User" />
+                    <img src={imageResolver(instructorData?.user?.image)} alt="User" />
                     <div className="d-flex flex-column flex-md-row align-items-center mt-2">
                         <h2>{`${instructorData?.user?.firstName} ${instructorData?.user?.lastName}`}</h2>
                         <div className="mx-2">
