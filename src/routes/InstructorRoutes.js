@@ -11,9 +11,7 @@ import StudentSolvedExam from '../Views/Instructor/Exams/ExamView/StudentSolvedE
 const InstructorRoutes =
     [
         { path: '/exams', component: Exams, exact: true },
-        { path: '/exams/:examId', component: ExamView, exact: true },
-        { path: '/exams/:examId/:studentId', component: StudentSolvedExam, exact: true },
-
+        
         { path: '/exams/add', component: AddExam, exact: true },
         { path: '/exams/edit', component: AddExam, exact: true },
         { path: '/exams/:examId/set-options', component: SetExamOptions, exact: true },
@@ -22,6 +20,9 @@ const InstructorRoutes =
         { path: '/questions', component: Questions, exact: true },
         { path: '/questions/add', component: AddQuestionScreen, exact: true },
         { path: '/questions/edit', component: AddQuestionScreen, exact: true },
-        { path: '/questions/:questionId', component: QuestionViewScreen, exact: true }
+        { path: '/questions/:questionId', component: QuestionViewScreen, exact: true },
+
+        { path: '/exams/:examId', component: ExamView, exact: true },
+        { path: '/exams/:examId/:studentId', component: StudentSolvedExam, exact: true },
     ]
 export default InstructorRoutes
