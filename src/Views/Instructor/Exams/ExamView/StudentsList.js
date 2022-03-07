@@ -11,20 +11,28 @@ import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import NoContentComponent from '../../../../Components/NoContentComponent/NoContentComponent';
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
+import useImageResolver from '../../../../hooks/useImageResolver';
+import { MarkExamServices } from '../../../../apis/Services/MarkExamService';
+import { useParams } from 'react-router-dom';
+import showSuccessMsg from '../../../../hooks/showSuccessMsg';
+import HandleErrors from '../../../../hooks/handleErrors';
 
 const StudentsList = ({ students }) => {
-    const hasMark = (mark) => {
-        return mark || mark == 0
-    }
+    const imageResolver = useImageResolver()
 
     const history = useHistory()
     const location = useLocation()
+    const params = useParams()
     const goToThisStudent = (id) => {
         history.push(`${location.pathname}/${id}`)
     }
-    
-    const markAllHandler = () => {
 
+    const markAllHandler = () => {
+        MarkExamServices.markAllAutomatic(params?.examId)
+            .then(res => {
+                showSuccessMsg("Mark All Student Successfully!")
+            })
+            .catch(err => HandleErrors(err))
     }
 
     return (
@@ -34,22 +42,22 @@ const StudentsList = ({ students }) => {
             </div>
             <Paper className='mt-3' elevation={3}>
                 <List>
-                    {[{ name: 'hoss', mark: 20, id: 2 }, { name: 'hoss', mark: 20, id: 2 }]?.map(item => (
-                        <ListItem onClick={() => goToThisStudent(item.id)}>
+                    {students?.map(item => (
+                        <ListItem onClick={() => goToThisStudent(item.student_id)}>
                             <ListItemButton>
                                 <ListItemAvatar>
-                                    <Avatar alt={item.name} src="https://mui.com/static/images/avatar/3.jpg" />
+                                    <Avatar alt={item.name} src={imageResolver(item?.image)} />
                                 </ListItemAvatar>
                                 <ListItemText
-                                    primaryTypographyProps={hasMark(item.mark) && { color: Colors.success, fontWeight: 'bolder' }}
+                                    primaryTypographyProps={item?.isMarked && { color: Colors.success, fontWeight: 'bolder' }}
                                     primary={`${item.name}`}
-                                    secondary={hasMark(item.mark) && `Mark: ${item.mark}`}
+                                    secondary={item?.isMarked && `Mark: ${item.mark}`}
                                 />
                             </ListItemButton>
                         </ListItem>
                     ))
                     }
-                    {![2]?.length ?
+                    {!students?.length ?
                         <NoContentComponent text={"No submittion yet"} />
                         :
                         null

@@ -7,8 +7,10 @@ import useImageResolver from '../../../../hooks/useImageResolver'
 import PersonIcon from '@mui/icons-material/Person';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import McqAnswer from '../../../../Components/AnsweredQuestion/McqAnswer'
+import showSuccessMsg from '../../../../hooks/showSuccessMsg'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 
-const StudentCard = ({ studentInfo }) => {
+const StudentCard = ({ name, isVerified, numberOfFaces, image, markAutoFun }) => {
     const imageResolver = useImageResolver()
 
     return (
@@ -17,19 +19,19 @@ const StudentCard = ({ studentInfo }) => {
                 <div className="d-flex">
                     <img
                         className='shadow-sm'
-                        src={imageResolver('https://mui.com/static/images/avatar/3.jpg')}
+                        src={imageResolver(image)}
                         style={{ height: 200, width: 200, objectFit: 'cover', borderRadius: 15 }}
                         alt="student Photo"
                     />
                     <div className='ms-3'>
-                        <Typography variant="h4" fontWeight={'bold'} color={'primary'}>Hossam Sherif</Typography>
-                        <Chip icon={<PersonIcon />} color='success' label={`1 face detected`} className="me-2" />
-                        <Chip icon={<VerifiedIcon />} color='error' label={"Unverified"} />
+                        <Typography variant="h4" fontWeight={'bold'} color={'primary'}>{name}</Typography>
+                        <Chip icon={<PersonIcon />} color={(numberOfFaces === 1) ? 'success' : 'error'} label={`${numberOfFaces} face detected`} className="me-2" />
+                        <Chip icon={<VerifiedIcon />} color={isVerified ? 'success' : 'error'} label={isVerified ? "Verified" : "Unverified"} />
                     </div>
                 </div>
             </div>
             <div className='col-md-6 col-12 mt-md-0 mt-5 text-md-end text-center'>
-                <Button variant="contained" color="success">
+                <Button onClick={markAutoFun} variant="contained" color="success">
                     Mark Automatic
                 </Button>
             </div>
@@ -39,48 +41,82 @@ const StudentCard = ({ studentInfo }) => {
 
 const StudentSolvedExam = () => {
     const params = useParams()
+    const history = useHistory()
     const [studentExamResult, setStudentExamResult] = useState(null)
+
+    const autoMarkThisStudentHandler = () => {
+        MarkExamServices.markSpecificStudentAutomatic(params?.examId, params?.studentId)
+            .then(res => {
+                showSuccessMsg(`Mark ${studentExamResult.studentName}'s exam successfully!`)
+                history.goBack()
+            })
+            .catch(err => HandleErrors(err))
+    }
+
+    const markAsRightHandler = (questionId, mark) => {
+        MarkExamServices.manualMark({
+            examId: params?.examId,
+            studentId: params?.studentId,
+            questionId: questionId,
+            questionMark: mark
+        })
+            .then(res => {
+                getStudentAnswers()
+            })
+            .catch(err => HandleErrors(err))
+    }
+
+    const markAsWrongHandler = (questionId) => {
+        MarkExamServices.manualMark({
+            examId: params?.examId,
+            studentId: params?.studentId,
+            questionId: questionId,
+            questionMark: 0
+        })
+            .then(res => {
+                getStudentAnswers()
+            })
+            .catch(err => HandleErrors(err))
+    }
+
+    const getStudentAnswers = () => {
+        MarkExamServices.getSpecificStudentAnswers(params?.examId, params?.studentId)
+            .then(res => {
+                setStudentExamResult(res)
+                console.log(res)
+            })
+            .catch(err => HandleErrors(err))
+    }
     useEffect(() => {
-        // MarkExamServices.getSpecificStudentAnswers(params?.examId, params?.studentId)
-        //     .then(res => {
-        //         setStudentExamResult(res)
-        //         console.log(res)
-        //     })
-        //     .catch(err => HandleErrors(err))
+        getStudentAnswers()
     }, [])
 
     return (
         <div className='container'>
-            <StudentCard />
+            <StudentCard
+                name={studentExamResult?.studentName}
+                isVerified={studentExamResult?.isVerified}
+                numberOfFaces={studentExamResult?.numberOfFaces}
+                image={studentExamResult?.image}
+                markAutoFun={autoMarkThisStudentHandler}
+            />
             <hr />
             <div className="row mt-5 justify-content-center">
                 <div className="col-12">
                     <>
-                        {[{
-                            questionText: "sss", type: 'mcq',
-                            answers: [{
-                                "id": 2,
-                                "isCorrect": true,
-                                "value": "Answer 1"
-                            }, {
-                                "id": 3,
-                                "isCorrect": false,
-                                "value": "Answeffde 1"
-                            }, , {
-                                "id": 4,
-                                "isCorrect": false,
-                                "value": "Answersd 1"
-                            }]
-                        }]?.map(item =>
-                            (item.type === 'mcq') &&
+                        {studentExamResult?.solution?.map(item =>
                             <div className='my-2'>
-                                <McqAnswer
-                                    markAsRight={() => { }}
-                                    markAsWrong={() => { }}
-                                    studentAnswer={{ id: 2, value: 'Answer 1' }}
-                                    questionText={item?.questionText}
-                                    choices={item?.answers}
-                                />
+                                {(item?.question?.type === 'mcq') ?
+                                    <McqAnswer
+                                        markAsRight={() => markAsRightHandler(item?.question_id, 1)}
+                                        markAsWrong={() => markAsWrongHandler(item?.question_id)}
+                                        studentAnswer={{ id: item?.option_id, value: item?.studentAnswer }}
+                                        questionText={item?.question?.questionText}
+                                        choices={item?.question?.answers}
+                                    />
+                                    :
+                                    null
+                                }
                             </div>
 
                         )}
