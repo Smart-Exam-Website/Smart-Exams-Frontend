@@ -118,7 +118,7 @@ const AddExam = () => {
                                     <MobileDateTimePicker
                                         label="Start Date"
                                         minutesStep={5}
-                                        inputFormat={'yyyy-MM-DD hh:mm'}
+                                        inputFormat={'yyyy-MM-DD HH:mm'}
                                         value={props.values.startAt}
                                         onClose={() => {
                                             props.setFieldTouched('startAt', true)
@@ -138,7 +138,7 @@ const AddExam = () => {
                                     <MobileDateTimePicker
                                         label="End Date"
                                         minutesStep={5}
-                                        inputFormat={'yyyy-MM-DD hh:mm'}
+                                        inputFormat={'yyyy-MM-DD HH:mm'}
                                         value={props.values.endAt}
                                         onClose={() => {
                                             props.setFieldTouched('endAt', true)
