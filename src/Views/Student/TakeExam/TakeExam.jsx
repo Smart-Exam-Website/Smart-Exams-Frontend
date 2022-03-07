@@ -6,8 +6,10 @@ import { ExamServices } from '../../../apis/Services/ExamService';
 import { useState } from 'react';
 import HandleErrors from '../../../hooks/handleErrors';
 import showSuccessMsg from '../../../hooks/showSuccessMsg';
+import { useParams } from 'react-router-dom';
 const TakeExam = (props) => {
-    const exam = props.location.state.exam
+    const params = useParams()
+    const exam = props.location.state?.exam || { id: params.examId, name: 'Continoue The Exam' }
     const [questions, setQuestions] = useState(null);
     const [currentQuestionNumber, setCurrentQuestionNumber] = useState(0);
 
@@ -52,31 +54,28 @@ const TakeExam = (props) => {
 
         ExamServices.addAnswer(answerData)
             .then(() => {
-                // Answer Added to backend
+                // Go to next question by increasing currentQuestionNumber (if it's not in the last question) 
+                const newQuestionNumber = currentQuestionNumber + 1
+                // If we are in the last question, then we should refer to the Done Page
+                if (newQuestionNumber === questions.length) {
+                    ExamServices.submitExam(exam.id)
+                        .then(res => {
+                            showSuccessMsg("Exam has been submitted successfully")
+                            props.history.push({
+                                pathname: '/done',
+                                state: { examName: exam.name }
+                            })
+                        })
+                        .catch(err => HandleErrors(err))
+                    return
+                }
+                // advance to the next question
+                setCurrentQuestionNumber(newQuestionNumber)
 
             }).catch((error) => {
                 HandleErrors(error)
             })
 
-        // Go to next question by increasing currentQuestionNumber (if it's not in the last question) 
-        const newQuestionNumber = currentQuestionNumber + 1
-
-        // If we are in the last question, then we should refer to the Done Page
-        if (newQuestionNumber === questions.length) {
-            ExamServices.submitExam(exam.id)
-                .then(res => {
-                    showSuccessMsg("Exam has been submitted successfully")
-                    props.history.push({
-                        pathname: '/done',
-                        state: { examName: exam.name }
-                    })
-                })
-                .catch(err => HandleErrors(err))
-            return
-        }
-
-        // advance to the next question
-        setCurrentQuestionNumber(newQuestionNumber)
     }
 
     const clickedPreviousHandler = () => {

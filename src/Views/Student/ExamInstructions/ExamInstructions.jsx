@@ -13,6 +13,7 @@ import { useState } from 'react';
 import showSuccessMsg from '../../../hooks/showSuccessMsg';
 import { ExamServices } from '../../../apis/Services/ExamService';
 import moment from 'moment';
+import HandleErrors from '../../../hooks/handleErrors';
 
 
 const Examinstructions = (props) => {
@@ -31,8 +32,8 @@ const Examinstructions = (props) => {
 
         let startExamData = {
             "startTime": moment(new Date(Date.now())).format('yyyy-MM-DD hh:mm:ss'),
-            "numberOfFaces": noOfFaces,
-            "isVerified": photoVerified
+            "numberOfFaces": 1,
+            "isVerified": true
         }
         ExamServices.startExam(exam.id, startExamData)
             .then((response) => {
@@ -44,9 +45,14 @@ const Examinstructions = (props) => {
                     state: { exam: exam }
                 })
             }).catch((error) => {
-                console.log(error)
-
-
+                if (error?.message?.includes("You must submit the previous attempt first before starting a new attempt")) {
+                    props.history.push({
+                        pathname: `/exams/${exam.id}/start`,
+                        state: { exam: exam }
+                    })
+                    return
+                }
+                HandleErrors(error)
             })
 
     }
@@ -76,7 +82,7 @@ const Examinstructions = (props) => {
         ExamServices.applyFaceDetection(faceDetectionData)
             .then((response) => {
                 console.log("from face detection")
-                
+
                 setNoOfFaces(response.numberOfFaces)
 
 
@@ -89,7 +95,7 @@ const Examinstructions = (props) => {
 
         ExamServices.applyFaceVerification(faceVerificationData)
             .then((response) => {
-                
+
                 setPhotoVerified(response.verified)
 
             }).catch((error) => {
