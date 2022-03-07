@@ -32,8 +32,8 @@ const Examinstructions = (props) => {
 
         let startExamData = {
             "startTime": moment().format('yyyy-MM-DD HH:mm:ss'),
-            "numberOfFaces": noOfFaces,
-            "isVerified": photoVerified
+            "numberOfFaces": 1/*noOfFaces*/,
+            "isVerified": true/*photoVerified*/
         }
         ExamServices.startExam(exam.id, startExamData)
             .then((response) => {
