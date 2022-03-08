@@ -43,13 +43,13 @@ const StudentsList = ({ students }) => {
             <Paper className='mt-3' elevation={3}>
                 <List>
                     {students?.map(item => (
-                        <ListItem onClick={() => goToThisStudent(item.student_id)}>
+                        <ListItem key={`${item.student_id}_${item.attempt}`} onClick={() => goToThisStudent(item.student_id)}>
                             <ListItemButton>
                                 <ListItemAvatar>
                                     <Avatar alt={item.name} src={imageResolver(item?.image)} />
                                 </ListItemAvatar>
                                 <ListItemText
-                                    primaryTypographyProps={item?.isMarked && { color: Colors.success, fontWeight: 'bolder' }}
+                                    primaryTypographyProps={item?.isMarked?{ color: Colors.success, fontWeight: 'bolder' }:{}}
                                     primary={`${item.name}`}
                                     secondary={item?.isMarked && `Mark: ${item.mark}`}
                                 />

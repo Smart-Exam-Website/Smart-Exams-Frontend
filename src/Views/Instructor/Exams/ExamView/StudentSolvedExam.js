@@ -108,6 +108,7 @@ const StudentSolvedExam = () => {
                             <div className='my-2'>
                                 {(item?.question?.type === 'mcq') ?
                                     <McqAnswer
+                                        key={item.question_id}
                                         markAsRight={() => markAsRightHandler(item?.question_id, 1)}
                                         markAsWrong={() => markAsWrongHandler(item?.question_id)}
                                         studentAnswer={{ id: item?.option_id, value: item?.studentAnswer }}
