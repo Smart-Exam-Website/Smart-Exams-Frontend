@@ -23,16 +23,16 @@ const MCQ = ({ initValues, getQuestionCreationRequest = () => { } }) => {
     const MCQSCHEMA = yup.object().shape({
         questionText: yup.string().required('This is a required field'),
         correctAnswer: yup.string().required('This is a required field'),
-        choise1: yup.string().required('This is a required field'),
-        choise2: yup.string().required('This is a required field'),
-        choise3: yup.string().required('This is a required field'),
+        choice1: yup.string().required('This is a required field'),
+        choice2: yup.string().required('This is a required field'),
+        choice3: yup.string().required('This is a required field'),
     });
     const submitQuestionHandler = (values) => {
         if (!initValues) {
             let creationRequest = QuestionServices.createMcqQuestion({
                 questionText: values.questionText,
                 correctAnswer: values.correctAnswer,
-                answers: [values.correctAnswer, values.choise1, values.choise2, values.choise3]
+                answers: [values.correctAnswer, values.choice1, values.choice2, values.choice3]
             })
             // pass the request outside the component
             getQuestionCreationRequest(creationRequest)
@@ -42,7 +42,7 @@ const MCQ = ({ initValues, getQuestionCreationRequest = () => { } }) => {
             let editRequest = QuestionServices.editQuestion(initValues?.id, {
                 questionText: values.questionText,
                 correctAnswer: values.correctAnswer,
-                answers: [values.correctAnswer, values.choise1, values.choise2, values.choise3]
+                answers: [values.correctAnswer, values.choice1, values.choice2, values.choice3]
             })
 
             // pass the request outside the component
@@ -57,9 +57,9 @@ const MCQ = ({ initValues, getQuestionCreationRequest = () => { } }) => {
         initialValues={{
             questionText: initValues?.questionText || '',
             correctAnswer: mcqCorrectAnswer?.option.value || '',
-            choise1: mcqChoices?.[0].option.value || '',
-            choise2: mcqChoices?.[1].option.value || '',
-            choise3: mcqChoices?.[2].option.value || ''
+            choice1: mcqChoices?.[0].option.value || '',
+            choice2: mcqChoices?.[1].option.value || '',
+            choice3: mcqChoices?.[2].option.value || ''
         }}
         enableReinitialize={true}
         validationSchema={MCQSCHEMA}
@@ -105,52 +105,52 @@ const MCQ = ({ initValues, getQuestionCreationRequest = () => { } }) => {
 
                 {/* Options #1 */}
                 <div className='mt-4 text-start'>
-                    <DangerLabel htmlFor='choise1' className='mb-2'>Wrong Option 1</DangerLabel>
+                    <DangerLabel htmlFor='choice1' className='mb-2'>Wrong Option 1</DangerLabel>
                     <TextField
-                        name="choise1"
-                        id="choise1"
+                        name="choice1"
+                        id="choice1"
                         placeholder='Wrong Answer....'
                         fullWidth
-                        value={props.values.choise1}
+                        value={props.values.choice1}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
                         variant="filled"
-                        helperText={props.touched.choise1 && props.errors.choise1}
-                        error={props.touched.choise1 && Boolean(props.errors.choise1)}
+                        helperText={props.touched.choice1 && props.errors.choice1}
+                        error={props.touched.choice1 && Boolean(props.errors.choice1)}
                     />
                 </div>
 
                 {/* Options #2 */}
                 <div className='mt-4 text-start'>
-                    <DangerLabel htmlFor='choise2' className='mb-2'>Wrong Option 2</DangerLabel>
+                    <DangerLabel htmlFor='choice2' className='mb-2'>Wrong Option 2</DangerLabel>
                     <TextField
-                        name="choise2"
-                        id="choise2"
+                        name="choice2"
+                        id="choice2"
                         placeholder='Wrong Answer....'
                         fullWidth
-                        value={props.values.choise2}
+                        value={props.values.choice2}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
                         variant="filled"
-                        helperText={props.touched.choise2 && props.errors.choise2}
-                        error={props.touched.choise2 && Boolean(props.errors.choise2)}
+                        helperText={props.touched.choice2 && props.errors.choice2}
+                        error={props.touched.choice2 && Boolean(props.errors.choice2)}
                     />
                 </div>
 
                 {/* Options #3 */}
                 <div className='mt-4 text-start'>
-                    <DangerLabel htmlFor='choise3' className='mb-2'>Wrong Option 3</DangerLabel>
+                    <DangerLabel htmlFor='choice3' className='mb-2'>Wrong Option 3</DangerLabel>
                     <TextField
-                        name="choise3"
-                        id="choise3"
+                        name="choice3"
+                        id="choice3"
                         placeholder='Wrong Answer....'
                         fullWidth
-                        value={props.values.choise3}
+                        value={props.values.choice3}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
                         variant="filled"
-                        helperText={props.touched.choise3 && props.errors.choise3}
-                        error={props.touched.choise3 && Boolean(props.errors.choise3)}
+                        helperText={props.touched.choice3 && props.errors.choice3}
+                        error={props.touched.choice3 && Boolean(props.errors.choice3)}
                     />
                 </div>
 

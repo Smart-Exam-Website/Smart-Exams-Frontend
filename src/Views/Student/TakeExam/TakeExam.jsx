@@ -79,7 +79,7 @@ const TakeExam = (props) => {
     }
 
     const clickedPreviousHandler = () => {
-        // Go to next question by increasing currentQuestionNumber (if it's not in the last question) 
+        // Go to previous question by decreasing currentQuestionNumber 
         setCurrentQuestionNumber(currentQuestionNumber - 1)
     }
 

@@ -13,6 +13,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { saveAQuestion } from '../../../redux/actions/ExamAction';
 import { QuestionServices } from '../../../apis/Services/QuestionService';
+import Essay from './QuestionTypes/Essay';
 
 
 const AddQuestionScreen = () => {
@@ -38,8 +39,9 @@ const AddQuestionScreen = () => {
     const [questionTypes, setQuestionTypes] = useState(null);
     const getQuestionTypes = () => {
         setQuestionTypes([
-            { id: '123', value: 'mcq' }
-        ])
+            { id: '123', value: 'MCQ' },
+            { id: '111', value: 'Essay' },
+        ]) 
     }
     useEffect(() => {
         getQuestionTypes();
@@ -95,10 +97,18 @@ const AddQuestionScreen = () => {
                         </div>
                     }
 
-                    {questionType === 'mcq' &&
+                    {questionType === 'MCQ' &&
                         <div>
                             <MCQ
-                                initValues={oldQuestionDetails?.type === 'mcq' ? oldQuestionDetails : null}
+                                initValues={oldQuestionDetails?.type === 'MCQ' ? oldQuestionDetails : null}
+                                getQuestionCreationRequest={createQuestionHandler}
+                            />
+                        </div>
+                    }
+                    {questionType === 'Essay' &&
+                        <div>
+                            <Essay
+                                initValues={oldQuestionDetails?.type === 'Essay' ? oldQuestionDetails : null}
                                 getQuestionCreationRequest={createQuestionHandler}
                             />
                         </div>
