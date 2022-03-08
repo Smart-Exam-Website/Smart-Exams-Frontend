@@ -19,6 +19,7 @@ const Header = () => {
         history.push('/login')
     }
 
+    const isInstructor = userType === 'instructor'
     return (
         <div className="Navbar">
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -61,9 +62,9 @@ const Header = () => {
                                         <span>Exams</span>
                                     </li>
                                 </NavLink>
-                                <NavLink className="nav-link p-0" activeclassname={'active'} to="/questions">
+                                <NavLink className="nav-link p-0" activeclassname={'active'} to={isInstructor ? "/questions" : "/my-results"}>
                                     <li className="nav-item px-5 mx-2">
-                                        <span>Questions</span>
+                                        <span>{isInstructor ? 'Questions' : 'My Results'}</span>
                                     </li>
                                 </NavLink>
                             </>
