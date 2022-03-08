@@ -166,7 +166,11 @@ const Exams = () => {
                     </TableHead>
                     <TableBody>
                         {exams?.map((row) => (
-                            <StyledTableRow className={isExamNotCompleted(row) ? 'bg-danger' : ''} onClick={() => GoToExamDetailsHandler(row.id)} key={row.id}>
+                            <StyledTableRow
+                                className={isExamNotCompleted(row) ? 'bg-danger disablePointer' : ''}
+                                onClick={!isExamNotCompleted(row) ? () => GoToExamDetailsHandler(row.id) : null}
+                                key={row.id}
+                            >
                                 {/* NAME */}
                                 <StyledTableCell className={isExamNotCompleted(row) ? 'text-light' : ''} component="th" scope="row">
                                     {row.name}
@@ -203,7 +207,8 @@ const Exams = () => {
                 </Table>
             </TableContainer>
 
-            {selectedExam &&
+            {
+                selectedExam &&
                 <Menu
                     id="basic-menu"
                     anchorEl={anchorEl}
@@ -236,7 +241,7 @@ const Exams = () => {
                     </MenuItem>
                 </Menu>
             }
-        </div>
+        </div >
     )
 }
 

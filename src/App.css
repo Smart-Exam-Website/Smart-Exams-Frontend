@@ -23,3 +23,6 @@
 .badge-secondary{
     background-color: var(--secondary);
 }
+.disablePointer{
+    cursor: not-allowed !important;
+}

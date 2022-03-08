@@ -93,7 +93,7 @@ const AntiCheatingTimeline = ({ examConfig }) => {
                     <TimelineDot color={isplagiarism ? "primary" : "error"}>
                         <FactCheckIcon />
                     </TimelineDot>
-                    <TimelineConnector sx={{ bgcolor: 'secondary.main' }} />
+                    <TimelineConnector />
                 </TimelineSeparator>
                 <TimelineContent sx={{ py: '12px', px: 2 }}>
                     <Typography
@@ -141,11 +141,9 @@ const AntiCheatingTimeline = ({ examConfig }) => {
                     Level5
                 </TimelineOppositeContent>
                 <TimelineSeparator>
-                    <TimelineConnector />
                     <TimelineDot color={isFaceVerify ? "primary" : "error"}>
                         <PhotoCameraFrontIcon />
                     </TimelineDot>
-                    <TimelineConnector />
                 </TimelineSeparator>
                 <TimelineContent sx={{ py: '12px', px: 2 }}>
                     <Typography
