@@ -41,15 +41,16 @@ const ExamView = () => {
     }, [])
 
     const [studentAnswers, setStudentAnswers] = useState(null)
-    useEffect(() => {
+    const getStudentExams = () => {
         MarkExamServices.getAllStudentsAnswers(params.examId)
             .then(res => {
                 console.log(res.solvedExams)
                 setStudentAnswers(res.solvedExams)
             })
             .catch(err => HandleErrors(err))
-
-
+    }
+    useEffect(() => {
+        getStudentExams()
     }, [])
 
     return (
@@ -77,7 +78,10 @@ const ExamView = () => {
                         <ExamOverview questions={questions} />
                     }
                     {selectedTab === 'StudentAnswers' &&
-                        <StudentsList students={studentAnswers} />
+                        <StudentsList
+                            students={studentAnswers}
+                            getStudentExams={getStudentExams}
+                        />
                     }
                 </div>
             </div>

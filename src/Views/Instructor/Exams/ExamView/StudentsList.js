@@ -17,7 +17,7 @@ import { useParams } from 'react-router-dom';
 import showSuccessMsg from '../../../../hooks/showSuccessMsg';
 import HandleErrors from '../../../../hooks/handleErrors';
 
-const StudentsList = ({ students }) => {
+const StudentsList = ({ students, getStudentExams = () => { } }) => {
     const imageResolver = useImageResolver()
 
     const history = useHistory()
@@ -31,6 +31,7 @@ const StudentsList = ({ students }) => {
         MarkExamServices.markAllAutomatic(params?.examId)
             .then(res => {
                 showSuccessMsg("Mark All Student Successfully!")
+                getStudentExams()
             })
             .catch(err => HandleErrors(err))
     }
@@ -49,7 +50,7 @@ const StudentsList = ({ students }) => {
                                     <Avatar alt={item.name} src={imageResolver(item?.image)} />
                                 </ListItemAvatar>
                                 <ListItemText
-                                    primaryTypographyProps={item?.isMarked?{ color: Colors.success, fontWeight: 'bolder' }:{}}
+                                    primaryTypographyProps={item?.isMarked ? { color: Colors.success, fontWeight: 'bolder' } : {}}
                                     primary={`${item.name}`}
                                     secondary={item?.isMarked && `Mark: ${item.mark}`}
                                 />
