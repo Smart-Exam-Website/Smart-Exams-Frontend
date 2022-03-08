@@ -10,7 +10,9 @@ import { ExamServices } from '../../../apis/Services/ExamService';
 import HandleErrors from '../../../hooks/handleErrors';
 import { useEffect } from 'react';
 import moment from 'moment';
-
+import { Colors } from '../../../constants/Colors';
+import { Chip, colors, Grid } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
 
 
 
@@ -41,29 +43,64 @@ const ShowExams = (props) => {
             .catch(err => HandleErrors(err))
     }, [])
 
+    const getRemainingEndTime = (examEndDate) => {
+        let result = moment(examEndDate).diff(moment(), 'hours')
+        return result
+    }
     return (
         <div className="row justify-content-center text-center my-5">
             <div className="col-md-8 col-12">
                 <CardComponent title={'Your Exams'}>
                     <div className="m-5 text-start ">
                         {exams?.map(exam => (
-                            <Card key={exam.id} className='shadow p-3 mb-5 bg-white rounded ' sx={{ minWidth: 275 }}>
+                            <Card style={{ border: exam.isSubmitted ? `1px solid ${Colors.success}` : '' }} key={exam.id} className='shadow p-3 mb-5 bg-white rounded' sx={{ minWidth: 275 }}>
                                 <CardContent>
                                     {/* Exam Title */}
                                     <Typography variant="h4" component="div">
                                         {exam.name}
-                                        <hr />
                                     </Typography>
+                                    {exam.isSubmitted &&
+                                        <Chip
+                                            variant='filled'
+                                            color='success'
+                                            label={'Submitted'}
+                                            size={'small'}
+                                            className='mx-1'
+                                            icon={<CheckIcon />}
+                                        />
+                                    }
+                                    {exam.isMarked &&
+                                        <Chip
+                                            variant='filled'
+                                            color='success'
+                                            label={'Marked'}
+                                            size={'small'}
+                                            className='mx-1'
+                                            icon={<CheckIcon />}
+                                        />
+                                    }
+                                    <hr />
                                     <Typography variant="body3">
                                         {exam.description}
                                     </Typography>
                                 </CardContent>
                                 <CardActions className='d-flex m-2 justify-content-between'>
+                                    <Grid display={'flex'} alignItems={'center'} direction={'row'}>
+                                        <Typography fontWeight={'bold'}>Due:</Typography>
+                                        {getRemainingEndTime(exam.endAt) >= 0 ?
+                                            < Typography
+                                                className='mx-1'
+                                                color={getRemainingEndTime(exam.endAt) > 24 ? Colors.success : Colors.danger}>
+                                                {`${moment(exam.endAt).format('yyyy/MM/DD hh:mm A')} [${getRemainingEndTime(exam.endAt)} hours left]`}
+                                            </Typography>
+                                            :
+                                            <Typography className='mx-1'>
+                                                {moment(exam.endAt).format('yyyy/MM/DD hh:mm A')}
+                                            </Typography>
+                                        }
+                                    </Grid>
                                     <Typography variant="body3">
-                                        Due: {moment(exam.endAt).format('yyyy/MM/DD hh:mm A')}
-                                    </Typography>
-                                    <Typography variant="body3">
-                                        Time: {exam.duration}
+                                        <b>Duration:</b> {exam.duration}
                                     </Typography>
                                     <Button
                                         className='btn m-2 p-2 btn-primary text-white'
@@ -77,8 +114,8 @@ const ShowExams = (props) => {
                         ))}
                     </div>
                 </CardComponent>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }
 
