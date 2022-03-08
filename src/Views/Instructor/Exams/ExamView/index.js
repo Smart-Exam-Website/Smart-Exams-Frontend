@@ -56,7 +56,7 @@ const ExamView = () => {
     return (
         <div className="container">
             <div className="row">
-                <div className="col-md-8 col-12 mt-5">
+                <div className="col-12 mt-5">
                     <Box sx={{ width: '100%' }}>
                         <Tabs
                             value={selectedTab}
@@ -73,7 +73,7 @@ const ExamView = () => {
                 </div>
             </div>
             <div className="row justify-content-center">
-                <div className="col-md-8 col-12 mt-5">
+                <div className="col-12 mt-5">
                     {selectedTab === 'Overview' &&
                         <ExamOverview questions={questions} />
                     }

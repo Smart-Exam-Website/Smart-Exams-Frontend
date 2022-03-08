@@ -9,8 +9,9 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import McqAnswer from '../../../../Components/AnsweredQuestion/McqAnswer'
 import showSuccessMsg from '../../../../hooks/showSuccessMsg'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import { ExamServices } from '../../../../apis/Services/ExamService'
 
-const StudentCard = ({ name, isVerified, numberOfFaces, image, markAutoFun }) => {
+const StudentCard = ({ name, isVerified, numberOfFaces, image, markAutoFun, examConfigs }) => {
     const imageResolver = useImageResolver()
 
     return (
@@ -25,8 +26,16 @@ const StudentCard = ({ name, isVerified, numberOfFaces, image, markAutoFun }) =>
                     />
                     <div className='ms-3'>
                         <Typography variant="h4" fontWeight={'bold'} color={'primary'}>{name}</Typography>
-                        <Chip icon={<PersonIcon />} color={(numberOfFaces === 1) ? 'success' : 'error'} label={`${numberOfFaces} face detected`} className="me-2" />
-                        <Chip icon={<VerifiedIcon />} color={isVerified ? 'success' : 'error'} label={isVerified ? "Verified" : "Unverified"} />
+                        {examConfigs?.faceDetection ?
+                            <Chip icon={<PersonIcon />} color={(numberOfFaces === 1) ? 'success' : 'error'} label={`${numberOfFaces} face detected`} className="me-2" />
+                            :
+                            null
+                        }
+                        {examConfigs?.faceRecognition ?
+                            <Chip icon={<VerifiedIcon />} color={isVerified ? 'success' : 'error'} label={isVerified ? "Verified" : "Unverified"} />
+                            :
+                            null
+                        }
                     </div>
                 </div>
             </div>
@@ -91,6 +100,17 @@ const StudentSolvedExam = () => {
         getStudentAnswers()
     }, [])
 
+    const { examId } = useParams()
+    const [examConfigs, setExamConfigs] = useState(null)
+    useEffect(() => {
+        ExamServices.getExamConfig(examId)
+            .then(res => {
+                console.log(res.configuration)
+                setExamConfigs(res.configuration)
+            })
+            .catch(err => HandleErrors(err))
+    }, [])
+
     return (
         <div className='container'>
             <StudentCard
@@ -99,6 +119,7 @@ const StudentSolvedExam = () => {
                 numberOfFaces={studentExamResult?.numberOfFaces}
                 image={studentExamResult?.image}
                 markAutoFun={autoMarkThisStudentHandler}
+                examConfigs={examConfigs}
             />
             <hr />
             <div className="row mt-5 justify-content-center">

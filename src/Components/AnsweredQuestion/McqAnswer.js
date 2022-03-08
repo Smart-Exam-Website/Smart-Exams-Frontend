@@ -14,6 +14,7 @@ const McqAnswer = ({ questionText, choices, studentAnswer, markAsRight = () => {
             displayText: (answer?.option?.value || answer?.value)
         }
     }
+    
     return (
         <Card className='shadow p-3 mb-5 bg-white rounded ' sx={{ minWidth: 275 }}>
             {studentAnswer ?
@@ -51,7 +52,7 @@ const McqAnswer = ({ questionText, choices, studentAnswer, markAsRight = () => {
                         >
                             {choices?.map(choice => (
                                 formatedAnswer(choice).id === formatedAnswer(correctAnswer).id ?
-                                    <div className='d-flex align-items-center py-3 text-success' >
+                                    <div key={choice.id} className='d-flex align-items-center py-3 text-success' >
                                         <FormControlLabel
                                             key={formatedAnswer(choice).id}
                                             value={formatedAnswer(choice).id}
