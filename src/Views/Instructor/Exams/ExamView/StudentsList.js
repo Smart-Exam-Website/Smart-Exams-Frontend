@@ -17,14 +17,14 @@ import { useParams } from 'react-router-dom';
 import showSuccessMsg from '../../../../hooks/showSuccessMsg';
 import HandleErrors from '../../../../hooks/handleErrors';
 
-const StudentsList = ({ students, getStudentExams = () => { } }) => {
+const StudentsList = ({ students, getStudentExams = () => { }, examConfigs }) => {
     const imageResolver = useImageResolver()
 
     const history = useHistory()
     const location = useLocation()
     const params = useParams()
     const goToThisStudent = (id) => {
-        history.push(`${location.pathname}/${id}`)
+        history.push(`${location.pathname}/${id}`, { examConfigs })
     }
 
     const markAllHandler = () => {

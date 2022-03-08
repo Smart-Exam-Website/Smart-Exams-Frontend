@@ -53,6 +53,17 @@ const ExamView = () => {
         getStudentExams()
     }, [])
 
+    const {examId} = useParams()
+    const [examConfigs, setExamConfigs] = useState(null)
+    useEffect(() => {
+        ExamServices.getExamConfig(examId)
+            .then(res => {
+                console.log(res.configuration)
+                setExamConfigs(res.configuration)
+            })
+            .catch(err => HandleErrors(err))
+    }, [])
+
     return (
         <div className="container">
             <div className="row">
@@ -75,12 +86,13 @@ const ExamView = () => {
             <div className="row justify-content-center">
                 <div className="col-12 mt-5">
                     {selectedTab === 'Overview' &&
-                        <ExamOverview questions={questions} />
+                        <ExamOverview questions={questions} examConfigs={examConfigs}/>
                     }
                     {selectedTab === 'StudentAnswers' &&
                         <StudentsList
                             students={studentAnswers}
                             getStudentExams={getStudentExams}
+                            examConfigs={examConfigs}
                         />
                     }
                 </div>

@@ -159,18 +159,9 @@ const AntiCheatingTimeline = ({ examConfig }) => {
     )
 }
 
-export const ExamOverview = ({ questions }) => {
+export const ExamOverview = ({ questions, examConfigs}) => {
     const { examId } = useParams()
-    const [examConfigs, setExamConfigs] = useState(null)
-    useEffect(() => {
-        ExamServices.getExamConfig(examId)
-            .then(res => {
-                console.log(res.configuration)
-                setExamConfigs(res.configuration)
-            })
-            .catch(err => HandleErrors(err))
-    }, [])
-
+    
     return (
         <>
             <CardComponent title={'Anti Cheating Levels'}>

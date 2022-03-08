@@ -1,6 +1,6 @@
 import { Button, Chip, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory, useLocation } from 'react-router-dom'
 import { MarkExamServices } from '../../../../apis/Services/MarkExamService'
 import HandleErrors from '../../../../hooks/handleErrors'
 import useImageResolver from '../../../../hooks/useImageResolver'
@@ -8,8 +8,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import McqAnswer from '../../../../Components/AnsweredQuestion/McqAnswer'
 import showSuccessMsg from '../../../../hooks/showSuccessMsg'
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
-import { ExamServices } from '../../../../apis/Services/ExamService'
 
 const StudentCard = ({ name, isVerified, numberOfFaces, image, markAutoFun, examConfigs }) => {
     const imageResolver = useImageResolver()
@@ -51,6 +49,9 @@ const StudentCard = ({ name, isVerified, numberOfFaces, image, markAutoFun, exam
 const StudentSolvedExam = () => {
     const params = useParams()
     const history = useHistory()
+    const location = useLocation()
+    const examConfigs = location?.state?.examConfigs
+    
     const [studentExamResult, setStudentExamResult] = useState(null)
 
     const autoMarkThisStudentHandler = () => {
@@ -98,17 +99,6 @@ const StudentSolvedExam = () => {
     }
     useEffect(() => {
         getStudentAnswers()
-    }, [])
-
-    const { examId } = useParams()
-    const [examConfigs, setExamConfigs] = useState(null)
-    useEffect(() => {
-        ExamServices.getExamConfig(examId)
-            .then(res => {
-                console.log(res.configuration)
-                setExamConfigs(res.configuration)
-            })
-            .catch(err => HandleErrors(err))
     }, [])
 
     return (
