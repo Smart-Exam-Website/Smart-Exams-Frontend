@@ -112,6 +112,9 @@ export class ExamServices {
         return _axios.get(`/exams/${examId}/questions`);
     }
 
+    static getExamConfig(examId) {
+        return _axios.get(`/exams/${examId}/configs`);
+    }
 
 
     /**
@@ -161,7 +164,7 @@ export class ExamServices {
         return _axios.get(`exams/${examId}/my-answers`)
     }
 
-    static submitExam(examId){
+    static submitExam(examId) {
         return _axios.post(`exams/${examId}/submit`)
     }
 
@@ -175,6 +178,6 @@ export class ExamServices {
         return _axios.post(`exams/${examId}/start`, data)
     }
 
-    
+
 
 }

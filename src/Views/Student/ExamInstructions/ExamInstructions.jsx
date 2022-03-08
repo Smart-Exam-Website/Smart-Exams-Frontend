@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -14,6 +14,7 @@ import showSuccessMsg from '../../../hooks/showSuccessMsg';
 import { ExamServices } from '../../../apis/Services/ExamService';
 import moment from 'moment';
 import HandleErrors from '../../../hooks/handleErrors';
+import { useParams } from 'react-router-dom';
 
 
 const Examinstructions = (props) => {
@@ -24,11 +25,21 @@ const Examinstructions = (props) => {
     const [photoVerified, setPhotoVerified] = useState(null);
     // const [studentImage, setStudentImage] = useState(null);
 
+    const { examId } = useParams()
+    const [examConfigs, setExamConfigs] = useState(null)
+    useEffect(() => {
+        console.log(examId)
+        ExamServices.getExamConfig(examId)
+            .then(res => {
+                console.log(res.configuration)
+                setExamConfigs(res.configuration)
+            })
+            .catch(err => HandleErrors(err))
+    }, [])
 
     const goToExamHandler = (event) => {
         // this code pevents from going to another page
         event.preventDefault()
-
 
         let startExamData = {
             "startTime": moment().format('yyyy-MM-DD HH:mm:ss'),
@@ -54,61 +65,42 @@ const Examinstructions = (props) => {
                 }
                 HandleErrors(error)
             })
-
     }
 
     const photoTakenHandler = (img) => {
-
         setIsPhotoTaken(true)
         // setStudentImage(img)
         showSuccessMsg("Photo Taken Successfully")
 
         // Data to be passed to ML apis
         let faceDetectionData = {
-
             "image": img,
             "examId": exam.id
-
         }
         let faceVerificationData = {
-
             "image1": img,
             "examId": exam.id
-
         }
 
         // let numberOfFaces;
         // let verified; // faceVerified or not
         ExamServices.applyFaceDetection(faceDetectionData)
             .then((response) => {
-                console.log("from face detection")
-
                 setNoOfFaces(response.numberOfFaces)
-
-
-
             }).catch((error) => {
                 console.log(error)
-
-
             })
 
         ExamServices.applyFaceVerification(faceVerificationData)
             .then((response) => {
-
                 setPhotoVerified(response.verified)
-
             }).catch((error) => {
                 console.log(error)
-
-
             })
-
-
         return
     }
 
-
+    const mustVerifyFace = (examConfigs?.faceRecognition || examConfigs?.faceDetection)
     return (
         <div>
             <div className="row justify-content-center text-center my-5">
@@ -122,88 +114,76 @@ const Examinstructions = (props) => {
                                         Important Instructions
                                         <hr />
                                     </Typography>
-                                    <Typography variant="body3">
-                                        <ul>
-                                            <li className='text-danger font-weight-bold'>
-                                                Verify your identity with a photo before entering the exam.
+                                    <ul>
+                                        <li className='text-danger font-weight-bold'>
+                                            Verify your identity with a photo before entering the exam.
+                                        </li>
+                                        <li>
+                                            Don't use internet for getting information.
+                                        </li>
+                                        <li>
+                                            No one else can be in the room with you.
+                                        </li>
+                                        <li>
+                                            Time is limited, so organize your time well with questions.
+                                        </li>
+                                        <li>
+                                            The room must be well-lit and you must be clearly visible.
+                                        </li>
+                                    </ul>
+                                    <div className='text-center'>
 
-                                            </li>
-                                            <li>
-                                                Don't use internet for getting information.
+                                    </div>
+                                    <div className='text-center text-success' >
+                                        Good Luck with your exam!
+                                    </div>
 
-                                            </li>
-                                            <li>
-                                                No one else can be in the room with you.
-
-                                            </li>
-                                            <li>
-                                                Time is limited, so organize your time well with questions.
-
-                                            </li>
-                                            <li>
-                                                The room must be well-lit and you must be clearly visible.
-                                            </li>
-
-                                        </ul>
-                                        <div className='text-center text-success' >
-                                            Good Luck with your exam..!!
-                                        </div>
-
-                                    </Typography>
                                 </CardContent>
                                 <CardActions className='d-flex m-2 justify-content-end'>
+                                    {mustVerifyFace ?
+                                        <Popup
+                                            trigger={
+                                                <Button
+                                                    className='btn m-2 p-2 text-white'
+                                                    size="large"
+                                                    variant="contained"
+                                                    color='warning'
+                                                >
+                                                    Take Photo
+                                                </Button>
+                                            }
+                                            modal
+                                            lockScroll
+                                            position="top center"
+                                        >
+                                            {close => (
+                                                <CardComponent title={'Take a nice photo'}>
+                                                    <h4 className="d-flex justify-content-center">
+                                                        Make sure the place is well lit..!
+                                                    </h4>
+                                                    <TakePhoto
+                                                        captured={photoTakenHandler}
+                                                        clicked={close}
+                                                    ></TakePhoto>
+                                                </CardComponent>
 
-                                    <Popup
-                                        trigger={
-                                            <Button
-                                                className='btn m-2 p-2 text-white'
-                                                size="large"
-                                                variant="contained"
-                                                color='warning'
-                                            >
-                                                Take Photo
-                                            </Button>
-                                        }
-
-                                        modal
-                                        lockScroll
-                                        position="top center"
-
-                                    >
-                                        {close => (
-                                            <CardComponent title={'Take a nice photo'}>
-
-                                                <h4 className="d-flex justify-content-center">
-                                                    Make sure the place is well lit..!
-                                                </h4>
-                                                <TakePhoto
-                                                    captured={photoTakenHandler}
-                                                    clicked={close}
-                                                ></TakePhoto>
-                                            </CardComponent>
-
-                                        )}
-
-
-                                    </Popup>
-
+                                            )}
+                                        </Popup>
+                                        :
+                                        null
+                                    }
                                     <Button
                                         className='btn m-2 p-2 text-white'
                                         size="small"
                                         variant="contained"
                                         color='success'
                                         onClick={goToExamHandler}
-
-                                        disabled={!isPhotoTaken}
+                                        disabled={(mustVerifyFace && !isPhotoTaken)}
                                     >
                                         Start Exam Now
                                     </Button>
-
                                 </CardActions>
                             </Card>
-
-
-
                         </div>
                     </CardComponent>
                 </div>
