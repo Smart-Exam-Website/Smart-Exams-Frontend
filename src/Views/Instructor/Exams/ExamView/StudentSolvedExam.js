@@ -51,7 +51,7 @@ const StudentSolvedExam = () => {
     const history = useHistory()
     const location = useLocation()
     const examConfigs = location?.state?.examConfigs
-    
+
     const [studentExamResult, setStudentExamResult] = useState(null)
 
     const autoMarkThisStudentHandler = () => {
@@ -120,11 +120,14 @@ const StudentSolvedExam = () => {
                                 {(item?.question?.type === 'mcq') ?
                                     <McqAnswer
                                         key={item.question_id}
-                                        markAsRight={() => markAsRightHandler(item?.question_id, 1)}
+                                        markAsRight={() => markAsRightHandler(item?.question_id, item?.totalQuestionMark)}
                                         markAsWrong={() => markAsWrongHandler(item?.question_id)}
                                         studentAnswer={{ id: item?.option_id, value: item?.studentAnswer }}
                                         questionText={item?.question?.questionText}
                                         choices={item?.question?.answers}
+                                        studentMark={item?.questionMark}
+                                        questionMark={item?.totalQuestionMark}
+                                        isMarked={item?.isMarked}
                                     />
                                     :
                                     null

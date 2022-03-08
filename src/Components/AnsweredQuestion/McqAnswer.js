@@ -1,9 +1,18 @@
 import React from 'react'
-import { Button, Card, CardContent, CardHeader, FormControl, FormControlLabel, IconButton, Radio, RadioGroup, Typography } from '@mui/material'
+import { Button, Card, CardContent, CardHeader, colors, FormControl, FormControlLabel, Grid, IconButton, Radio, RadioGroup, Typography } from '@mui/material'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
-const McqAnswer = ({ questionText, choices, studentAnswer, markAsRight = () => { }, markAsWrong = () => { } }) => {
+const McqAnswer = ({
+    questionText,
+    choices,
+    studentAnswer,
+    markAsRight = () => { },
+    markAsWrong = () => { },
+    isMarked,
+    questionMark,
+    studentMark
+}) => {
     const submitHandler = (values) => {
         console.log(values)
     }
@@ -14,20 +23,31 @@ const McqAnswer = ({ questionText, choices, studentAnswer, markAsRight = () => {
             displayText: (answer?.option?.value || answer?.value)
         }
     }
-    
+
+    const isCorrectStudentAnswer = questionMark === studentMark
     return (
-        <Card className='shadow p-3 mb-5 bg-white rounded ' sx={{ minWidth: 275 }}>
+        <Card className='shadow p-3 mb-5 bg-white rounded position-relative' sx={{ minWidth: 275 }}>
             {studentAnswer ?
                 <CardHeader
                     action={
-                        <div>
-                            <IconButton onClick={markAsWrong} size='large'>
-                                <CancelOutlinedIcon fontSize='large' color="error" />
-                            </IconButton>
-                            <IconButton onClick={markAsRight} size='large'>
-                                <CheckCircleOutlineIcon fontSize='large' color="success" />
-                            </IconButton>
-                        </div>
+                        !isMarked ?
+                            <div>
+                                <IconButton onClick={markAsWrong} size='large'>
+                                    <CancelOutlinedIcon fontSize='large' color="error" />
+                                </IconButton>
+                                <IconButton onClick={markAsRight} size='large'>
+                                    <CheckCircleOutlineIcon fontSize='large' color="success" />
+                                </IconButton>
+                            </div>
+                            :
+                            <div className={`me-3 d-flex shadow-sm p-2 border ${isCorrectStudentAnswer ? 'border-success' : 'border-danger'}`}>
+                                <Typography variant='h5' color={isCorrectStudentAnswer ? 'primary' : 'error'}>
+                                    {3}
+                                </Typography>
+                                <Typography variant='h5'>
+                                    {`/5`}
+                                </Typography>
+                            </div>
                     }
                 />
                 :
@@ -83,6 +103,17 @@ const McqAnswer = ({ questionText, choices, studentAnswer, markAsRight = () => {
                     </FormControl>
                 </form>
             </CardContent>
+            {isMarked ?
+                <div className='position-absolute opacity-25' style={{ right: '10%', bottom: '18%' }}>
+                    {(isCorrectStudentAnswer) ?
+                        <CheckCircleOutlineIcon fontSize='large' style={{ transform: 'scale(6)' }} color="success" />
+                        :
+                        <CancelOutlinedIcon fontSize='large' style={{ transform: 'scale(6)' }} color="error" />
+                    }
+                </div>
+                :
+                null
+            }
         </Card >
     )
 }
