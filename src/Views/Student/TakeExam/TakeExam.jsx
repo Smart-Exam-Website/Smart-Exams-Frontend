@@ -7,6 +7,12 @@ import { useState } from 'react';
 import HandleErrors from '../../../hooks/handleErrors';
 import showSuccessMsg from '../../../hooks/showSuccessMsg';
 import { useParams } from 'react-router-dom';
+
+
+
+
+
+
 const TakeExam = (props) => {
     const params = useParams()
     const exam = props.location.state?.exam || { id: params.examId, name: 'Continoue The Exam' }
@@ -15,6 +21,8 @@ const TakeExam = (props) => {
 
     useEffect(() => {
         let responseQuestions;
+        console.log("Exam here")
+        console.log(exam)
         ExamServices.getExamQuestions(exam.id)
             .then((response) => {
                 responseQuestions = response.questions
