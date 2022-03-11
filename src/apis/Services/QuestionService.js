@@ -14,6 +14,10 @@ export class QuestionServices {
         return _axios.post('/questions/create', { type: 'mcq', ...question });
     }
 
+    static createEssayQuestion(question) {
+        return _axios.post('/questions/create', { type: 'essay', ...question });
+    }
+
     /**
      * 
      * @param {*} id Question id
