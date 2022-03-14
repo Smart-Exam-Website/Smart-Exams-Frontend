@@ -100,7 +100,7 @@ export class ExamServices {
      * @param {{isMarked: boolean}} data
      * @returns {Promise<Array>}
      */
-    static getAllPublishedExams({ isMarked }) {
+    static getAllPublishedExams({ isMarked = false } = {}) {
         return _axios.get('/exams', {
             params: {
                 isMarked
