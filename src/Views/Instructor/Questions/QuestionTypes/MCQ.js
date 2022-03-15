@@ -51,8 +51,8 @@ const MCQ = ({ initValues, getQuestionCreationRequest = () => { } }) => {
 
     }
 
-    const mcqChoices = initValues?.mcq?.mcq_answers?.filter(item=>!item.isCorrect)
-    const mcqCorrectAnswer = initValues?.mcq?.mcq_answers?.find(item=>item.isCorrect)
+    const mcqChoices = initValues?.mcq?.mcq_answers?.filter(item => !item.isCorrect)
+    const mcqCorrectAnswer = initValues?.mcq?.mcq_answers?.find(item => item.isCorrect)
     return <Formik
         initialValues={{
             questionText: initValues?.questionText || '',

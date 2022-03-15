@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ExamServices } from '../../../../apis/Services/ExamService'
 import McqAnswer from '../../../../Components/AnsweredQuestion/McqAnswer'
+import EssayAnswer from '../../../../Components/AnsweredQuestion/EssayAnswer'
 import HandleErrors from '../../../../hooks/handleErrors'
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
@@ -159,9 +160,8 @@ const AntiCheatingTimeline = ({ examConfig }) => {
     )
 }
 
-export const ExamOverview = ({ questions, examConfigs}) => {
+export const ExamOverview = ({ questions, examConfigs }) => {
     const { examId } = useParams()
-    
     return (
         <>
             <CardComponent title={'Anti Cheating Levels'}>
@@ -169,12 +169,23 @@ export const ExamOverview = ({ questions, examConfigs}) => {
             </CardComponent>
             <br /><br />
             <CardComponent title={'Questions'}>
-                {questions?.map(item =>
-                    (item.type === 'mcq') &&
-                    <div key={item?.id} className='m-4'>
-                        <McqAnswer questionText={item?.questionText} choices={item?.answers} />
-                    </div>
+                {questions?.map((item) => {
 
+                    if (item.type === 'mcq') {
+
+                        return (
+                            <div key={item?.id} className='m-4'>
+                                <McqAnswer questionText={item?.questionText} choices={item?.answers} />
+                            </div>)
+                    }
+                    else if (item.type === 'essay') {
+                        return (
+                            <div key={item?.id} className='m-4'>
+                                <EssayAnswer questionText={item?.questionText} correctAnswer={item?.answers[0]} />
+                            </div>)
+                    }
+                    return 0
+                }
                 )}
             </CardComponent>
         </>

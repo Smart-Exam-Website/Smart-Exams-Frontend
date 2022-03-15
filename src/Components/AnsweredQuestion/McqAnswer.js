@@ -56,7 +56,7 @@ const McqAnswer = ({
 
             <CardContent>
                 {/* Question Text */}
-                <Typography className='m-3' variant='h5'>
+                <Typography className='m-3' variant='h5' sx={{ fontWeight: 'bold' }}>
                     {questionText}
                 </Typography>
             </CardContent>
