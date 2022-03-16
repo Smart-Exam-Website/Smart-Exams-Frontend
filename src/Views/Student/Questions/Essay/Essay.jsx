@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { useState } from 'react';
+import {QuestionTypes} from '../../../../constants/QuestionTypes'
+
 // import { connect } from 'react-redux';
 // import { saveAnswer } from '../../../../redux/actions/QuestionActions'
 
@@ -36,7 +38,7 @@ const Essay = (props) => {
 
                     {/* Question Text */}
                     <Typography className='m-3' variant='h5'>
-                        {props.questionText}
+                        {props.question?.questionText}
                     </Typography>
 
                 </CardContent>
@@ -50,6 +52,7 @@ const Essay = (props) => {
                         multiline
                         rows={8}
                         fullWidth
+                        value={essayAnswer}
                         onChange={essayChangedHandler}
                     />
 
@@ -71,9 +74,9 @@ const Essay = (props) => {
                         className='btn m-2 p-auto btn-primary text-white'
                         variant="contained"
                         onClick={() => {
-                            // props.clickedNext(chosenOptionID, chosenAnswer)
+                            props.clickedNext(null, essayAnswer, QuestionTypes.ESSAY)
                             // props.studentAnswerFunction(props.questionIndex, chosenOptionID, chosenAnswer)
-                            // setChosenOptionID(null)
+                            // setEssayAnswer("")
                         }}
                     >
                         {props.changeNextNameIntoFinish ? "Finish Exam" : "Next"}

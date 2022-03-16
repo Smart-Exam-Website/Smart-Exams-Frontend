@@ -7,7 +7,9 @@ import { useState } from 'react';
 import HandleErrors from '../../../hooks/handleErrors';
 import showSuccessMsg from '../../../hooks/showSuccessMsg';
 import { useParams } from 'react-router-dom';
+import Essay from '../Questions/Essay/Essay';
 
+import {QuestionTypes} from '../../../constants/QuestionTypes';
 
 
 
@@ -50,13 +52,31 @@ const TakeExam = (props) => {
             })
     }, [exam.id]);
 
-    const clickedNextHandler = (chosenOptionID, chosenAnswer) => {
+    const clickedNextHandler = (chosenOptionID, chosenAnswer, questionType) => {
         // Add this answer to backend
-        const answerData = {
-            "option_id": chosenOptionID,
-            "studentAnswer": chosenAnswer,
-            "question_id": questions[currentQuestionNumber].id,
-            "exam_id": exam.id
+        console.log("Testing essay answers")
+        console.log(chosenAnswer)
+        console.log(chosenOptionID)
+
+        let answerData = {}
+
+        if (questionType === QuestionTypes.MCQ) {
+            answerData = {
+                "option_id": chosenOptionID,
+                "studentAnswer": chosenAnswer,
+                "question_id": questions[currentQuestionNumber].id,
+                "exam_id": exam.id
+
+            }
+
+        }
+        else if (questionType === QuestionTypes.ESSAY) {
+            answerData = {
+                "studentAnswer": chosenAnswer,
+                "question_id": questions[currentQuestionNumber].id,
+                "exam_id": exam.id
+
+            }
 
         }
 
@@ -106,28 +126,58 @@ const TakeExam = (props) => {
     }
 
     let My_Questions_Markup = questions?.map((question, index) => {
-        return (
-            <MCQ
-                questionIndex={index + 1}
+        // console.log("question.type")
+        // console.log(question.type)
+        console.log("question")
+        console.log(question)
+        if (question?.type === QuestionTypes.ESSAY) {
+            return (
 
-                currentQuestionNumber={currentQuestionNumber}
-                key={props.questionIndex}
 
-                questionText={question.questionText}
-                answers={question.answers}
+                <Essay
+                    questionIndex={index + 1}
+                    question={question}
 
-                clickedNext={clickedNextHandler}
-                clickedPrevious={clickedPreviousHandler}
+                    clickedNext={clickedNextHandler}
+                    clickedPrevious={clickedPreviousHandler}
+                    previousButtonDisabled={currentQuestionNumber === 0}
+                    changeNextNameIntoFinish={index === questions.length - 1}
 
-                previousButtonDisabled={currentQuestionNumber === 0}
-                changeNextNameIntoFinish={index === questions.length - 1}
 
-                studentAnswerFunction={getAnswer}
+                    key={props.questionIndex}
 
-                savedStudentAnswer={question?.studentAnswer}
-            >
-            </MCQ>
-        )
+                />
+
+
+
+            );
+        }
+        else if (question?.type === QuestionTypes.MCQ) {
+            return (
+                <MCQ
+                    questionIndex={index + 1}
+
+                    currentQuestionNumber={currentQuestionNumber}
+                    key={props.questionIndex}
+
+                    questionText={question.questionText}
+                    answers={question.answers}
+
+                    clickedNext={clickedNextHandler}
+                    clickedPrevious={clickedPreviousHandler}
+
+                    previousButtonDisabled={currentQuestionNumber === 0}
+                    changeNextNameIntoFinish={index === questions.length - 1}
+
+                    studentAnswerFunction={getAnswer}
+
+                    savedStudentAnswer={question?.studentAnswer}
+                />
+            )
+
+        }
+
+        return null;
 
     })
 

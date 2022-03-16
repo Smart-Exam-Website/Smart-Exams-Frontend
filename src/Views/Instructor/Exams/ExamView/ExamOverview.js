@@ -19,6 +19,9 @@ import FactCheckIcon from '@mui/icons-material/FactCheck';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import PhotoCameraFrontIcon from '@mui/icons-material/PhotoCameraFront';
 
+
+
+
 const AntiCheatingTimeline = ({ examConfig }) => {
     const isRandom = examConfig?.questionsRandomOrder
     const isDisableSwitch = examConfig?.disableSwitchBrowser

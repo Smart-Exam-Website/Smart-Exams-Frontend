@@ -4,8 +4,10 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-// import { connect } from 'react-redux';
-// import { saveAnswer } from '../../../../redux/actions/QuestionActions'
+import {QuestionTypes} from '../../../../constants/QuestionTypes'
+
+
+
 
 const MCQ = (props) => {
 
@@ -19,7 +21,7 @@ const MCQ = (props) => {
 
         setChosenOptionID(props.savedStudentAnswer?.chosenOptionID)
         setChosenAnswer(props.savedStudentAnswer?.chosenAnswer)
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [props.currentQuestionNumber]);
 
 
@@ -42,7 +44,7 @@ const MCQ = (props) => {
 
     let isCheckedCondition = (ansIndex) => {
         // return chosenOptionID && parseInt(chosenOptionID) === parseInt(props.savedStudentAnswer?.chosenOptionID)
-        return parseInt(chosenOptionID) === parseInt(props.answers[ansIndex].id)
+        return parseInt(chosenOptionID) === parseInt(props.answers[ansIndex]?.id)
     }
     return (
         <div className="m-5 text-start ">
@@ -75,13 +77,13 @@ const MCQ = (props) => {
                                 className="form-check-input"
                                 checked={isCheckedCondition(0)}
                                 type="radio"
-                                value={props.answers[0].value}
-                                id={props.answers[0].id}
+                                value={props.answers[0]?.value}
+                                id={props.answers[0]?.id}
                                 onChange={onChangeHandler}
                                 name="flexRadioDefault" />
 
-                            <label className="form-check-label" htmlFor={props.answers[0].id}>
-                                {props.answers[0].value}
+                            <label className="form-check-label" htmlFor={props.answers[0]?.id}>
+                                {props.answers[0]?.value}
                             </label>
                         </div>
 
@@ -93,14 +95,14 @@ const MCQ = (props) => {
                                 className="form-check-input"
                                 checked={isCheckedCondition(1)}
                                 type="radio"
-                                value={props.answers[1].value}
-                                id={props.answers[1].id}
+                                value={props.answers[1]?.value}
+                                id={props.answers[1]?.id}
                                 onChange={onChangeHandler}
                                 name="flexRadioDefault" />
 
-                            <label className="form-check-label" htmlFor={props.answers[1].id}>
+                            <label className="form-check-label" htmlFor={props.answers[1]?.id}>
 
-                                {props.answers[1].value}
+                                {props.answers[1]?.value}
                             </label>
                         </div>
 
@@ -113,14 +115,14 @@ const MCQ = (props) => {
                                 className="form-check-input"
                                 checked={isCheckedCondition(2)}
                                 type="radio"
-                                value={props.answers[2].value}
-                                id={props.answers[2].id}
+                                value={props.answers[2]?.value}
+                                id={props.answers[2]?.id}
                                 onChange={onChangeHandler}
                                 name="flexRadioDefault" />
 
-                            <label className="form-check-label" htmlFor={props.answers[2].id} >
+                            <label className="form-check-label" htmlFor={props.answers[2]?.id} >
 
-                                {props.answers[2].value}
+                                {props.answers[2]?.value}
                             </label>
                         </div>
 
@@ -132,13 +134,13 @@ const MCQ = (props) => {
                                 className="form-check-input"
                                 checked={isCheckedCondition(3)}
                                 type="radio"
-                                value={props.answers[3].value}
-                                id={props.answers[3].id}
+                                value={props.answers[3]?.value}
+                                id={props.answers[3]?.id}
                                 onChange={onChangeHandler}
                                 name="flexRadioDefault" />
 
-                            <label className="form-check-label" htmlFor={props.answers[3].id}>
-                                {props.answers[3].value}
+                            <label className="form-check-label" htmlFor={props.answers[3]?.id}>
+                                {props.answers[3]?.value}
                             </label>
                         </div>
 
@@ -167,7 +169,7 @@ const MCQ = (props) => {
                         className='btn m-2 p-auto btn-primary text-white'
                         variant="contained"
                         onClick={() => {
-                            props.clickedNext(chosenOptionID, chosenAnswer)
+                            props.clickedNext(chosenOptionID, chosenAnswer, QuestionTypes.MCQ)
                             props.studentAnswerFunction(props.questionIndex, chosenOptionID, chosenAnswer)
                             setChosenOptionID(null)
                         }}
