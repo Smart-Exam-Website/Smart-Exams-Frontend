@@ -9,7 +9,8 @@ import showSuccessMsg from '../../../hooks/showSuccessMsg';
 import { useParams } from 'react-router-dom';
 import Essay from '../Questions/Essay/Essay';
 
-import {QuestionTypes} from '../../../constants/QuestionTypes';
+import { QuestionTypes } from '../../../constants/QuestionTypes';
+import useListShuffler from '../../../hooks/useListShuffler';
 
 
 
@@ -23,8 +24,6 @@ const TakeExam = (props) => {
 
     useEffect(() => {
         let responseQuestions;
-        console.log("Exam here")
-        console.log(exam)
         ExamServices.getExamQuestions(exam.id)
             .then((response) => {
                 responseQuestions = response.questions
@@ -45,12 +44,26 @@ const TakeExam = (props) => {
                     let formatedQuestion = { ...question, studentAnswer: thisQuestionAnswer }
                     return formatedQuestion
                 })
+                /** Randomize choices */
+                formatedQuestions = formatedQuestions?.map(item => { return { ...item, answers: randomChoices(item?.answers) } })
+
+                /** Randomize Question */
+                formatedQuestions = randomQuestions(formatedQuestions)
+
                 setQuestions([...formatedQuestions])
             })
             .catch((error) => {
                 HandleErrors(error)
             })
     }, [exam.id]);
+
+    const shuffler = useListShuffler()
+    const randomChoices = (choices) => {
+        return shuffler(choices)
+    }
+    const randomQuestions = (questions) => {
+        return shuffler(questions)
+    }
 
     const clickedNextHandler = (chosenOptionID, chosenAnswer, questionType) => {
         // Add this answer to backend
