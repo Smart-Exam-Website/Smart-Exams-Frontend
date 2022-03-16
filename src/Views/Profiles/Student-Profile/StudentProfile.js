@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './StudentProfile.css'
 import { StudentServices } from '../../../apis/Services/StudentService'
 import useImageResolver from '../../../hooks/useImageResolver'
+import HandleErrors from '../../../hooks/handleErrors'
 
 const StudentProfile = () => {
 
@@ -11,7 +12,7 @@ const StudentProfile = () => {
             .then(res => {
                 setStudentData(res.student)
             })
-            .catch(err => console.log(err))
+            .catch(err => HandleErrors(err))
 
     }, [])
 
