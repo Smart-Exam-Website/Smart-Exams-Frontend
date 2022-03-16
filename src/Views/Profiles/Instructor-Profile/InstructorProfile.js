@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './InstructorProfile.css'
 import { InstructorServices } from '../../../apis/Services/InstructorService'
 import useImageResolver from '../../../hooks/useImageResolver'
+import HandleErrors from '../../../hooks/handleErrors'
 
 const InstructorProfile = () => {
 
@@ -11,11 +12,11 @@ const InstructorProfile = () => {
             .then(res => {
                 setInstructorData(res.instructor)
             })
-            .catch(err => console.log(err))
+            .catch(err => HandleErrors(err))
     }, [])
 
     const imageResolver = useImageResolver()
-    return ( instructorData &&
+    return (instructorData &&
         <div className="Profile_I mt-5" style={{ minHeight: '100vh' }}>
             <div className="container d-flex justify-content-center">
                 <div className="d-flex flex-column align-items-center ProfileCard w-100 p-3">
