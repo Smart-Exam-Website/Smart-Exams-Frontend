@@ -1,2 +1,2 @@
-const DomainUrl = 'http://18.223.162.98/api';
+const DomainUrl = 'http://44.201.124.239/api';
 export default DomainUrl;
