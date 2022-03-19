@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import CardComponent from '../../../Components/CardComponent/CardComponent';
 import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
 import MCQ from '../Questions/MCQ/MCQ';
@@ -13,8 +13,11 @@ import { QuestionTypes } from '../../../constants/QuestionTypes';
 import useListShuffler from '../../../hooks/useListShuffler';
 import useSwitchBrowserDetector from '../../../hooks/useSwitchBrowserDetector';
 import CheaterPopup from '../../../Components/CheaterPopup/CheaterPopup';
+import Webcam from 'react-webcam';
+import ExamCounter from '../../../Components/ExamCounter/ExamCounter';
 
 const _getMinsFromDuration = (duration) => {
+    if (!duration) return null
     let durationList = duration?.split(':')
     let mins = Number(durationList[0]) * 60 + Number(durationList[1])
     return mins
@@ -94,7 +97,7 @@ const TakeExam = (props) => {
 
     /** Timer to sent cheat reports */
     let timer;
-    let examDurationInMins = _getMinsFromDuration(examInfo?.duration);
+    let examDurationInMins = _getMinsFromDuration('00:05:00'/*examInfo?.duration*/);
     const [totalCountedMins, setTotalCountedMins] = useState(0)
     const [lastRandomMin, setLastRandomMin] = useState(1)
     const activateJobWithRandomTriggerTimer = (RandomMins, callback = () => { }) => {
@@ -102,7 +105,7 @@ const TakeExam = (props) => {
             setTotalCountedMins(prevState => prevState + RandomMins)
             setLastRandomMin(RandomMins)
             callback()
-        }, RandomMins * 60 * 1000);
+        }, RandomMins * 60 * 100/*1000*/);
     }
     useEffect(() => {
         if (totalCountedMins >= examDurationInMins) return
@@ -119,6 +122,7 @@ const TakeExam = (props) => {
 
 
     const [cheatReasons, setCheatReasons] = useState([])
+    const [cheaterImage, setCheaterImage] = useState(null)
     const [isCheaterPopVisible, setIsCheaterPopVisible] = useState(null)
 
     /** Switch Browser detector */
@@ -136,12 +140,16 @@ const TakeExam = (props) => {
     const reportFaceDetectionCheater = () => {
         setIsCheaterPopVisible(true)
         setCheatReasons(prevState => Array.from(new Set([...prevState, 'Multi face detection'])))
+        let capturePhotoFromWebcam = webcamRef?.current?.getScreenshot()
+        setCheaterImage(capturePhotoFromWebcam)
     }
 
     /** Face recognation detector */
     const reportFaceRecognationCheater = () => {
         setIsCheaterPopVisible(true)
         setCheatReasons(prevState => Array.from(new Set([...prevState, 'Face unvalidity'])))
+        let capturePhotoFromWebcam = webcamRef?.current?.getScreenshot()
+        setCheaterImage(capturePhotoFromWebcam)
     }
 
     const clickedNextHandler = (chosenOptionID, chosenAnswer, questionType) => {
@@ -252,26 +260,37 @@ const TakeExam = (props) => {
         return null;
     })
 
-
-
-
+    const webcamRef = useRef(null)
     return (
         <div>
+            <div className="d-flex justify-content-between">
+                <Webcam
+                    audio={false}
+                    height={360}
+                    ref={webcamRef}
+                    screenshotFormat="image/jpeg"
+                />
+                <ExamCounter />
+            </div>
+
             <div className="row justify-content-center text-center my-5">
                 <div className="col-md-8 col-12">
-                    <CheaterPopup
-                        isVisible={isCheaterPopVisible}
-                        setVisibility={(value) => {
-                            setIsCheaterPopVisible(value)
-                            setCheatReasons([])
-                        }}
-                        cheatReasons={cheatReasons}
-                    />
                     <CardComponent title={exam.name}>
                         {My_Questions_Markup?.[currentQuestionNumber]}
                     </CardComponent>
                 </div>
             </div>
+
+            <CheaterPopup
+                isVisible={isCheaterPopVisible}
+                setVisibility={(value) => {
+                    setIsCheaterPopVisible(value)
+                    setCheatReasons([])
+                    setCheaterImage(null)
+                }}
+                cheatReasons={cheatReasons}
+                cheaterImage={cheaterImage}
+            />
         </div>
     );
 }

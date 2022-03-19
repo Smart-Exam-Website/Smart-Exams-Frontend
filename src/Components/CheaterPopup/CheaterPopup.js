@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import InspectorCheaterImage from '../../assets/images/cheat-inspector.png'
 
-const CheaterPopup = ({ isVisible, setVisibility, cheatReasons }) => {
+const CheaterPopup = ({ isVisible, setVisibility, cheatReasons, cheaterImage }) => {
 
     const handleClose = () => {
         setVisibility(false);
@@ -25,7 +25,14 @@ const CheaterPopup = ({ isVisible, setVisibility, cheatReasons }) => {
                     {"CHEAT ATTEMPT !!"}
                 </DialogTitle>
                 <DialogContent>
-                    <img className='w-100' alt='detector' src={InspectorCheaterImage} />
+                    <div className='d-flex'>
+                        {cheaterImage ?
+                            <img className='w-50' alt='cheater' src={cheaterImage} />
+                            :
+                            null
+                        }
+                        <img className={cheaterImage ? 'w-50' : 'w-100'} alt='detector' src={InspectorCheaterImage} />
+                    </div>
                     <DialogContentText id="alert-dialog-description">
                         You're trying to cheat by <b className='text-uppercase'>{cheatReasons?.join(' & ')}</b> and we have reported that attempt to your instructor.
                     </DialogContentText>
