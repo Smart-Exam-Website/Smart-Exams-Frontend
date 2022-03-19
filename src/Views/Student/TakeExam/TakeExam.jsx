@@ -11,10 +11,17 @@ import Essay from '../Questions/Essay/Essay';
 
 import { QuestionTypes } from '../../../constants/QuestionTypes';
 import useListShuffler from '../../../hooks/useListShuffler';
+import useSwitchBrowserDetector from '../../../hooks/useSwitchBrowserDetector';
+import CheaterPopup from '../../../Components/CheaterPopup/CheaterPopup';
 
-
-
-
+const _getMinsFromDuration = (duration) => {
+    let durationList = duration?.split(':')
+    let mins = Number(durationList[0]) * 60 + Number(durationList[1])
+    return mins
+}
+const _getRandomNumber = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
 
 const TakeExam = (props) => {
     const params = useParams()
@@ -22,6 +29,35 @@ const TakeExam = (props) => {
     const [questions, setQuestions] = useState(null);
     const [currentQuestionNumber, setCurrentQuestionNumber] = useState(0);
 
+    const shuffler = useListShuffler()
+    const randomChoices = (choices) => {
+        return shuffler(choices)
+    }
+    const randomQuestions = (questions) => {
+        return shuffler(questions)
+    }
+
+    const [examInfo, setExamInfo] = useState(null)
+    const [examOptions, setExamOptions] = useState(null)
+    /** getting exam config */
+    useEffect(() => {
+        ExamServices.getExamConfig(exam.id)
+            .then(res => {
+                setExamOptions(res.configuration)
+            })
+            .catch(err => HandleErrors(err))
+    }, [])
+
+    /** getting exam info*/
+    useEffect(() => {
+        ExamServices.getExamInfo(exam.id)
+            .then(res => {
+                setExamInfo(res.exam)
+            })
+            .catch(err => HandleErrors(err))
+    }, [])
+
+    /** getting questions */
     useEffect(() => {
         let responseQuestions;
         ExamServices.getExamQuestions(exam.id)
@@ -35,7 +71,6 @@ const TakeExam = (props) => {
                 res?.answers.forEach((answer) => {
                     formatedAnswers[answer.question_id] = { chosenOptionID: answer.option_id, chosenAnswer: answer.studentAnswer }
                 })
-                console.log("ANSWERS", formatedAnswers)
                 //formated question stage
                 let formatedQuestions = responseQuestions.map((question) => {
                     let thisQuestionAnswer = formatedAnswers?.[question.id]
@@ -57,22 +92,60 @@ const TakeExam = (props) => {
             })
     }, [exam.id]);
 
-    const shuffler = useListShuffler()
-    const randomChoices = (choices) => {
-        return shuffler(choices)
+    /** Timer to sent cheat reports */
+    let timer;
+    let examDurationInMins = _getMinsFromDuration(examInfo?.duration);
+    const [totalCountedMins, setTotalCountedMins] = useState(0)
+    const [lastRandomMin, setLastRandomMin] = useState(1)
+    const activateJobWithRandomTriggerTimer = (RandomMins, callback = () => { }) => {
+        timer = setTimeout(() => {
+            setTotalCountedMins(prevState => prevState + RandomMins)
+            setLastRandomMin(RandomMins)
+            callback()
+        }, RandomMins * 60 * 1000);
     }
-    const randomQuestions = (questions) => {
-        return shuffler(questions)
+    useEffect(() => {
+        if (totalCountedMins >= examDurationInMins) return
+        let randomMins = _getRandomNumber(1, examDurationInMins - lastRandomMin + 1)
+        activateJobWithRandomTriggerTimer(randomMins, () => {
+            reportFaceDetectionCheater()
+            reportFaceRecognationCheater()
+        })
+
+        return () => {
+            clearTimeout(timer)
+        }
+    }, [totalCountedMins])
+
+
+    const [cheatReasons, setCheatReasons] = useState([])
+    const [isCheaterPopVisible, setIsCheaterPopVisible] = useState(null)
+
+    /** Switch Browser detector */
+    const isBrowserSwitched = useSwitchBrowserDetector()
+    const reportSwitchBrowserCheater = () => {
+        setIsCheaterPopVisible(true)
+        setCheatReasons(prevState => Array.from(new Set([...prevState, 'Switching the browser'])))
+    }
+    useEffect(() => {
+        if (!isBrowserSwitched) return
+        reportSwitchBrowserCheater()
+    }, [isBrowserSwitched])
+
+    /** Face detection detector */
+    const reportFaceDetectionCheater = () => {
+        setIsCheaterPopVisible(true)
+        setCheatReasons(prevState => Array.from(new Set([...prevState, 'Multi face detection'])))
+    }
+
+    /** Face recognation detector */
+    const reportFaceRecognationCheater = () => {
+        setIsCheaterPopVisible(true)
+        setCheatReasons(prevState => Array.from(new Set([...prevState, 'Face unvalidity'])))
     }
 
     const clickedNextHandler = (chosenOptionID, chosenAnswer, questionType) => {
-        // Add this answer to backend
-        console.log("Testing essay answers")
-        console.log(chosenAnswer)
-        console.log(chosenOptionID)
-
         let answerData = {}
-
         if (questionType === QuestionTypes.MCQ) {
             answerData = {
                 "option_id": chosenOptionID,
@@ -81,7 +154,6 @@ const TakeExam = (props) => {
                 "exam_id": exam.id
 
             }
-
         }
         else if (questionType === QuestionTypes.ESSAY) {
             answerData = {
@@ -90,7 +162,6 @@ const TakeExam = (props) => {
                 "exam_id": exam.id
 
             }
-
         }
 
         ExamServices.addAnswer(answerData)
@@ -139,14 +210,8 @@ const TakeExam = (props) => {
     }
 
     let My_Questions_Markup = questions?.map((question, index) => {
-        // console.log("question.type")
-        // console.log(question.type)
-        console.log("question")
-        console.log(question)
         if (question?.type === QuestionTypes.ESSAY) {
             return (
-
-
                 <Essay
                     questionIndex={index + 1}
                     question={question}
@@ -158,11 +223,7 @@ const TakeExam = (props) => {
 
 
                     key={props.questionIndex}
-
                 />
-
-
-
             );
         }
         else if (question?.type === QuestionTypes.MCQ) {
@@ -187,11 +248,8 @@ const TakeExam = (props) => {
                     savedStudentAnswer={question?.studentAnswer}
                 />
             )
-
         }
-
         return null;
-
     })
 
 
@@ -201,12 +259,16 @@ const TakeExam = (props) => {
         <div>
             <div className="row justify-content-center text-center my-5">
                 <div className="col-md-8 col-12">
+                    <CheaterPopup
+                        isVisible={isCheaterPopVisible}
+                        setVisibility={(value) => {
+                            setIsCheaterPopVisible(value)
+                            setCheatReasons([])
+                        }}
+                        cheatReasons={cheatReasons}
+                    />
                     <CardComponent title={exam.name}>
-
                         {My_Questions_Markup?.[currentQuestionNumber]}
-
-
-
                     </CardComponent>
                 </div>
             </div>

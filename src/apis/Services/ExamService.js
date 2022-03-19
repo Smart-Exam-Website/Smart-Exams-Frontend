@@ -124,6 +124,10 @@ export class ExamServices {
         return _axios.get(`/exams/${examId}/configs`);
     }
 
+    static getExamInfo(examId) {
+        return _axios.get(`/exams/${examId}`);
+    }
+
 
     /**
      * Post a question answer to 
