@@ -16,6 +16,7 @@ import CheaterPopup from '../../../Components/CheaterPopup/CheaterPopup';
 import Webcam from 'react-webcam';
 import ExamCounter from '../../../Components/ExamCounter/ExamCounter';
 
+const MIN_INTERVAL_TIME_TO_DO_CHEAT_CHECK = 10
 const _getMinsFromDuration = (duration) => {
     if (!duration) return null
     let durationList = duration?.split(':')
@@ -97,7 +98,7 @@ const TakeExam = (props) => {
 
     /** Timer to sent cheat reports */
     let timer;
-    let examDurationInMins = _getMinsFromDuration('00:05:00'/*examInfo?.duration*/);
+    let examDurationInMins = _getMinsFromDuration(examInfo?.duration);
     const [totalCountedMins, setTotalCountedMins] = useState(0)
     const [lastRandomMin, setLastRandomMin] = useState(1)
     const activateJobWithRandomTriggerTimer = (RandomMins, callback = () => { }) => {
@@ -105,11 +106,12 @@ const TakeExam = (props) => {
             setTotalCountedMins(prevState => prevState + RandomMins)
             setLastRandomMin(RandomMins)
             callback()
-        }, RandomMins * 60 * 100/*1000*/);
+        }, RandomMins * 60 * 1000);
     }
     useEffect(() => {
+        if(!examDurationInMins) return
         if (totalCountedMins >= examDurationInMins) return
-        let randomMins = _getRandomNumber(1, examDurationInMins - lastRandomMin + 1)
+        let randomMins = _getRandomNumber(1, Math.min(MIN_INTERVAL_TIME_TO_DO_CHEAT_CHECK, (examDurationInMins - lastRandomMin + 1)))
         activateJobWithRandomTriggerTimer(randomMins, () => {
             reportFaceDetectionCheater()
             reportFaceRecognationCheater()
@@ -118,7 +120,7 @@ const TakeExam = (props) => {
         return () => {
             clearTimeout(timer)
         }
-    }, [totalCountedMins])
+    }, [totalCountedMins, examDurationInMins])
 
 
     const [cheatReasons, setCheatReasons] = useState([])
@@ -217,6 +219,18 @@ const TakeExam = (props) => {
         })
     }
 
+    const onTimerFinishHanlder = () => {
+        ExamServices.submitExam(exam.id)
+            .then(res => {
+                showSuccessMsg("Exam has been submitted successfully")
+                props.history.push({
+                    pathname: '/done',
+                    state: { examName: exam.name }
+                })
+            })
+            .catch(err => HandleErrors(err))
+    }
+
     let My_Questions_Markup = questions?.map((question, index) => {
         if (question?.type === QuestionTypes.ESSAY) {
             return (
@@ -270,7 +284,11 @@ const TakeExam = (props) => {
                     ref={webcamRef}
                     screenshotFormat="image/jpeg"
                 />
-                <ExamCounter />
+                {examDurationInMins ?
+                    <ExamCounter onFinish={onTimerFinishHanlder} numberOfMins={examDurationInMins} />
+                    :
+                    null
+                }
             </div>
 
             <div className="row justify-content-center text-center my-5">
