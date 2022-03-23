@@ -74,9 +74,9 @@ const AddQuestionScreen = () => {
             .then(res => {
                 console.log("Question request", res)
 
-                let isFromExamCreation = location.state?.fromExamCreation
+                let isFromExamCreation = location?.state?.fromExamCreation
                 if (isFromExamCreation) {
-                    dispatch(saveAQuestion([{ questionText: res.questionText, id: res.id }]))
+                    dispatch(saveAQuestion([{ questionText: res?.questionText, id: res?.id }]))
                 }
                 showSuccessMsg("Request done successfully")
                 history.goBack()

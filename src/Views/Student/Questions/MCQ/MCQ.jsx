@@ -53,7 +53,7 @@ const MCQ = (props) => {
 
                     {/* Question Label */}
                     <Typography className='font-weight-bold' variant="h4" component="div">
-                        {/* TODO, FETCH QUESTION NUMBER */}
+                        {/* FETCH QUESTION NUMBER */}
                         Question {props.questionIndex}
                         <hr />
                     </Typography>

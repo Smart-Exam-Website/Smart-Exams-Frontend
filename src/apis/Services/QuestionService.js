@@ -1,5 +1,5 @@
 import _axios from "../axios-instance";
-
+import {QuestionTypes} from '../../constants/QuestionTypes'
 export class QuestionServices {
     /**
      * Create new question
@@ -11,11 +11,11 @@ export class QuestionServices {
      * @returns {Promise<any>}
      */
     static createMcqQuestion(question) {
-        return _axios.post('/questions/create', { type: 'mcq', ...question });
+        return _axios.post('/questions/create', { type: QuestionTypes.MCQ , ...question });
     }
 
     static createEssayQuestion(question) {
-        return _axios.post('/questions/create', { type: 'essay', ...question });
+        return _axios.post('/questions/create', { type: QuestionTypes.ESSAY, ...question });
     }
 
     /**

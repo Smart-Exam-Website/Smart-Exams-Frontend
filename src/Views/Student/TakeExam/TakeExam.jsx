@@ -71,6 +71,9 @@ const TakeExam = (props) => {
             })
             .then(res => {
                 // Formatting answer array stage
+
+                console.log("Student Anses")
+                console.log(res)
                 let formatedAnswers = {}
                 res?.answers.forEach((answer) => {
                     formatedAnswers[answer.question_id] = { chosenOptionID: answer.option_id, chosenAnswer: answer.studentAnswer }
@@ -109,7 +112,7 @@ const TakeExam = (props) => {
         }, RandomMins * 60 * 1000);
     }
     useEffect(() => {
-        if(!examDurationInMins) return
+        if (!examDurationInMins) return
         if (totalCountedMins >= examDurationInMins) return
         let randomMins = _getRandomNumber(1, Math.min(MIN_INTERVAL_TIME_TO_DO_CHEAT_CHECK, (examDurationInMins - lastRandomMin + 1)))
         activateJobWithRandomTriggerTimer(randomMins, () => {
@@ -191,8 +194,11 @@ const TakeExam = (props) => {
                         .catch(err => HandleErrors(err))
                     return
                 }
+                showSuccessMsg("Answer Saved Successfully")
+
                 // advance to the next question
                 setCurrentQuestionNumber(newQuestionNumber)
+                
 
             }).catch((error) => {
                 HandleErrors(error)

@@ -56,7 +56,7 @@ const AddExamQuestions = () => {
 
     /** Get Questions of this exam */
     const [questions, setQuestions] = useState(null);
-    const savedQuestions = useSelector(state => state.exam.examQuestions)
+    const savedQuestions = useSelector(state => state?.exam?.examQuestions)
     const getQuestions = () => {
         setQuestions([...examOldQuestions, ...savedQuestions])
     }
@@ -102,9 +102,9 @@ const AddExamQuestions = () => {
                             {
                                 questions?.map(question =>
                                     <BorderdQuestionController
-                                        deleteFunction={() => removeQuestionFromListHandler(question.id)}
-                                        id={question.id} key={question.id}
-                                        questionTitle={question.questionText}
+                                        deleteFunction={() => removeQuestionFromListHandler(question?.id)}
+                                        id={question?.id} key={question?.id}
+                                        questionTitle={question?.questionText}
                                     />
                                 )
                             }

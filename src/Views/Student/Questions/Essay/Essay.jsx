@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { useState } from 'react';
-import {QuestionTypes} from '../../../../constants/QuestionTypes'
+import { QuestionTypes } from '../../../../constants/QuestionTypes'
 
 // import { connect } from 'react-redux';
 // import { saveAnswer } from '../../../../redux/actions/QuestionActions'
@@ -21,7 +21,14 @@ const Essay = (props) => {
         setEssayAnswer(event.target.value);
     };
 
-
+    useEffect(() => {
+        setEssayAnswer(props.question?.studentAnswer?.chosenAnswer || '')
+        // console.log(props.question?.studentAnswer)
+    }, []);
+    
+    const retrieveOldAnswer = () => {
+        return essayAnswer  
+    }
 
     return (
         <div className="m-5 text-start ">
@@ -52,7 +59,9 @@ const Essay = (props) => {
                         multiline
                         rows={8}
                         fullWidth
+                        // value={essayAnswer === retrieveOldAnswer() ? essayAnswer : ''}
                         value={essayAnswer}
+
                         onChange={essayChangedHandler}
                     />
 
@@ -64,8 +73,11 @@ const Essay = (props) => {
                     <button
                         className='btn m-2 p-auto btn-danger text-white'
                         variant="contained"
-                        onClick={props.clickedPrevious}
                         disabled={props.previousButtonDisabled}
+                        onClick={() => {
+                            props.clickedPrevious() 
+                            retrieveOldAnswer()
+                        }}
                     >
                         Previous
                     </button>
@@ -74,7 +86,14 @@ const Essay = (props) => {
                         className='btn m-2 p-auto btn-primary text-white'
                         variant="contained"
                         onClick={() => {
-                            props.clickedNext(null, essayAnswer, QuestionTypes.ESSAY)
+                            const answer = essayAnswer
+                            props.clickedNext(null, answer, QuestionTypes.ESSAY)
+                            const nextAnswer = props.question?.studentAnswer?.chosenAnswer || ''
+                            setTimeout(() => {
+                                setEssayAnswer(nextAnswer)
+                                
+                            },1000);
+                            // setEssayAnswer('')
                             // props.studentAnswerFunction(props.questionIndex, chosenOptionID, chosenAnswer)
                             // setEssayAnswer("")
                         }}

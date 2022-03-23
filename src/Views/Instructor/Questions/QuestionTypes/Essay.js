@@ -30,17 +30,19 @@ const Essay = ({ initValues, getQuestionCreationRequest = () => { } }) => {
                 questionText: values?.questionText,
                 // correctAnswer: values?.correctAnswer,
                 answers: [values?.correctAnswer]
-            }).then((response) => {
-                console.log("Success Response")
-                console.log(response)
-
-            }).catch((error) => {
-                console.log("error")
-                console.log(error)
-
-
             })
+            // .then((response) => {
+            //     console.log("Success Response")
+            //     console.log(response)
+
+            // }).catch((error) => {
+            //     console.log("error")
+            //     console.log(error)
+
+
+            // })
             // pass the request outside the component
+
             getQuestionCreationRequest(creationRequest)
         }
         //EDIT MODE

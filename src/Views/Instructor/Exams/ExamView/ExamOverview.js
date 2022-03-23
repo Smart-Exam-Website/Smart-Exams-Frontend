@@ -18,6 +18,7 @@ import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import PhotoCameraFrontIcon from '@mui/icons-material/PhotoCameraFront';
+import { QuestionTypes } from '../../../../constants/QuestionTypes'
 
 
 
@@ -174,14 +175,14 @@ export const ExamOverview = ({ questions, examConfigs }) => {
             <CardComponent title={'Questions'}>
                 {questions?.map((item) => {
 
-                    if (item.type === 'mcq') {
+                    if (item.type === QuestionTypes.MCQ ) {
 
                         return (
                             <div key={item?.id} className='m-4'>
                                 <McqAnswer questionText={item?.questionText} choices={item?.answers} />
                             </div>)
                     }
-                    else if (item.type === 'essay') {
+                    else if (item.type === QuestionTypes.ESSAY) {
                         return (
                             <div key={item?.id} className='m-4'>
                                 <EssayAnswer questionText={item?.questionText} correctAnswer={item?.answers[0]} />
