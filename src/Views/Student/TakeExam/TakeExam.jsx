@@ -15,6 +15,7 @@ import useSwitchBrowserDetector from '../../../hooks/useSwitchBrowserDetector';
 import CheaterPopup from '../../../Components/CheaterPopup/CheaterPopup';
 import Webcam from 'react-webcam';
 import ExamCounter from '../../../Components/ExamCounter/ExamCounter';
+import { CheatServices } from '../../../apis/Services/CheatService';
 
 const MIN_INTERVAL_TIME_TO_DO_CHEAT_CHECK = 10
 const _getMinsFromDuration = (duration) => {
@@ -43,6 +44,7 @@ const TakeExam = (props) => {
 
     const [examInfo, setExamInfo] = useState(null)
     const [examOptions, setExamOptions] = useState(null)
+
     /** getting exam config */
     useEffect(() => {
         ExamServices.getExamConfig(exam.id)
@@ -63,6 +65,8 @@ const TakeExam = (props) => {
 
     /** getting questions */
     useEffect(() => {
+        if (!examOptions) return
+
         let responseQuestions;
         ExamServices.getExamQuestions(exam.id)
             .then((response) => {
@@ -90,14 +94,15 @@ const TakeExam = (props) => {
                 formatedQuestions = formatedQuestions?.map(item => { return { ...item, answers: randomChoices(item?.answers) } })
 
                 /** Randomize Question */
-                formatedQuestions = randomQuestions(formatedQuestions)
+                if (examOptions?.questionsRandomOrder)
+                    formatedQuestions = randomQuestions(formatedQuestions)
 
                 setQuestions([...formatedQuestions])
             })
             .catch((error) => {
                 HandleErrors(error)
             })
-    }, [exam.id]);
+    }, [exam.id, examOptions]);
 
     /** Timer to sent cheat reports */
     let timer;
@@ -116,8 +121,8 @@ const TakeExam = (props) => {
         if (totalCountedMins >= examDurationInMins) return
         let randomMins = _getRandomNumber(1, Math.min(MIN_INTERVAL_TIME_TO_DO_CHEAT_CHECK, (examDurationInMins - lastRandomMin + 1)))
         activateJobWithRandomTriggerTimer(randomMins, () => {
-            reportFaceDetectionCheater()
-            reportFaceRecognationCheater()
+            examOptions?.faceDetection && reportFaceDetectionCheater()
+            examOptions?.faceRecognition && reportFaceRecognationCheater()
         })
 
         return () => {
@@ -138,7 +143,7 @@ const TakeExam = (props) => {
     }
     useEffect(() => {
         if (!isBrowserSwitched) return
-        reportSwitchBrowserCheater()
+        examOptions?.disableSwitchBrowser && reportSwitchBrowserCheater()
     }, [isBrowserSwitched])
 
     /** Face detection detector */
@@ -198,7 +203,7 @@ const TakeExam = (props) => {
 
                 // advance to the next question
                 setCurrentQuestionNumber(newQuestionNumber)
-                
+
 
             }).catch((error) => {
                 HandleErrors(error)
