@@ -91,7 +91,7 @@ const TakeExam = (props) => {
                     return formatedQuestion
                 })
                 /** Randomize choices */
-                formatedQuestions = formatedQuestions?.map(item => { return { ...item, answers: randomChoices(item?.answers) } })
+                formatedQuestions = formatedQuestions?.map(item => { return { ...item, answers: randomChoices(item?.options) } })
 
                 /** Randomize Question */
                 if (examOptions?.questionsRandomOrder)
@@ -114,7 +114,7 @@ const TakeExam = (props) => {
             setTotalCountedMins(prevState => prevState + RandomMins)
             setLastRandomMin(RandomMins)
             callback()
-        }, RandomMins * 60 * 1000);
+        }, RandomMins * 60 * 100);
     }
     useEffect(() => {
         if (!examDurationInMins) return
@@ -138,8 +138,12 @@ const TakeExam = (props) => {
     /** Switch Browser detector */
     const isBrowserSwitched = useSwitchBrowserDetector()
     const reportSwitchBrowserCheater = () => {
-        setIsCheaterPopVisible(true)
-        setCheatReasons(prevState => Array.from(new Set([...prevState, 'Switching the browser'])))
+        CheatServices.sentSwitchBrowserCheatAttempt(exam.id)
+            .then(res => {
+                setIsCheaterPopVisible(true)
+                setCheatReasons(prevState => Array.from(new Set([...prevState, 'Switching the browser'])))
+            })
+            .catch(err => console.log(err))
     }
     useEffect(() => {
         if (!isBrowserSwitched) return
@@ -147,19 +151,42 @@ const TakeExam = (props) => {
     }, [isBrowserSwitched])
 
     /** Face detection detector */
-    const reportFaceDetectionCheater = () => {
-        setIsCheaterPopVisible(true)
-        setCheatReasons(prevState => Array.from(new Set([...prevState, 'Multi face detection'])))
+    const reportFaceDetectionCheater = async () => {
         let capturePhotoFromWebcam = webcamRef?.current?.getScreenshot()
-        setCheaterImage(capturePhotoFromWebcam)
+        let faceDetectionData = {
+            "image": capturePhotoFromWebcam,
+            "examId": exam.id
+        }
+        try {
+            let response = await ExamServices.applyFaceDetection(faceDetectionData)
+            if (Number(response.numberOfFaces) === 1) return
+            await CheatServices.sentFaceDetectionCheatAttempt(exam.id, response?.image)
+            setCheaterImage(capturePhotoFromWebcam)
+            setIsCheaterPopVisible(true)
+            setCheatReasons(prevState => Array.from(new Set([...prevState, 'Multi face detection'])))
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     /** Face recognation detector */
-    const reportFaceRecognationCheater = () => {
-        setIsCheaterPopVisible(true)
-        setCheatReasons(prevState => Array.from(new Set([...prevState, 'Face unvalidity'])))
+    const reportFaceRecognationCheater = async () => {
         let capturePhotoFromWebcam = webcamRef?.current?.getScreenshot()
-        setCheaterImage(capturePhotoFromWebcam)
+        let faceVerificationData = {
+            "image1": capturePhotoFromWebcam,
+            "examId": exam.id
+        }
+        try {
+            let response = await ExamServices.applyFaceVerification(faceVerificationData)
+            if (response.verified) return
+            await CheatServices.sentFaceRecognationCheatAttempt(exam.id, response?.image)
+            setCheaterImage(capturePhotoFromWebcam)
+            setIsCheaterPopVisible(true)
+            setCheatReasons(prevState => Array.from(new Set([...prevState, 'Face unvalidity'])))
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const clickedNextHandler = (chosenOptionID, chosenAnswer, questionType) => {
@@ -170,7 +197,6 @@ const TakeExam = (props) => {
                 "studentAnswer": chosenAnswer,
                 "question_id": questions[currentQuestionNumber].id,
                 "exam_id": exam.id
-
             }
         }
         else if (questionType === QuestionTypes.ESSAY) {

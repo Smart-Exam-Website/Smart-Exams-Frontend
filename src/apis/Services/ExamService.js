@@ -92,7 +92,7 @@ export class ExamServices {
      * @returns {Promise<Array>}
      */
     static getMyExams() {
-        return _axios.get('/instructors/myExams');
+        return _axios.get('/instructors/my-exams');
     }
 
     /**
@@ -181,10 +181,10 @@ export class ExamServices {
     }
 
     static applyFaceDetection(data) {
-        return _axios.post(`/faceDetection`, data)
+        return _axios.post(`/face-detection`, data)
     }
     static applyFaceVerification(data) {
-        return _axios.post(`/faceVerification`, data)
+        return _axios.post(`/face-verification`, data)
     }
     static startExam(examId, data) {
         return _axios.post(`exams/${examId}/start`, data)
