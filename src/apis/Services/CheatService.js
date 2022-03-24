@@ -20,7 +20,17 @@ export class CheatServices {
         return _axios.post(`/cheater`, {
             examId,
             image,
-            type: CheatTypes.FACE_RECOGNATION
+            type: CheatTypes.FACE_RECOGNITION
         })
+    }
+
+
+
+    static getCheaters(examId) {
+        return _axios.get(`/exams/${examId}/cheaters`)
+    }
+
+    static performStudentDecrement(ActionData) {
+        return _axios.post(`/cheater/action`, ActionData)
     }
 }

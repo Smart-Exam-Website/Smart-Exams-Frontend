@@ -175,17 +175,18 @@ export const ExamOverview = ({ questions, examConfigs }) => {
             <CardComponent title={'Questions'}>
                 {questions?.map((item) => {
 
-                    if (item.type === QuestionTypes.MCQ ) {
+
+                    if (item?.type === QuestionTypes.MCQ) {
 
                         return (
                             <div key={item?.id} className='m-4'>
-                                <McqAnswer questionText={item?.questionText} choices={item?.answers} />
+                                <McqAnswer questionText={item?.questionText} choices={item?.options} />
                             </div>)
                     }
-                    else if (item.type === QuestionTypes.ESSAY) {
+                    else if (item?.type === QuestionTypes.ESSAY) {
                         return (
                             <div key={item?.id} className='m-4'>
-                                <EssayAnswer questionText={item?.questionText} correctAnswer={item?.answers[0]} />
+                                <EssayAnswer questionText={item?.questionText} correctAnswer={item?.options[0]} />
                             </div>)
                     }
                     return 0
