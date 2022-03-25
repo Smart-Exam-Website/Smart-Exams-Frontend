@@ -16,6 +16,7 @@ import CheaterPopup from '../../../Components/CheaterPopup/CheaterPopup';
 import Webcam from 'react-webcam';
 import ExamCounter from '../../../Components/ExamCounter/ExamCounter';
 import { CheatServices } from '../../../apis/Services/CheatService';
+import moment from 'moment';
 
 const MIN_INTERVAL_TIME_TO_DO_CHEAT_CHECK = 10
 const _getMinsFromDuration = (duration) => {
@@ -44,6 +45,8 @@ const TakeExam = (props) => {
 
     const [examInfo, setExamInfo] = useState(null)
     const [examOptions, setExamOptions] = useState(null)
+
+    const [endExamTime, setEndExamTime] = useState(null)
 
     /** getting exam config */
     useEffect(() => {
@@ -74,8 +77,9 @@ const TakeExam = (props) => {
                 return ExamServices.getStudentExamAnswers(exam.id)
             })
             .then(res => {
-                // Formatting answer array stage
+                setEndExamTime(res?.endTime)
 
+                // Formatting answer array stage
                 console.log("Student Anses")
                 console.log(res)
                 let formatedAnswers = {}
@@ -106,7 +110,8 @@ const TakeExam = (props) => {
 
     /** Timer to sent cheat reports */
     let timer;
-    let examDurationInMins = _getMinsFromDuration(examInfo?.duration);
+    let examDurationInMins = moment(endExamTime).diff(moment(), 'minute');
+    console.log(examDurationInMins)
     const [totalCountedMins, setTotalCountedMins] = useState(0)
     const [lastRandomMin, setLastRandomMin] = useState(1)
     const activateJobWithRandomTriggerTimer = (RandomMins, callback = () => { }) => {

@@ -13,7 +13,7 @@ const ExamCounter = ({ numberOfMins = 1, onFinish = () => { } }) => {
         if(!numberOfMins) return
         let numberOfSeconds = remainingSeconds
         let timer = setInterval(() => {
-            if (numberOfSeconds === 0) {
+            if (numberOfSeconds <= 0) {
                 clearInterval(timer)
                 onFinish()
                 return
