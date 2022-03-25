@@ -5,6 +5,7 @@ import { QuestionServices } from '../../../apis/Services/QuestionService';
 import McqAnswer from '../../../Components/AnsweredQuestion/McqAnswer';
 import EssayAnswer from '../../../Components/AnsweredQuestion/EssayAnswer';
 import HandleErrors from '../../../hooks/handleErrors';
+import { QuestionTypes } from '../../../constants/QuestionTypes';
 
 const QuestionViewScreen = () => {
     const { questionId } = useParams()
@@ -21,13 +22,13 @@ const QuestionViewScreen = () => {
     }, [questionId])
 
     let QuestionMarkup = () => {
-        if (question?.type === "essay") {
+        if (question?.type === QuestionTypes.ESSAY) {
 
             return (
                 <EssayAnswer questionText={question?.questionText} correctAnswer={question?.question_option[0].option} />
             )
         }
-        else if (question?.type === "mcq") {
+        else if (question?.type === QuestionTypes.MCQ) {
             console.log("ana 3mad y3m")
             return (question?.mcq &&
                 <McqAnswer questionText={question?.questionText} choices={question?.mcq.mcq_answers} />
