@@ -49,8 +49,8 @@ const AddExam = () => {
                             totalMark: examOldData?.totalMark || '',
                             duration: examOldData?.duration || '',
                             examSubject: examOldData?.examSubject || '',
-                            startAt: examOldData?.startAt || moment(new Date().setMinutes(0)).format('yyyy-MM-DD hh:mm'),
-                            endAt: examOldData?.endAt || moment(new Date().setMinutes(0)).add(7, 'days').format('yyyy-MM-DD hh:mm'),
+                            startAt: examOldData?.startAt || moment(new Date().setMinutes(0)).format('yyyy-MM-DD HH:mm'),
+                            endAt: examOldData?.endAt || moment(new Date().setMinutes(0)).add(7, 'days').format('yyyy-MM-DD HH:mm'),
                         }}
                         onSubmit={onAddExamHandler}
                     >
