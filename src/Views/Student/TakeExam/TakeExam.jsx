@@ -110,8 +110,7 @@ const TakeExam = (props) => {
 
     /** Timer to sent cheat reports */
     let timer;
-    let examDurationInMins = moment(endExamTime).diff(moment(), 'minute');
-    console.log(examDurationInMins)
+    let examDurationInMins = Math.ceil(Number(moment(endExamTime).diff(moment(), 'seconds')) / 60);
     const [totalCountedMins, setTotalCountedMins] = useState(0)
     const [lastRandomMin, setLastRandomMin] = useState(1)
     const activateJobWithRandomTriggerTimer = (RandomMins, callback = () => { }) => {
@@ -316,16 +315,21 @@ const TakeExam = (props) => {
         return null;
     })
 
+    const videoRecorderIsShown = examOptions?.faceDetection || examOptions?.faceRecognition
     const webcamRef = useRef(null)
     return (
         <div>
             <div className="d-flex justify-content-between">
-                <Webcam
-                    audio={false}
-                    height={360}
-                    ref={webcamRef}
-                    screenshotFormat="image/jpeg"
-                />
+                {videoRecorderIsShown ?
+                    <Webcam
+                        audio={false}
+                        height={360}
+                        ref={webcamRef}
+                        screenshotFormat="image/jpeg"
+                    />
+                    :
+                    null
+                }
                 {examDurationInMins ?
                     <ExamCounter onFinish={onTimerFinishHanlder} numberOfMins={examDurationInMins} />
                     :
