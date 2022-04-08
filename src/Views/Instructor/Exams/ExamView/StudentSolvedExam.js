@@ -8,6 +8,8 @@ import PersonIcon from '@mui/icons-material/Person';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import McqAnswer from '../../../../Components/AnsweredQuestion/McqAnswer'
 import showSuccessMsg from '../../../../hooks/showSuccessMsg'
+import { QuestionTypes } from '../../../../constants/QuestionTypes'
+import EssayAnswer from '../../../../Components/AnsweredQuestion/EssayAnswer'
 
 const StudentCard = ({ name, isVerified, numberOfFaces, image, markAutoFun, examConfigs }) => {
     const imageResolver = useImageResolver()
@@ -116,18 +118,31 @@ const StudentSolvedExam = () => {
                 <div className="col-12">
                     <>
                         {studentExamResult?.solution?.map(item =>
-                            <div className='my-2'>
-                                {(item?.question?.type === 'mcq') ?
+                            <div key={item.id} className='my-2'>
+                                {(item?.type === QuestionTypes.MCQ) ?
                                     <McqAnswer
-                                        key={item.question_id}
-                                        markAsRight={() => markAsRightHandler(item?.question_id, item?.totalQuestionMark)}
-                                        markAsWrong={() => markAsWrongHandler(item?.question_id)}
-                                        studentAnswer={{ id: item?.option_id, value: item?.studentAnswer }}
-                                        questionText={item?.question?.questionText}
-                                        choices={item?.question?.answers}
-                                        studentMark={item?.questionMark}
-                                        questionMark={item?.totalQuestionMark}
-                                        isMarked={item?.isMarked}
+                                        markAsRight={() => markAsRightHandler(item?.id, item?.pivot?.mark)}
+                                        markAsWrong={() => markAsWrongHandler(item?.id)}
+                                        studentAnswer={{ id: item?.answer?.option_id, value: item?.answer?.studentAnswer }}
+                                        questionText={item?.questionText}
+                                        choices={item?.options}
+                                        studentMark={item?.answer?.questionMark}
+                                        questionMark={item?.pivot?.mark}
+                                        isMarked={item?.answer?.isMarked}
+                                    />
+                                    :
+                                    null
+                                }
+                                {(item?.type === QuestionTypes.ESSAY) ?
+                                    <EssayAnswer
+                                        markAsRight={() => markAsRightHandler(item?.id, item?.pivot?.mark)}
+                                        markAsWrong={() => markAsWrongHandler(item?.id)}
+                                        studentAnswer={{ id: item?.answer?.option_id, value: item?.answer?.studentAnswer }}
+                                        questionText={item?.questionText}
+                                        studentMark={item?.answer?.questionMark}
+                                        questionMark={item?.pivot?.mark}
+                                        isMarked={item?.answer?.isMarked}
+                                        correctAnswer={item?.options[0]}
                                     />
                                     :
                                     null

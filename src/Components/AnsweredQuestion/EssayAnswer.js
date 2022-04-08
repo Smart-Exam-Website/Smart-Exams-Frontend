@@ -1,6 +1,7 @@
 import React from 'react'
-import {  Card, CardContent, Typography } from '@mui/material'
+import { Card, CardContent, CardHeader, IconButton, Typography } from '@mui/material'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
 const EssayAnswer = ({
     questionText,
@@ -13,21 +14,10 @@ const EssayAnswer = ({
     studentMark
 }) => {
 
-    // const submitHandler = (values) => {
-    //     console.log(values)
-    // }
-    // const correctAnswer = correctAnswer?.find(item => item.isCorrect)
-    // const formatedAnswer = (answer) => {
-    //     return {
-    //         id: answer?.id,
-    //         displayText: (answer?.option?.value || answer?.value)
-    //     }
-    // }
-
-    // const isCorrectStudentAnswer = questionMark === studentMark
+    const isCorrectStudentAnswer = questionMark === studentMark
     return (
         <Card className='shadow p-3 mb-5 bg-white rounded position-relative' sx={{ minWidth: 275 }}>
-            {/* {studentAnswer ?
+            {studentAnswer ?
                 <CardHeader
                     action={
                         !isMarked ?
@@ -52,7 +42,7 @@ const EssayAnswer = ({
                 />
                 :
                 null
-            } */}
+            }
 
             <CardContent>
                 {/* Question Text */}
@@ -62,15 +52,43 @@ const EssayAnswer = ({
             </CardContent>
 
             {/* Essay Content */}
-            <Typography className='m-4' variant='h5'>
-                {correctAnswer?.value}
-                <CheckCircleOutlineIcon fontSize='large' color='success' />
-
-            </Typography>
-
             <CardContent className=''>
-
+                {studentAnswer ?
+                    <Typography sx={{ fontWeight: 'bold' }} style={{ textDecoration: 'underline' }}>Student Answer:</Typography>
+                    :
+                    null
+                }
+                <Typography className={studentAnswer ? '' : 'm-4'} variant={studentAnswer ? '' : 'h5'}>
+                    {studentAnswer ? studentAnswer?.value : correctAnswer?.value}
+                    {!studentAnswer ?
+                        < CheckCircleOutlineIcon fontSize='large' color='success' />
+                        :
+                        null
+                    }
+                </Typography>
             </CardContent>
+
+            {/* MODEL ANSWER */}
+            {studentAnswer ?
+                <CardContent className=''>
+                    <Typography color='green' sx={{ fontWeight: 'bold' }} style={{ textDecoration: 'underline' }}>Model Answer:</Typography>
+                    <Typography color='green'>{correctAnswer?.value}</Typography>
+                </CardContent>
+                :
+                null
+            }
+
+            {isMarked ?
+                <div className='position-absolute opacity-25' style={{ right: '10%', bottom: '18%' }}>
+                    {(isCorrectStudentAnswer) ?
+                        <CheckCircleOutlineIcon fontSize='large' style={{ transform: 'scale(6)' }} color="success" />
+                        :
+                        <CancelOutlinedIcon fontSize='large' style={{ transform: 'scale(6)' }} color="error" />
+                    }
+                </div>
+                :
+                null
+            }
 
         </Card >
     )

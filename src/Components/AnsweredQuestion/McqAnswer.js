@@ -83,7 +83,7 @@ const McqAnswer = ({
                                         <CheckCircleOutlineIcon fontSize='large' color='success' />
                                     </div>
                                     :
-                                    <div className='d-flex align-items-center py-3 text-danger' >
+                                    <div key={choice.id} className='d-flex align-items-center py-3 text-danger' >
                                         <FormControlLabel
                                             key={formatedAnswer(choice).id}
                                             disabled
