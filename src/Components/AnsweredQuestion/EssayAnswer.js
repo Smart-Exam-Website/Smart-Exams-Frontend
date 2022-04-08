@@ -32,10 +32,10 @@ const EssayAnswer = ({
                             :
                             <div className={`me-3 d-flex shadow-sm p-2 border ${isCorrectStudentAnswer ? 'border-success' : 'border-danger'}`}>
                                 <Typography variant='h5' color={isCorrectStudentAnswer ? 'primary' : 'error'}>
-                                    {3}
+                                    {studentMark}
                                 </Typography>
                                 <Typography variant='h5'>
-                                    {`/5`}
+                                    {`/${questionMark}`}
                                 </Typography>
                             </div>
                     }
@@ -79,7 +79,7 @@ const EssayAnswer = ({
             }
 
             {isMarked ?
-                <div className='position-absolute opacity-25' style={{ right: '10%', bottom: '18%' }}>
+                <div className='position-absolute opacity-25' style={{ right: '10%', bottom: '25%' }}>
                     {(isCorrectStudentAnswer) ?
                         <CheckCircleOutlineIcon fontSize='large' style={{ transform: 'scale(6)' }} color="success" />
                         :
@@ -90,7 +90,7 @@ const EssayAnswer = ({
                 null
             }
 
-        </Card >
+        </Card>
     )
 }
 

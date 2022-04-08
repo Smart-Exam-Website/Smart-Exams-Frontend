@@ -42,10 +42,10 @@ const McqAnswer = ({
                             :
                             <div className={`me-3 d-flex shadow-sm p-2 border ${isCorrectStudentAnswer ? 'border-success' : 'border-danger'}`}>
                                 <Typography variant='h5' color={isCorrectStudentAnswer ? 'primary' : 'error'}>
-                                    {3}
+                                    {studentMark}
                                 </Typography>
                                 <Typography variant='h5'>
-                                    {`/5`}
+                                    {`/${questionMark}`}
                                 </Typography>
                             </div>
                     }
@@ -114,7 +114,7 @@ const McqAnswer = ({
                 :
                 null
             }
-        </Card >
+        </Card>
     )
 }
 
