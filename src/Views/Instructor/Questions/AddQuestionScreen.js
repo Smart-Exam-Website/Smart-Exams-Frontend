@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { saveAQuestion } from '../../../redux/actions/ExamAction';
 import { QuestionServices } from '../../../apis/Services/QuestionService';
 import Essay from './QuestionTypes/Essay';
+import Formula from './QuestionTypes/Formula';
 
 
 const AddQuestionScreen = () => {
@@ -41,7 +42,8 @@ const AddQuestionScreen = () => {
         setQuestionTypes([
             { id: '123', value: 'MCQ' },
             { id: '111', value: 'Essay' },
-        ]) 
+            { id: '122', value: 'Formula' }
+        ])
     }
     useEffect(() => {
         getQuestionTypes();
@@ -109,6 +111,14 @@ const AddQuestionScreen = () => {
                         <div>
                             <Essay
                                 initValues={oldQuestionDetails?.type === 'Essay' ? oldQuestionDetails : null}
+                                getQuestionCreationRequest={createQuestionHandler}
+                            />
+                        </div>
+                    }
+                    {questionType === 'Formula' &&
+                        <div>
+                            <Formula
+                                initValues={oldQuestionDetails?.type === 'Formula' ? oldQuestionDetails : null}
                                 getQuestionCreationRequest={createQuestionHandler}
                             />
                         </div>
