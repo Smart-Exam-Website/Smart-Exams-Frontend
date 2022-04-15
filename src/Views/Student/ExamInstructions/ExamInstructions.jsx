@@ -24,8 +24,8 @@ const Examinstructions = (props) => {
     const [isLoading, setIsLoading] = useState(false)
 
     const [isPhotoTaken, setIsPhotoTaken] = useState(false);
-    const [noOfFaces, setNoOfFaces] = useState(null);
-    const [photoVerified, setPhotoVerified] = useState(null);
+    const [noOfFaces, setNoOfFaces] = useState(0);
+    const [photoVerified, setPhotoVerified] = useState(false);
 
     const { examId } = useParams()
     const [examConfigs, setExamConfigs] = useState(null)
@@ -113,10 +113,12 @@ const Examinstructions = (props) => {
                                         <hr />
                                     </Typography>
                                     <ul>
-                                        {mustVerifyFace &&
+                                        {mustVerifyFace?
                                             <li className='text-danger font-weight-bold'>
                                                 Verify your identity with a photo before entering the exam.
                                             </li>
+                                            :
+                                            null
                                         }
                                         <li>
                                             Don't use internet for getting information.

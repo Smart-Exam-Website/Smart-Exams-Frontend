@@ -58,7 +58,7 @@ const ShowExams = (props) => {
                 <CardComponent title={'Your Exams'}>
                     <div className="m-5 text-start ">
                         {exams?.map(exam => (
-                            <Card style={{ border: exam.isSubmitted ? `1px solid ${Colors.success}` : '' }} key={exam.id} className='shadow p-2 pb-0 bg-white rounded' sx={{ minWidth: 275 }}>
+                            <Card style={{ border: exam.isSubmitted ? `1px solid ${Colors.success}` : '' }} key={exam.id} className='shadow p-2 pb-0 mb-3 bg-white rounded' sx={{ minWidth: 275 }}>
                                 <CardContent>
                                     {/* Exam Title */}
                                     <Typography variant="h4" component="div">
