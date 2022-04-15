@@ -15,15 +15,17 @@ import { ExamServices } from '../../../apis/Services/ExamService';
 import moment from 'moment';
 import HandleErrors from '../../../hooks/handleErrors';
 import { useParams } from 'react-router-dom';
+import Loader from '../../../Components/Loader/Loader';
 
 
 const Examinstructions = (props) => {
     const exam = props.location.state.exam
 
+    const [isLoading, setIsLoading] = useState(false)
+
     const [isPhotoTaken, setIsPhotoTaken] = useState(false);
     const [noOfFaces, setNoOfFaces] = useState(null);
     const [photoVerified, setPhotoVerified] = useState(null);
-    // const [studentImage, setStudentImage] = useState(null);
 
     const { examId } = useParams()
     const [examConfigs, setExamConfigs] = useState(null)
@@ -68,11 +70,10 @@ const Examinstructions = (props) => {
     }
 
     const photoTakenHandler = (img) => {
+        setIsLoading(true)
         setIsPhotoTaken(true)
-        // setStudentImage(img)
         showSuccessMsg("Photo Taken Successfully")
 
-        // Data to be passed to ML apis
         let faceDetectionData = {
             "image": img,
             "examId": exam.id
@@ -82,26 +83,23 @@ const Examinstructions = (props) => {
             "examId": exam.id
         }
 
-        // let numberOfFaces;
-        // let verified; // faceVerified or not
         ExamServices.applyFaceDetection(faceDetectionData)
             .then((response) => {
                 setNoOfFaces(response.numberOfFaces)
-            }).catch((error) => {
-                console.log(error)
+                if (response.numberOfFaces !== 1) {
+                    return {verified: false}
+                }
+                return ExamServices.applyFaceVerification(faceVerificationData)
             })
-
-        ExamServices.applyFaceVerification(faceVerificationData)
             .then((response) => {
                 setPhotoVerified(response.verified)
-            }).catch((error) => {
-                console.log(error)
             })
+            .finally(() => { setIsLoading(false) })
         return
     }
 
     const mustVerifyFace = (examConfigs?.faceRecognition || examConfigs?.faceDetection)
-    return (
+    return (examConfigs ?
         <div>
             <div className="row justify-content-center text-center my-5">
                 <div className="col-md-8 col-12">
@@ -115,9 +113,11 @@ const Examinstructions = (props) => {
                                         <hr />
                                     </Typography>
                                     <ul>
-                                        <li className='text-danger font-weight-bold'>
-                                            Verify your identity with a photo before entering the exam.
-                                        </li>
+                                        {mustVerifyFace &&
+                                            <li className='text-danger font-weight-bold'>
+                                                Verify your identity with a photo before entering the exam.
+                                            </li>
+                                        }
                                         <li>
                                             Don't use internet for getting information.
                                         </li>
@@ -140,54 +140,67 @@ const Examinstructions = (props) => {
 
                                 </CardContent>
                                 <CardActions className='d-flex m-2 justify-content-end'>
-                                    {mustVerifyFace ?
-                                        <Popup
-                                            trigger={
-                                                <Button
-                                                    className='btn m-2 p-2 text-white'
-                                                    size="large"
-                                                    variant="contained"
-                                                    color='warning'
+                                    {!isLoading ?
+                                        <>
+                                            {mustVerifyFace ?
+                                                <Popup
+                                                    trigger={
+                                                        <Button
+                                                            className='btn m-2 p-2 text-white'
+                                                            size="large"
+                                                            variant="contained"
+                                                            color='warning'
+                                                        >
+                                                            Take Photo
+                                                        </Button>
+                                                    }
+                                                    modal
+                                                    lockScroll
+                                                    position="top center"
                                                 >
-                                                    Take Photo
-                                                </Button>
-                                            }
-                                            modal
-                                            lockScroll
-                                            position="top center"
-                                        >
-                                            {close => (
-                                                <CardComponent title={'Take a nice photo'}>
-                                                    <h4 className="d-flex justify-content-center">
-                                                        Make sure the place is well lit..!
-                                                    </h4>
-                                                    <TakePhoto
-                                                        captured={photoTakenHandler}
-                                                        clicked={close}
-                                                    ></TakePhoto>
-                                                </CardComponent>
+                                                    {close => (
+                                                        <CardComponent title={'Take a nice photo'}>
+                                                            <h4 className="d-flex justify-content-center">
+                                                                Make sure the place is well lit!
+                                                            </h4>
+                                                            <TakePhoto
+                                                                captured={photoTakenHandler}
+                                                                clicked={close}
+                                                            ></TakePhoto>
+                                                        </CardComponent>
 
-                                            )}
-                                        </Popup>
+                                                    )}
+                                                </Popup>
+                                                :
+                                                null
+                                            }
+                                            <Button
+                                                className='btn m-2 p-2 text-white'
+                                                size="small"
+                                                variant="contained"
+                                                color='success'
+                                                onClick={goToExamHandler}
+                                                disabled={(mustVerifyFace && !isPhotoTaken)}
+                                            >
+                                                Start Exam Now
+                                            </Button>
+                                        </>
                                         :
-                                        null
+                                        <div className='me-4 d-flex flex-column align-items-center'>
+                                            <Typography color="primary">Verifing...!</Typography>
+                                            <Loader />
+                                        </div>
                                     }
-                                    <Button
-                                        className='btn m-2 p-2 text-white'
-                                        size="small"
-                                        variant="contained"
-                                        color='success'
-                                        onClick={goToExamHandler}
-                                        disabled={(mustVerifyFace && !isPhotoTaken)}
-                                    >
-                                        Start Exam Now
-                                    </Button>
                                 </CardActions>
                             </Card>
                         </div>
                     </CardComponent>
                 </div>
-            </div>
+            </div >
+        </div>
+        :
+        <div className='d-flex justify-content-center align-items-center' style={{ height: '70vh' }}>
+            <Loader />
         </div>
     );
 }
