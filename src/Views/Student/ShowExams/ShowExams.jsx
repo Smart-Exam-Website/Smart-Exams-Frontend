@@ -46,7 +46,11 @@ const ShowExams = (props) => {
 
     const getRemainingEndTime = (examEndDate) => {
         let result = moment(examEndDate).diff(moment(), 'hours')
-        return result
+        let remainingMins = moment(examEndDate).diff(moment().add(result, 'hours'), 'minutes')
+        if (result > 0 || remainingMins > 0)
+            return { hours: result, mins: remainingMins }
+        else
+            return null
     }
     return (
         <div className="row justify-content-center text-center my-5">
@@ -54,7 +58,7 @@ const ShowExams = (props) => {
                 <CardComponent title={'Your Exams'}>
                     <div className="m-5 text-start ">
                         {exams?.map(exam => (
-                            <Card style={{ border: exam.isSubmitted ? `1px solid ${Colors.success}` : '' }} key={exam.id} className='shadow p-3 mb-5 bg-white rounded' sx={{ minWidth: 275 }}>
+                            <Card style={{ border: exam.isSubmitted ? `1px solid ${Colors.success}` : '' }} key={exam.id} className='shadow p-2 pb-0 bg-white rounded' sx={{ minWidth: 275 }}>
                                 <CardContent>
                                     {/* Exam Title */}
                                     <Typography variant="h4" component="div">
@@ -88,17 +92,9 @@ const ShowExams = (props) => {
                                 <CardActions className='d-flex m-2 justify-content-between'>
                                     <Grid display={'flex'} alignItems={'center'} direction={'row'}>
                                         <Typography fontWeight={'bold'}>Due:</Typography>
-                                        {getRemainingEndTime(exam.endAt) >= 0 ?
-                                            < Typography
-                                                className='mx-1'
-                                                color={getRemainingEndTime(exam.endAt) > 24 ? Colors.success : Colors.danger}>
-                                                {`${moment(exam.endAt).format('yyyy/MM/DD hh:mm A')} [${getRemainingEndTime(exam.endAt)} hours left]`}
-                                            </Typography>
-                                            :
-                                            <Typography className='mx-1'>
-                                                {moment(exam.endAt).format('yyyy/MM/DD hh:mm A')}
-                                            </Typography>
-                                        }
+                                        <Typography className='mx-1'>
+                                            {moment(exam.endAt).format('yyyy/MM/DD hh:mm A')}
+                                        </Typography>
                                     </Grid>
                                     <Typography variant="body3">
                                         <b>Duration:</b> {exam.duration}
@@ -111,6 +107,21 @@ const ShowExams = (props) => {
                                         Go to this Exam
                                     </Button>
                                 </CardActions>
+                                {getRemainingEndTime(exam.endAt) ?
+                                    <CardActions className='d-flex justify-content-center'>
+                                        <Grid display={'flex'} alignItems={'center'} direction={'row'}>
+                                            <Typography fontWeight={'bold'}>Close in:</Typography>
+                                            <Typography
+                                                className='mx-1'
+                                                fontStyle='italic'
+                                                color={getRemainingEndTime(exam.endAt).hours > 24 ? Colors.success : Colors.danger}>
+                                                {`[${getRemainingEndTime(exam.endAt).hours} h ${getRemainingEndTime(exam.endAt).mins} m]`}
+                                            </Typography>
+                                        </Grid>
+                                    </CardActions>
+                                    :
+                                    null
+                                }
                             </Card>
                         ))}
                     </div>
