@@ -39,6 +39,16 @@ const Examinstructions = (props) => {
             .catch(err => HandleErrors(err))
     }, [])
 
+    const [startDate, setstartDate] = useState(null)
+    useEffect(() => {
+        console.log(examId)
+        ExamServices.getExamInfo(examId)
+            .then(res => {
+                setstartDate(res.exam.startAt)
+            })
+            .catch(err => HandleErrors(err))
+    }, [])
+
     const goToExamHandler = (event) => {
         // this code pevents from going to another page
         event.preventDefault()
@@ -87,7 +97,7 @@ const Examinstructions = (props) => {
             .then((response) => {
                 setNoOfFaces(response.numberOfFaces)
                 if (response.numberOfFaces !== 1) {
-                    return {verified: false}
+                    return { verified: false }
                 }
                 return ExamServices.applyFaceVerification(faceVerificationData)
             })
@@ -99,7 +109,8 @@ const Examinstructions = (props) => {
     }
 
     const mustVerifyFace = (examConfigs?.faceRecognition || examConfigs?.faceDetection)
-    return (examConfigs ?
+    const isNotStartYet = startDate && moment(startDate).isBefore(moment())
+    return ((examConfigs && startDate) ?
         <div>
             <div className="row justify-content-center text-center my-5">
                 <div className="col-md-8 col-12">
@@ -113,7 +124,7 @@ const Examinstructions = (props) => {
                                         <hr />
                                     </Typography>
                                     <ul>
-                                        {mustVerifyFace?
+                                        {mustVerifyFace ?
                                             <li className='text-danger font-weight-bold'>
                                                 Verify your identity with a photo before entering the exam.
                                             </li>
@@ -182,9 +193,9 @@ const Examinstructions = (props) => {
                                                 variant="contained"
                                                 color='success'
                                                 onClick={goToExamHandler}
-                                                disabled={(mustVerifyFace && !isPhotoTaken)}
+                                                disabled={(mustVerifyFace && !isPhotoTaken) || (isNotStartYet)}
                                             >
-                                                Start Exam Now
+                                                {`Start Exam Now ${isNotStartYet ? '(Not Started)' : ''}`}
                                             </Button>
                                         </>
                                         :
