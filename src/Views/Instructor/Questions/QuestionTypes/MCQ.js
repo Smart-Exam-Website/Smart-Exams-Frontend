@@ -51,15 +51,15 @@ const MCQ = ({ initValues, getQuestionCreationRequest = () => { } }) => {
 
     }
 
-    const mcqChoices = initValues?.mcq?.mcq_answers?.filter(item => !item.isCorrect)
-    const mcqCorrectAnswer = initValues?.mcq?.mcq_answers?.find(item => item.isCorrect)
+    const mcqChoices = initValues?.options?.filter(item => !item.isCorrect)
+    const mcqCorrectAnswer = initValues?.options?.find(item => item.isCorrect)
     return <Formik
         initialValues={{
             questionText: initValues?.questionText || '',
-            correctAnswer: mcqCorrectAnswer?.option.value || '',
-            choice1: mcqChoices?.[0].option.value || '',
-            choice2: mcqChoices?.[1].option.value || '',
-            choice3: mcqChoices?.[2].option.value || ''
+            correctAnswer: mcqCorrectAnswer?.value || '',
+            choice1: mcqChoices?.[0].value || '',
+            choice2: mcqChoices?.[1].value || '',
+            choice3: mcqChoices?.[2].value || ''
         }}
         enableReinitialize={true}
         validationSchema={MCQSCHEMA}
@@ -154,7 +154,7 @@ const MCQ = ({ initValues, getQuestionCreationRequest = () => { } }) => {
                     />
                 </div>
 
-                <button className="btn btn-primary mx-auto mt-4" type="submit">ADD</button>
+                <button className="btn btn-primary mx-auto mt-4" type="submit">{!initValues? 'ADD':'EDIT'}</button>
             </form>
         )}
     </Formik>

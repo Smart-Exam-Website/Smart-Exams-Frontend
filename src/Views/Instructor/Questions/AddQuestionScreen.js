@@ -15,6 +15,7 @@ import { saveAQuestion } from '../../../redux/actions/ExamAction';
 import { QuestionServices } from '../../../apis/Services/QuestionService';
 import Essay from './QuestionTypes/Essay';
 import Formula from './QuestionTypes/Formula';
+import { QuestionTypes } from '../../../constants/QuestionTypes';
 
 
 const AddQuestionScreen = () => {
@@ -40,9 +41,9 @@ const AddQuestionScreen = () => {
     const [questionTypes, setQuestionTypes] = useState(null);
     const getQuestionTypes = () => {
         setQuestionTypes([
-            { id: '123', value: 'MCQ' },
-            { id: '111', value: 'Essay' },
-            { id: '122', value: 'Formula' }
+            { id: '123', value: QuestionTypes.MCQ },
+            { id: '111', value:  QuestionTypes.ESSAY },
+            { id: '122', value: 'formula' }
         ])
     }
     useEffect(() => {
@@ -99,18 +100,18 @@ const AddQuestionScreen = () => {
                         </div>
                     }
 
-                    {questionType === 'MCQ' &&
+                    {questionType === QuestionTypes.MCQ &&
                         <div>
                             <MCQ
-                                initValues={oldQuestionDetails?.type === 'MCQ' ? oldQuestionDetails : null}
+                                initValues={oldQuestionDetails?.type === QuestionTypes.MCQ ? oldQuestionDetails : null}
                                 getQuestionCreationRequest={createQuestionHandler}
                             />
                         </div>
                     }
-                    {questionType === 'Essay' &&
+                    {questionType === QuestionTypes.ESSAY  &&
                         <div>
                             <Essay
-                                initValues={oldQuestionDetails?.type === 'Essay' ? oldQuestionDetails : null}
+                                initValues={oldQuestionDetails?.type === QuestionTypes.ESSAY ? oldQuestionDetails : null}
                                 getQuestionCreationRequest={createQuestionHandler}
                             />
                         </div>

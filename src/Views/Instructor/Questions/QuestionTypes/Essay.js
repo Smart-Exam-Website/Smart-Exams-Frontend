@@ -58,10 +58,11 @@ const Essay = ({ initValues, getQuestionCreationRequest = () => { } }) => {
 
     }
 
+    console.log(initValues)
     return <Formik
         initialValues={{
             questionText: initValues?.questionText || '',
-            correctAnswer: initValues?.correctAnswer || '',
+            correctAnswer: initValues?.options[0]?.value || '',
 
         }}
         enableReinitialize={true}
