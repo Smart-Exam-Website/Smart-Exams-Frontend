@@ -89,7 +89,7 @@ const AddExamQuestions = () => {
     return (
         <div className="row justify-content-center text-center my-5">
             <div className="col-md-8 col-12">
-                <CardComponent title={!isEditMode ? 'Add Questions' : 'View Questions'}>
+                <CardComponent title={!isEditMode ? 'Create Exam: add questions' : 'Edit Exam: edit questions'}>
                     <div className='p-4'>
                         <div className='d-flex justify-content-end mb-4'>
                             <button onClick={AddQuestionHandler} className='btn btn-success'>

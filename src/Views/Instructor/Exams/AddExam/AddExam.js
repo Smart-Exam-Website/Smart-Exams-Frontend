@@ -201,7 +201,7 @@ const AddExam = () => {
                                         onChange={props.handleChange}
                                         onBlur={props.handleBlur}
                                         value={props.values.totalMark}
-                                        type="text"
+                                        type="number"
                                         label="Total Mark"
                                         variant="outlined"
                                         helperText={props.touched.totalMark && props.errors.totalMark}
