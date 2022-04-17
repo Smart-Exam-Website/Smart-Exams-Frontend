@@ -109,7 +109,8 @@ const Examinstructions = (props) => {
     }
 
     const mustVerifyFace = (examConfigs?.faceRecognition || examConfigs?.faceDetection)
-    const isNotStartYet = startDate && moment(startDate).isBefore(moment())
+    const hasStarted = startDate && moment(startDate).isBefore(moment())
+    console.log("cons", hasStarted, moment().format('yyyy-MM-DD HH:mm'))
     return ((examConfigs && startDate) ?
         <div>
             <div className="row justify-content-center text-center my-5">
@@ -193,9 +194,9 @@ const Examinstructions = (props) => {
                                                 variant="contained"
                                                 color='success'
                                                 onClick={goToExamHandler}
-                                                disabled={(mustVerifyFace && !isPhotoTaken) || (isNotStartYet)}
+                                                disabled={(mustVerifyFace && !isPhotoTaken) || (!hasStarted)}
                                             >
-                                                {`Start Exam Now ${isNotStartYet ? '(Not Started)' : ''}`}
+                                                {`Start Exam Now ${!hasStarted ? '(Not Started)' : ''}`}
                                             </Button>
                                         </>
                                         :
