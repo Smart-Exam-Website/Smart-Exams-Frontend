@@ -23,15 +23,13 @@ const QuestionViewScreen = () => {
 
     let QuestionMarkup = () => {
         if (question?.type === QuestionTypes.ESSAY) {
-
             return (
-                <EssayAnswer questionText={question?.questionText} correctAnswer={question?.question_option[0].option} />
+                <EssayAnswer questionText={question?.questionText} correctAnswer={question?.options[0]} />
             )
         }
         else if (question?.type === QuestionTypes.MCQ) {
-            console.log("ana 3mad y3m")
-            return (question?.mcq &&
-                <McqAnswer questionText={question?.questionText} choices={question?.mcq.mcq_answers} />
+            return (
+                <McqAnswer questionText={question?.questionText} choices={question?.options} />
             )
         }
 

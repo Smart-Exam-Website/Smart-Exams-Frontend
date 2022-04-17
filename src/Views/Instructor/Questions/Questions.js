@@ -22,6 +22,7 @@ import showSuccessMsg from '../../../hooks/showSuccessMsg';
 import { useDispatch } from 'react-redux';
 import { hideAlert, showAlert } from '../../../redux/actions/AppActions';
 import { saveAQuestion } from '../../../redux/actions/ExamAction';
+import NoContentComponent from '../../../Components/NoContentComponent/NoContentComponent';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -170,55 +171,66 @@ const Questions = () => {
                 }
             </div>
 
-            <TableContainer className='mt-4' component={Paper}>
-                <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                            {isSelectionMode &&
-                                <StyledTableCell>
-                                    <Checkbox
-                                        style={{ backgroundColor: '#fff' }}
-                                        checked={isAllSelected}
-                                        onChange={isAllSelected ? deselectAllQuestions : selectAllQuestions}
-                                    />
-                                </StyledTableCell>
-                            }
-                            <StyledTableCell>Question Header</StyledTableCell>
-                            <StyledTableCell align="right">Type</StyledTableCell>
-                            <StyledTableCell align="right">Created Date</StyledTableCell>
-                            {!isSelectionMode &&
-                                <StyledTableCell align="right"> </StyledTableCell>
-                            }
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {questions?.map((row, index) => (
-                            <StyledTableRow onClick={() => GoToQuestionDetailsHandler(row.id)} key={row.id}>
+            {questions?.length ?
+
+                <TableContainer className='mt-4' component={Paper}>
+                    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                        <TableHead>
+                            <TableRow>
                                 {isSelectionMode &&
-                                    <StyledTableCell onClick={(e) => e.stopPropagation()} component="th" scope="row">
+                                    <StyledTableCell>
                                         <Checkbox
-                                            color="primary"
-                                            checked={Boolean(row.isSelected)}
-                                            onChange={(e) => onCheckHandler(index, e.target.checked)}
+                                            style={{ backgroundColor: '#fff' }}
+                                            checked={isAllSelected}
+                                            onChange={isAllSelected ? deselectAllQuestions : selectAllQuestions}
                                         />
                                     </StyledTableCell>
                                 }
-                                <StyledTableCell component="th" scope="row">
-                                    {row.questionText}
-                                </StyledTableCell>
-                                <StyledTableCell align="right">{row.type}</StyledTableCell>
-                                <StyledTableCell align="right">{row.created_at}</StyledTableCell>
+                                <StyledTableCell>Question Header</StyledTableCell>
+                                <StyledTableCell align="right">Type</StyledTableCell>
+                                <StyledTableCell align="right">Created Date</StyledTableCell>
                                 {!isSelectionMode &&
-                                    <StyledTableCell onClick={(e) => handleClick(e, row.id)} align="right">
-                                        <SettingsIcon fontSize='medium' color='secondary' />
-                                    </StyledTableCell>
+                                    <StyledTableCell align="right"> </StyledTableCell>
                                 }
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {questions?.map((row, index) => (
+                                <StyledTableRow onClick={() => GoToQuestionDetailsHandler(row.id)} key={row.id}>
+                                    {isSelectionMode &&
+                                        <StyledTableCell onClick={(e) => e.stopPropagation()} component="th" scope="row">
+                                            <Checkbox
+                                                color="primary"
+                                                checked={Boolean(row.isSelected)}
+                                                onChange={(e) => onCheckHandler(index, e.target.checked)}
+                                            />
+                                        </StyledTableCell>
+                                    }
+                                    <StyledTableCell component="th" scope="row">
+                                        {row.questionText}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="right">{row.type}</StyledTableCell>
+                                    <StyledTableCell align="right">{row.created_at}</StyledTableCell>
+                                    {!isSelectionMode &&
+                                        <StyledTableCell onClick={(e) => handleClick(e, row.id)} align="right">
+                                            <SettingsIcon fontSize='medium' color='secondary' />
+                                        </StyledTableCell>
+                                    }
 
-                            </StyledTableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                                </StyledTableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                :
+                null
+            }
+
+            {!questions?.length ?
+                <NoContentComponent text="No Questions at the moment" />
+                :
+                null
+            }
 
             <Menu
                 id="basic-menu"
