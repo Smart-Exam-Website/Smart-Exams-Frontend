@@ -20,8 +20,8 @@ const AddExam = () => {
         duration: yup
             .string()
             .matches(DURATION_REGEX, "Wrong Duration Formate (hh:mm:ss)")
-            .test("duration", "mins must not be more than 60", value => Number(value.split(':')[1]) <= 60)
-            .test("duration", "seconds must not be more than 60", value => Number(value.split(':')[2]) <= 60)
+            .test("duration", "mins must not be more than 60", value => Number(value?.split(':')?.[1]) <= 60)
+            .test("duration", "seconds must not be more than 60", value => Number(value?.split(':')?.[2]) <= 60)
             .required('This is a required field'),
         examSubject: yup.string().required('This is a required field'),
         startAt: yup.date().min(new Date(), "Start Date must be a future date").required('This is a required field'),
