@@ -21,7 +21,7 @@ const InstructorProfile = () => {
             <div className="container d-flex justify-content-center">
                 <div className="d-flex flex-column align-items-center ProfileCard w-100 p-3">
                     {/* IMAGE AND NAME */}
-                    <img src={imageResolver(instructorData?.user?.image)} alt="User" />
+                    <img style={{objectFit:'contain'}} src={imageResolver(instructorData?.user?.image)} alt="User" />
                     <div className="d-flex flex-column flex-md-row align-items-center mt-2">
                         <h2>{`${instructorData?.user?.firstName} ${instructorData?.user?.lastName}`}</h2>
                         <div className="mx-2">
