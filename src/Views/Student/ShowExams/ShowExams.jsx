@@ -13,6 +13,7 @@ import moment from 'moment';
 import { Colors } from '../../../constants/Colors';
 import { Chip, colors, Grid } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
+import NoContentComponent from '../../../Components/NoContentComponent/NoContentComponent';
 
 
 
@@ -124,6 +125,12 @@ const ShowExams = (props) => {
                                 }
                             </Card>
                         ))}
+
+                        {!exams?.length ?
+                            <NoContentComponent text={"No Exams Right Now"} />
+                            :
+                            null
+                        }
                     </div>
                 </CardComponent>
             </div >
