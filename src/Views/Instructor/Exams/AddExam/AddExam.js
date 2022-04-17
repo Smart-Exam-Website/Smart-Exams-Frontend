@@ -1,5 +1,5 @@
 import { TextField } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import CardComponent from '../../../../Components/CardComponent/CardComponent'
 import { Formik } from 'formik';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -8,8 +8,34 @@ import HandleErrors from '../../../../hooks/handleErrors';
 import showSuccessMsg from '../../../../hooks/showSuccessMsg';
 import MobileDateTimePicker from '@mui/lab/MobileDateTimePicker';
 import moment from 'moment';
+import * as yup from 'yup';
 
+const DURATION_REGEX = /^[0-9]{2}:[0-9]{2}:[0-9]{2}$/
 const AddExam = () => {
+    const createExamSchema = yup.object().shape({
+        name: yup.string().required('This is a required field'),
+        numberOfTrials: yup.number().min(1).required('This is a required field'),
+        description: yup.string().required('This is a required field'),
+        totalMark: yup.number().min(1).required('This is a required field'),
+        duration: yup
+            .string()
+            .matches(DURATION_REGEX, "Wrong Duration Formate (hh:mm:ss)")
+            .test("duration", "mins must not be more than 60", value => Number(value.split(':')[1]) <= 60)
+            .test("duration", "seconds must not be more than 60", value => Number(value.split(':')[2]) <= 60)
+            .required('This is a required field'),
+        examSubject: yup.string().required('This is a required field'),
+        startAt: yup.date().min(new Date(), "Start Date must be a future date").required('This is a required field'),
+        endAt: yup
+            .date()
+            .when('startAt', (startAt, schema) => {
+                return schema.test({
+                    test: endAt => moment(startAt).isBefore(moment(endAt)),
+                    message: "End Date must be after start date"
+                })
+            })
+            .required('This is a required field')
+
+    });
 
     const history = useHistory()
     const location = useLocation()
@@ -52,6 +78,7 @@ const AddExam = () => {
                             startAt: examOldData?.startAt || moment(new Date().setMinutes(0)).format('yyyy-MM-DD HH:mm'),
                             endAt: examOldData?.endAt || moment(new Date().setMinutes(0)).add(7, 'days').format('yyyy-MM-DD HH:mm'),
                         }}
+                        validationSchema={createExamSchema}
                         onSubmit={onAddExamHandler}
                     >
                         {props => (
@@ -66,8 +93,9 @@ const AddExam = () => {
                                         type="text"
                                         label="Exam Name"
                                         variant="outlined"
+                                        helperText={props.touched.name && props.errors.name}
+                                        error={props.touched.name && Boolean(props.errors.name)}
                                     />
-                                    {props.errors.name && <div id="feedback">{props.errors.name}</div>}
                                 </div>
 
                                 <div className='mt-4'>
@@ -80,8 +108,9 @@ const AddExam = () => {
                                         type="number"
                                         label="Number Of Trials"
                                         variant="outlined"
+                                        helperText={props.touched.numberOfTrials && props.errors.numberOfTrials}
+                                        error={props.touched.numberOfTrials && Boolean(props.errors.numberOfTrials)}
                                     />
-                                    {props.errors.numberOfTrials && <div id="feedback">{props.errors.numberOfTrials}</div>}
                                 </div>
 
                                 <div className='mt-4'>
@@ -94,8 +123,9 @@ const AddExam = () => {
                                         type="text"
                                         label="Description"
                                         variant="outlined"
+                                        helperText={props.touched.description && props.errors.description}
+                                        error={props.touched.description && Boolean(props.errors.description)}
                                     />
-                                    {props.errors.description && <div id="feedback">{props.errors.description}</div>}
                                 </div>
 
                                 {/* Exam Subject */}
@@ -109,8 +139,9 @@ const AddExam = () => {
                                         type="text"
                                         label="Exam Subject"
                                         variant="outlined"
+                                        helperText={props.touched.examSubject && props.errors.examSubject}
+                                        error={props.touched.examSubject && Boolean(props.errors.examSubject)}
                                     />
-                                    {props.errors.examSubject && <div id="feedback">{props.errors.examSubject}</div>}
                                 </div>
 
                                 {/* Start Date */}
@@ -125,12 +156,17 @@ const AddExam = () => {
                                         }}
                                         onChange={(date) => {
                                             let selectedDate = moment(date).format('yyyy-MM-DD HH:mm')
-                                            console.log(selectedDate)
                                             props.setFieldValue('startAt', selectedDate)
                                         }}
-                                        renderInput={(params) => <TextField {...params} fullWidth />}
+                                        renderInput={
+                                            (params) => <TextField
+                                                {...params}
+                                                fullWidth
+                                                helperText={props.touched.startAt && props.errors.startAt}
+                                                error={props.touched.startAt && Boolean(props.errors.startAt)}
+                                            />
+                                        }
                                     />
-                                    {props.errors.startAt && <div id="feedback">{props.errors.startAt}</div>}
                                 </div>
 
                                 {/* End Date */}
@@ -140,17 +176,22 @@ const AddExam = () => {
                                         minutesStep={5}
                                         inputFormat={'yyyy-MM-DD HH:mm'}
                                         value={props.values.endAt}
+
                                         onClose={() => {
                                             props.setFieldTouched('endAt', true)
                                         }}
                                         onChange={(date) => {
                                             let selectedDate = moment(date).format('yyyy-MM-DD HH:mm')
-                                            console.log(selectedDate)
                                             props.setFieldValue('endAt', selectedDate)
                                         }}
-                                        renderInput={(params) => <TextField {...params} fullWidth />}
+                                        renderInput={(params) => <TextField
+                                            {...params}
+                                            fullWidth
+                                            helperText={props.touched.endAt && props.errors.endAt}
+                                            error={props.touched.endAt && Boolean(props.errors.endAt)}
+                                        />
+                                        }
                                     />
-                                    {props.errors.endAt && <div id="feedback">{props.errors.endAt}</div>}
                                 </div>
 
                                 <div className='mt-4'>
@@ -163,8 +204,9 @@ const AddExam = () => {
                                         type="text"
                                         label="Total Mark"
                                         variant="outlined"
+                                        helperText={props.touched.totalMark && props.errors.totalMark}
+                                        error={props.touched.totalMark && Boolean(props.errors.totalMark)}
                                     />
-                                    {props.errors.totalMark && <div id="feedback">{props.errors.totalMark}</div>}
                                 </div>
 
                                 <div className='mt-4'>
@@ -178,8 +220,9 @@ const AddExam = () => {
                                         type="text"
                                         label="Duration"
                                         variant="outlined"
+                                        helperText={props.touched.duration && props.errors.duration}
+                                        error={props.touched.duration && Boolean(props.errors.duration)}
                                     />
-                                    {props.errors.duration && <div id="feedback">{props.errors.duration}</div>}
                                 </div>
 
                                 <button className="btn btn-primary mx-auto mt-4" type="submit">Next</button>
