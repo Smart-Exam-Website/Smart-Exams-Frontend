@@ -54,7 +54,7 @@ const Header = () => {
                             <>
                                 <NavLink className="nav-link p-0" activeclassname={'active'} to="/classes">
                                     <li className="nav-item px-5 mx-2">
-                                        <span>Classes</span>
+                                        <span>Home</span>
                                     </li>
                                 </NavLink>
                                 <NavLink className="nav-link p-0" activeclassname={'active'} to="/exams">

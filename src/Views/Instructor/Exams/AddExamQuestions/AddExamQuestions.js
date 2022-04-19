@@ -69,7 +69,9 @@ const AddExamQuestions = () => {
     const submitExamHandler = () => {
         let submittedQuestions = [...questions]
         submittedQuestions = submittedQuestions.map(item => { return { question_id: item.id } })
-        ExamServices.addQuestionsToExam(examId, submittedQuestions)
+        let request = !isEditMode ? ExamServices.addQuestionsToExam(examId, submittedQuestions) : ExamServices.editQuestionsOfExam(examId, submittedQuestions)
+        
+        request
             .then(res => {
                 history.push('/exams')
                 dispatch(removeAllSavedQuestions())
