@@ -42,8 +42,8 @@ const AddQuestionScreen = () => {
     const getQuestionTypes = () => {
         setQuestionTypes([
             { id: '123', value: QuestionTypes.MCQ },
-            { id: '111', value:  QuestionTypes.ESSAY },
-            { id: '122', value: 'formula' }
+            { id: '111', value: QuestionTypes.ESSAY },
+            { id: '122', value: QuestionTypes.FORMULA }
         ])
     }
     useEffect(() => {
@@ -108,7 +108,7 @@ const AddQuestionScreen = () => {
                             />
                         </div>
                     }
-                    {questionType === QuestionTypes.ESSAY  &&
+                    {questionType === QuestionTypes.ESSAY &&
                         <div>
                             <Essay
                                 initValues={oldQuestionDetails?.type === QuestionTypes.ESSAY ? oldQuestionDetails : null}
@@ -116,7 +116,7 @@ const AddQuestionScreen = () => {
                             />
                         </div>
                     }
-                    {questionType === 'Formula' &&
+                    {questionType === QuestionTypes.FORMULA &&
                         <div>
                             <Formula
                                 initValues={oldQuestionDetails?.type === 'Formula' ? oldQuestionDetails : null}
