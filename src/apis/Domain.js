@@ -1,2 +1,2 @@
-const DomainUrl = 'http://44.201.124.239/api';
+const DomainUrl = 'https://api.smart-exam.ml/api';
 export default DomainUrl;
