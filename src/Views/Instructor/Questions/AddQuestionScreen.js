@@ -119,7 +119,7 @@ const AddQuestionScreen = () => {
                     {questionType === QuestionTypes.FORMULA &&
                         <div>
                             <Formula
-                                initValues={oldQuestionDetails?.type === 'Formula' ? oldQuestionDetails : null}
+                                initValues={oldQuestionDetails?.type === QuestionTypes.FORMULA ? oldQuestionDetails : null}
                                 getQuestionCreationRequest={createQuestionHandler}
                             />
                         </div>

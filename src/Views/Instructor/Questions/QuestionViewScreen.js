@@ -36,12 +36,7 @@ const QuestionViewScreen = () => {
     }
     return <div className="row justify-content-center my-5">
         <div className="col-md-8 col-12">
-
             {QuestionMarkup()}
-
-            {/* {question?.mcq &&
-                <McqAnswer questionText={question?.questionText} choices={question?.mcq.mcq_answers} />
-            } */}
         </div>
     </div>
 };
