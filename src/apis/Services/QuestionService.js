@@ -61,4 +61,19 @@ export class QuestionServices {
         return _axios.get('/questions', { params: params });
     }
 
+    // Formula Question Endpoints
+    /**
+     * Create Formula Question
+     * @param {Object} question Information about the question.
+     * @param {string} question.questionText Question header
+     * @param {string} question.formula
+     * @param {Array<Array<any>>} question.variables [[var name, min val, max val]] ex: [ ['x',30,40] ]
+     * @param {Array<Array<any>>} question.formulas [[questionHeader, finalAnswer]] ex: [ ['1+23=??', 8] ]
+     * @returns {Promise<any>}
+     */
+    static createFormulaQuestion(question) {
+        return _axios.post('/questions/formula/create', { type: QuestionTypes.FORMULA, ...question });
+    }
+
+
 }

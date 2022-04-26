@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import { QuestionServices } from '../../../../apis/Services/QuestionService';
 import mexp from 'math-expression-evaluator'
 import useRandomValue from '../../../../hooks/useRandomValue';
+import HandleErrors from '../../../../hooks/handleErrors';
 
 const VAR_REGEX = /\[[a-z A-Z]+\]/g
 const BRACKETS_REGEX = /\[|\]/g
@@ -25,7 +26,10 @@ const Formula = ({ initValues, getQuestionCreationRequest = () => { } }) => {
     });
 
     const getRandomValue = useRandomValue();
+    const [questionFormValue, setQuestionFormValue] = useState(null)
     const submitQuestionHandler = (values) => {
+        setQuestionFormValue(values)
+
         let numberOfGeneratedQuestion = values.numberOfQuestions
         let finalQuestionValue = []
 
@@ -96,7 +100,23 @@ const Formula = ({ initValues, getQuestionCreationRequest = () => { } }) => {
     const [generatedQuestions, setGeneratedQuestions] = useState(null)
 
     const createQuestion = () => {
-        console.log(generatedQuestions)
+        let generatedFormulas = generatedQuestions?.map(item => {
+            let questionText = questionFormValue?.questionText
+            let questionTextAfterGeneration = questionText
+            item?.variables?.forEach(element => {
+                questionTextAfterGeneration = questionTextAfterGeneration?.replaceAll(`[${element.var}]`, element.value)
+            });
+
+            return [questionTextAfterGeneration, item.finalValue]
+        })
+
+        let creationRequest = QuestionServices.createFormulaQuestion({
+            questionText: questionFormValue?.questionText,
+            formula: questionFormValue?.formula,
+            variables: vars,
+            formulas: generatedFormulas
+        })
+        getQuestionCreationRequest(creationRequest)
     }
 
     return (
