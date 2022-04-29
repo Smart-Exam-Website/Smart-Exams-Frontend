@@ -145,7 +145,7 @@ const Exams = () => {
     const isSelctedExamIsNotCompleted = () => {
         if (!exams?.length) return null
         let selectedExamObject = exams.find(item => item.id === selectedExam)
-        return (!selectedExamObject.config || !selectedExamObject.questions?.length)
+        return (!selectedExamObject?.config || !selectedExamObject?.questions?.length)
     }
 
     return (
