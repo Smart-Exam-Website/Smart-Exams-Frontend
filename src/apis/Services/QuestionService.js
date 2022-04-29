@@ -91,4 +91,29 @@ export class QuestionServices {
     }
 
 
+    // Grouping Question Endpoints
+    /**
+     * Create Group Question
+     * @param {Object} question Information about the question.
+     * @param {string} question.questionText Question header
+     * @param {Array<number>} question.questions Array of question ids
+     * @returns {Promise<any>}
+     */
+    static createGroupQuestion(question) {
+        return _axios.post('/questions/question-group/create', { type: QuestionTypes.GROUP, ...question });
+    }
+
+    /**
+     * Edit Group Question
+     * @param {*} id Question id
+     * @param {Object} question Information about the question.
+     * @param {string} question.questionText Question header
+     * @param {Array<number>} question.questions Array of question ids
+     * @returns {Promise<any>}
+     */
+    static editGroupQuestion(id, question) {
+        return _axios.post(`/questions/question-group/${id}`, { type: QuestionTypes.GROUP, ...question });
+    }
+
+
 }

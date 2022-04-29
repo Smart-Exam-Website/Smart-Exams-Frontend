@@ -17,20 +17,14 @@ const AddQuestionGroup = () => {
     const [groupNameCreated, setGroupNameCreated] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
 
-
-
-
     const AddQuestionHandler = (event) => {
         setAnchorEl(event.currentTarget)
     }
 
     const submitGroupHandler = () => {
-
         console.log(groupName);
-
         return
     }
-
 
     const createGroupHandler = () => {
 
@@ -44,21 +38,14 @@ const AddQuestionGroup = () => {
         return
     }
 
-
-
     const goCreateNewQuestion = () => 
     {
         history.push('/questions/add', { fromExamCreation: false, isFromGroup: true, groupName: groupName })
     }
     const selectQuestionFromQBank = () => 
     {
-        history.push('/questions', { canSelectQuestionsForExam: false, isFromGroup: true, groupName: groupName })
+        history.push('/questions', { canSelectQuestionsForExam: true, isFromGroup: true, groupName: groupName })
     }
-
-
-
-
-
 
     const methods = [
         {
@@ -100,8 +87,6 @@ const AddQuestionGroup = () => {
     }
 
     let mainContent = () => {
-
-        // Main Component
         return (
             <div className="row justify-content-center text-center my-5">
 
@@ -115,8 +100,6 @@ const AddQuestionGroup = () => {
                             <AddationMethodsMenu methods={methods} anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
                         </div>
 
-
-
                         <div className='m-5'>
                             <button onClick={submitGroupHandler} className="btn btn-primary mx-auto mt-4">Submit Group</button>
                         </div>
@@ -125,8 +108,6 @@ const AddQuestionGroup = () => {
             </div>
         );
     }
-
-
 
     return (
         <div>

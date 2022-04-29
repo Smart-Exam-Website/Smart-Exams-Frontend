@@ -28,7 +28,7 @@ const BorderdQuestionController = ({ questionTitle, id, deleteFunction = () => {
     history.push('/questions/' + id)
   }
 
-  return <Wrapper className='mb-4'>
+  return <Wrapper className='mb-3'>
     <ClickableView onClick={goToQuestion}>
       <Text>{questionTitle}</Text>
     </ClickableView>

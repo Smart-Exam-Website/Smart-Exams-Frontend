@@ -156,13 +156,16 @@ const Questions = () => {
             return newQuestions.map(item => { return { ...item, isSelected: false } })
         })
     }
+    const selectedGroupQuestionName = location.state?.groupName
     const sentSelectedQuestionHandler = () => {
-        dispatch(saveAQuestion(selectedQuestions))
+        console.log("testttt",selectedGroupQuestionName)
+        dispatch(saveAQuestion(selectedQuestions, selectedGroupQuestionName))
         history.goBack()
     }
 
 
-    // SEARCH AND FILTER FUNCTIONALITY
+    // #### SEARCH AND FILTER FUNCTIONALITY ####
+
     const [filterValue, setFilterValue] = useState(null)
     const [filterMenuEl, setFilterMenuEl] = useState(null)
     const [searchValue, setsearchValue] = useState('')

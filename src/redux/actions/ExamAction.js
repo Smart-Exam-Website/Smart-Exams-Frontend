@@ -8,7 +8,7 @@ import { actionTypes } from "../actionTypes"
 export const saveAQuestion = (questionData, groupName='') => {
 
     console.log("Question data from Action: ", questionData)
-    if (groupName !== '') {
+    if (groupName) {
         // then the questtion belongs to a group
         return {
 

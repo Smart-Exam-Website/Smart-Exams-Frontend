@@ -1,5 +1,5 @@
 import { PlusCircleOutlined } from '@ant-design/icons'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
@@ -13,9 +13,10 @@ import BorderdQuestionController from '../../../../Components/QuestionComponents
 import HandleErrors from '../../../../hooks/handleErrors'
 import showSuccessMsg from '../../../../hooks/showSuccessMsg'
 import { showAlert } from '../../../../redux/actions/AppActions'
-import { removeAllSavedQuestions, removeSavedQuestionFromExam } from '../../../../redux/actions/ExamAction'
+import { addNewGroup, removeAllSavedQuestions, removeSavedQuestionFromExam } from '../../../../redux/actions/ExamAction'
 
 import { TextField } from '@mui/material'
+import BorderdGroupQuestion from '../../../../Components/QuestionComponents/BorderdGroupQuestion'
 
 
 const AddExamQuestions = () => {
@@ -24,42 +25,24 @@ const AddExamQuestions = () => {
     const dispatch = useDispatch()
 
     const [anchorEl, setAnchorEl] = useState(null);
-    const [groupName, setGroupName] = useState('');
-    
-
-
+    const [selctedGroupName, setselctedGroupName] = useState(null);
 
     const AddQuestionHandler = (event) => {
         setAnchorEl(event.currentTarget)
     }
 
     const goCreateNewQuestion = () => {
-        history.push('/questions/add', { fromExamCreation: true })
+        history.push('/questions/add', { fromExamCreation: true, isFromGroup: Boolean(selctedGroupName), groupName: selctedGroupName })
     }
     const selectQuestionFromQBank = () => {
-        history.push('/questions', { canSelectQuestionsForExam: true })
+        history.push('/questions', { canSelectQuestionsForExam: true, isFromGroup: Boolean(selctedGroupName), groupName: selctedGroupName })
     }
     const goCreateNewGroup = () => {
-
-
-        history.push('/questions/add-group', { canSelectQuestionsForExam: true })
+        setShowGroupCreationForm(true)
+        setTimeout(() => {
+            document.getElementById('scrollElementToGroupCreationForm').scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }, 100);
     }
-
-    
-    // const confirmCreateNewGroup = () => {
-    //     return (
-    //         <MaterialModal title={"Please add group name"} close={closeModal}>
-    //             <TextField fullWidth onChange={(e) => { setGroupName(e.target.value) }} id="outlined-basic" label="Group Name" variant="outlined" />
-
-    //             <button 
-    //             disabled={groupName === ''} 
-    //             onClick={setCloseModal(true)} 
-    //             className="btn btn-primary mx-auto mt-4">Create</button>
-
-
-    //         </MaterialModal>
-    //     );
-    // }
 
     const methods = [
         {
@@ -72,7 +55,7 @@ const AddExamQuestions = () => {
             function: selectQuestionFromQBank
         }
         ,
-        {
+        setselctedGroupName && {
             displayName: 'Create a new group',
             function: goCreateNewGroup
         }
@@ -84,10 +67,6 @@ const AddExamQuestions = () => {
     const examOldQuestions = examOldData?.questions || []
     const [examId, setExamId] = useState(null)
 
-
-
-
-
     useEffect(() => {
         const match = matchPath(history.location.pathname, {
             path: '/exams/:examId/add-questions'
@@ -95,7 +74,6 @@ const AddExamQuestions = () => {
         console.log(match.params.examId)
         setExamId(match.params.examId)
     }, [history.location.pathname])
-
 
 
     /** Get Questions of this exam */
@@ -114,7 +92,7 @@ const AddExamQuestions = () => {
         let submittedQuestions = [...questions]
         submittedQuestions = submittedQuestions.map(item => { return { question_id: item.id } })
         let request = !isEditMode ? ExamServices.addQuestionsToExam(examId, submittedQuestions) : ExamServices.editQuestionsOfExam(examId, submittedQuestions)
-        
+
         request
             .then(res => {
                 history.push('/exams')
@@ -133,8 +111,34 @@ const AddExamQuestions = () => {
     }
 
 
+    // QUESTION GROUP STUFF
+    const savedQroupQuestions = useSelector(state => state?.exam?.examGroups)
+    useEffect(() => {
+        console.log("GROUPS", savedQroupQuestions)
+    }, [])
 
+    const [showGroupCreationForm, setShowGroupCreationForm] = useState(false)
+    const createGroupQuestion = (values) => {
+        let group = {
+            groupName: values?.groupName,
+            questions: []
+        }
+        dispatch(addNewGroup(group))
+        setShowGroupCreationForm(false)
+    }
+    const cancelGroupCreation = () => {
+        setShowGroupCreationForm(false)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
 
+    const showGroupQuestionMenu = (e, selectedName) => {
+        AddQuestionHandler(e)
+        setselctedGroupName(selectedName)
+    }
+    const hideGroupQuestionMenu = (ss) => {
+        setAnchorEl(ss)
+        setselctedGroupName(null)
+    }
     // Main Component
     return (
         <div className="row justify-content-center text-center my-5">
@@ -160,14 +164,52 @@ const AddExamQuestions = () => {
                             }
                         </div>
 
-                        
+                        <AddationMethodsMenu methods={methods} anchorEl={anchorEl} setAnchorEl={hideGroupQuestionMenu} />
+                        <div>
+                            {
+                                savedQroupQuestions?.map(question =>
+                                    <div className='position-relative'>
+                                        <button onClick={(e) => showGroupQuestionMenu(e, question?.groupName)} className='btn btn-success position-absolute p-0 rounded-circle' style={{ top: -20, zIndex: 20, right: -10, width: 44, height: 44 }}>
+                                            <PlusCircleOutlined className='primaryColoredIcon' style={{ color: '#fff', transform: 'scale(0.8)' }} />
+                                        </button>
+                                        <BorderdGroupQuestion
+                                            questionTitle={question?.groupName}
+                                            questionsMarkup={
+                                                question?.questions?.map(subQuestion => (
+                                                    <BorderdQuestionController
+                                                        key={subQuestion?.id}
+                                                        id={subQuestion?.id}
+                                                        questionTitle={subQuestion?.questionText}
+                                                    />
+                                                ))
+                                            }
+                                        />
+                                    </div>
+                                )
+                            }
+                        </div>
+
+                        <div id="scrollElementToGroupCreationForm" />
+                        {showGroupCreationForm ?
+                            <div>
+                                <BorderdGroupQuestion
+                                    isCreationMode={true}
+                                    cancelCreationFunction={cancelGroupCreation}
+                                    getCreationData={createGroupQuestion}
+                                />
+                            </div>
+                            :
+                            null
+                        }
+
+
                         <div>
                             <button onClick={submitExamHandler} className="btn btn-primary mx-auto mt-4">Submit</button>
                         </div>
                     </div>
                 </CardComponent>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 

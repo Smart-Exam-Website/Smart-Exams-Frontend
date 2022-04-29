@@ -43,11 +43,15 @@ const AddQuestionScreen = () => {
 
     const [questionTypes, setQuestionTypes] = useState(null);
     const getQuestionTypes = () => {
-        setQuestionTypes([
-            { id: '123', value: QuestionTypes.MCQ },
-            { id: '111', value: QuestionTypes.ESSAY },
-            { id: '122', value: QuestionTypes.FORMULA }
-        ])
+        let typesObject = QuestionTypes
+        let typeList = []
+        Object.keys(typesObject).forEach(key => {
+            if (QuestionTypes[key] === QuestionTypes.GROUP)
+                return;
+
+            typeList.push({ id: key, value: typesObject[key] })
+        })
+        setQuestionTypes(typeList)
     }
     useEffect(() => {
         getQuestionTypes();
@@ -84,15 +88,7 @@ const AddQuestionScreen = () => {
                 let isFromGroup = location?.state?.isFromGroup
                 let groupName = location?.state?.groupName
 
-                // Add normal question
-                if (isFromExamCreation) {
-                    dispatch(saveAQuestion([{ questionText: res?.questionText, id: res?.id }], ''))
-                }
-
-                // Add question at a group
-                if (isFromGroup) {
-                    dispatch(saveAQuestion([{ questionText: res?.questionText, id: res?.id }], groupName))
-                }
+                dispatch(saveAQuestion([{ questionText: res?.questionText, id: res?.id }], groupName))
 
                 showSuccessMsg("Request done successfully")
                 history.goBack()
