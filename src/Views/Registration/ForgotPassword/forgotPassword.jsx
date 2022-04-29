@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import _axios from '../../../apis/axios-instance';
 import { connect } from 'react-redux';
-import * as actionTypes from "../../../redux/actions/actionTypes"
-
+import { actionTypes } from '../../../redux/actionTypes';
 const Forgotpassword = (props) => {
     const [email, setEmail] = useState(null)
 

@@ -7,11 +7,16 @@ import { matchPath, useHistory } from 'react-router-dom'
 import { useLocation } from 'react-router-dom/cjs/react-router-dom.min'
 import { ExamServices } from '../../../../apis/Services/ExamService'
 import CardComponent from '../../../../Components/CardComponent/CardComponent'
+import MaterialModal from '../../../../Components/MaterialModal/MaterialModal'
 import AddationMethodsMenu from '../../../../Components/QuestionComponents/AddationMethodsMenu'
 import BorderdQuestionController from '../../../../Components/QuestionComponents/BorderdQuestionController'
 import HandleErrors from '../../../../hooks/handleErrors'
 import showSuccessMsg from '../../../../hooks/showSuccessMsg'
+import { showAlert } from '../../../../redux/actions/AppActions'
 import { removeAllSavedQuestions, removeSavedQuestionFromExam } from '../../../../redux/actions/ExamAction'
+
+import { TextField } from '@mui/material'
+
 
 const AddExamQuestions = () => {
     const history = useHistory()
@@ -19,6 +24,11 @@ const AddExamQuestions = () => {
     const dispatch = useDispatch()
 
     const [anchorEl, setAnchorEl] = useState(null);
+    const [groupName, setGroupName] = useState('');
+    
+
+
+
     const AddQuestionHandler = (event) => {
         setAnchorEl(event.currentTarget)
     }
@@ -29,14 +39,42 @@ const AddExamQuestions = () => {
     const selectQuestionFromQBank = () => {
         history.push('/questions', { canSelectQuestionsForExam: true })
     }
+    const goCreateNewGroup = () => {
+
+
+        history.push('/questions/add-group', { canSelectQuestionsForExam: true })
+    }
+
+    
+    // const confirmCreateNewGroup = () => {
+    //     return (
+    //         <MaterialModal title={"Please add group name"} close={closeModal}>
+    //             <TextField fullWidth onChange={(e) => { setGroupName(e.target.value) }} id="outlined-basic" label="Group Name" variant="outlined" />
+
+    //             <button 
+    //             disabled={groupName === ''} 
+    //             onClick={setCloseModal(true)} 
+    //             className="btn btn-primary mx-auto mt-4">Create</button>
+
+
+    //         </MaterialModal>
+    //     );
+    // }
+
     const methods = [
         {
-            displayName: 'Create new question',
+            displayName: 'Create a new question',
             function: goCreateNewQuestion
-        },
+        }
+        ,
         {
-            displayName: 'Select from quesiton bank',
+            displayName: 'Select from question bank',
             function: selectQuestionFromQBank
+        }
+        ,
+        {
+            displayName: 'Create a new group',
+            function: goCreateNewGroup
         }
     ]
 
@@ -44,8 +82,12 @@ const AddExamQuestions = () => {
     const isEditMode = Boolean(location.state?.exam)
     const examOldData = location.state?.exam
     const examOldQuestions = examOldData?.questions || []
-
     const [examId, setExamId] = useState(null)
+
+
+
+
+
     useEffect(() => {
         const match = matchPath(history.location.pathname, {
             path: '/exams/:examId/add-questions'
@@ -53,6 +95,8 @@ const AddExamQuestions = () => {
         console.log(match.params.examId)
         setExamId(match.params.examId)
     }, [history.location.pathname])
+
+
 
     /** Get Questions of this exam */
     const [questions, setQuestions] = useState(null);
@@ -86,6 +130,10 @@ const AddExamQuestions = () => {
         })
     }
 
+
+
+
+    // Main Component
     return (
         <div className="row justify-content-center text-center my-5">
             <div className="col-md-8 col-12">
@@ -110,6 +158,7 @@ const AddExamQuestions = () => {
                             }
                         </div>
 
+                        
                         <div>
                             <button onClick={submitExamHandler} className="btn btn-primary mx-auto mt-4">Submit</button>
                         </div>

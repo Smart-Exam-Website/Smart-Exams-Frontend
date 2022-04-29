@@ -1,3 +1,5 @@
+import { actionTypes } from "../actionTypes";
+
 const initStates = {
     errorMsg: null,
     successMsg: null,
@@ -6,23 +8,23 @@ const initStates = {
 
 const AppReducer = (state = initStates, action) => {
     switch (action.type) {
-        case 'SHOW_ERROR':
+        case actionTypes.SHOW_ERROR:
             console.log(action.payload)
             return {
                 ...state,
                 errorMsg: action.payload,
             };
-        case 'SHOW_SUCCESS':
+        case actionTypes.SHOW_SUCCESS:
             return {
                 ...state,
                 successMsg: action.payload
             };
-        case 'SHOW_ALERT':
+        case actionTypes.SHOW_ALERT:
             return {
                 ...state,
                 alertObject: action.payload
             };
-        case 'HIDE_ALERT':
+        case actionTypes.HIDE_ALERT:
             return {
                 ...state,
                 alertObject: null

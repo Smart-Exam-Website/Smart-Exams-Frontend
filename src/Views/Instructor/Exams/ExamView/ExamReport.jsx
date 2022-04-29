@@ -11,6 +11,8 @@ import { CheatActions } from '../../../../constants/CheatActions';
 import useImageResolver from '../../../../hooks/useImageResolver';
 import { CheatTypes } from '../../../../constants/CheatTypes';
 import HandleErrors from '../../../../hooks/handleErrors';
+
+
 const ExamReport = () => {
     const [cheaters, setCheaters] = useState([]);
     const [decrementDegree, setDecrementDegree] = useState(0);
@@ -22,7 +24,9 @@ const ExamReport = () => {
 
         CheatServices.getCheaters(params?.examId)
             .then((response) => {
-                setCheaters(response.details)
+                console.log("response")
+                console.log(response)
+                setCheaters(response?.details)
 
             }).catch((error) => {
                 HandleErrors(error)
@@ -80,18 +84,35 @@ const ExamReport = () => {
     }
 
     let imageResolver = useImageResolver()
-    return (
-        <div>
-            <Typography className='m-3 font-weight-bold' variant='h5' sx={{ fontWeight: 'bold' }}>
-                Suspicious Cheaters
-            </Typography>
-            <hr />
 
-            {cheaters?.map((cheater_details) => {
+
+
+    // let Cheaters = cheaters.map((cheater, index) => {
+
+    let CheatersMarkup = () => {
+
+
+
+        const uniqueCheaters = [...new Map(cheaters.map(item => [item['student_id'], item])).values()];
+
+        uniqueCheaters.forEach(unique_cheater => {
+            let typeCounter = 0;
+            cheaters.forEach(c => {
+                if (c?.type === unique_cheater?.type) {
+                    typeCounter++;
+                }
+
+            });
+            unique_cheater['typeCounter'] = typeCounter;
+        });
+
+
+        return (
+            uniqueCheaters?.map((cheater_details) => {
                 return (
                     <Card className='shadow p-3 mb-5 bg-white rounded position-relative' sx={{ minWidth: 275 }}>
 
-
+                        {/* <Stack spacing={2}/> */}
                         <div className="d-flex col-8 justify-content-start">
                             <div>
                                 <img
@@ -110,11 +131,12 @@ const ExamReport = () => {
                                     Name: {cheater_details?.studentName}
                                 </Typography>
                                 <Typography className='m-3 font-weight-bold' variant='h5' sx={{ fontWeight: 'bold' }}>
-                                    Type: {cheater_details?.type}
+                                    Type: {cheater_details?.type} {cheater_details?.type === CheatTypes.SWITCH_BROWSER ? '(' + cheater_details?.typeCounter + ' times)' : ''}
                                 </Typography>
                                 <Typography className='m-3 font-weight-bold' variant='h5' sx={{ fontWeight: 'bold' }}>
-                                    Original Profile Photo
+                                    {cheater_details?.type !== CheatTypes.SWITCH_BROWSER ? 'Original Profile Photo ' : ''}
                                 </Typography>
+
 
                             </div>
 
@@ -184,7 +206,22 @@ const ExamReport = () => {
                     </Card >
 
                 );
-            })}
+            })
+        );
+    }
+
+
+    return (
+        <div>
+            <Typography className='m-3 font-weight-bold' variant='h5' sx={{ fontWeight: 'bold' }}>
+                Suspicious Cheaters
+            </Typography>
+            <hr />
+
+            {
+
+                CheatersMarkup()
+            }
 
 
 

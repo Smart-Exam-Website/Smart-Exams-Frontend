@@ -28,6 +28,9 @@ const AddQuestionScreen = () => {
 
     /** get question details */
     const [oldQuestionDetails, setOldQuestionDetails] = useState(null)
+
+
+
     useEffect(() => {
         if (!oldQuestion?.id) return
         QuestionServices.getQuestionDetails(oldQuestion?.id)
@@ -77,9 +80,19 @@ const AddQuestionScreen = () => {
                 console.log("Question request", res)
 
                 let isFromExamCreation = location?.state?.fromExamCreation
+                let isFromGroup = location?.state?.isFromGroup
+                let groupName = location?.state?.groupName
+
+                // Add normal question
                 if (isFromExamCreation) {
-                    dispatch(saveAQuestion([{ questionText: res?.questionText, id: res?.id }]))
+                    dispatch(saveAQuestion([{ questionText: res?.questionText, id: res?.id }], ''))
                 }
+
+                // Add question at a group
+                if (isFromGroup) {
+                    dispatch(saveAQuestion([{ questionText: res?.questionText, id: res?.id }], groupName))
+                }
+
                 showSuccessMsg("Request done successfully")
                 history.goBack()
             })
