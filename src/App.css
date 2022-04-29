@@ -26,3 +26,6 @@
 .disablePointer{
     cursor: not-allowed !important;
 }
+.pointer{
+    cursor: pointer;
+}

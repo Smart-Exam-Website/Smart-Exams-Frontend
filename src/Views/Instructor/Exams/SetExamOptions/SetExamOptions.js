@@ -54,7 +54,7 @@ const SetExamOptions = () => {
     return (
         <div className="row justify-content-center text-center my-5">
             <div className="col-md-8 col-12">
-                <CardComponent title={!isEditMode ? 'Create Exam' : 'Edit Exam'}>
+                <CardComponent title={!isEditMode ? 'Create Exam: options' : 'Edit Exam: options'}>
                     <Formik
                         initialValues={{
                             faceRecognition: oldExamConfig ? Boolean(oldExamConfig?.faceRecognition) : false,

@@ -77,6 +77,16 @@ export class ExamServices {
     }
 
     /**
+     * Edit questions to the exam by id
+     * @param {number} examId 
+     * @param {Array.<{question_id:number}>} questions Array of objects contain question ids
+     * @returns {Promise<{message}>}
+     */
+     static editQuestionsOfExam(examId, questions) {
+        return _axios.put(`/exams/${examId}/step3`, { questions });
+    }
+
+    /**
      * Add questions to the exam by id
      * @param {number} examId 
      * @param {Array.<{id:number, mark:number, duration:string}>} questions Array of objects contain question ids

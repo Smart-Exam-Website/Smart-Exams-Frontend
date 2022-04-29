@@ -1,6 +1,8 @@
 export const QuestionTypes = {
     ESSAY: "essay",
-    MCQ : "mcq"
+    MCQ: "mcq",
+    FORMULA: "formula",
+    GROUP: "group"
 }
 
 

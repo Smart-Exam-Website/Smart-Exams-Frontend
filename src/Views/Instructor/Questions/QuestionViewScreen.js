@@ -6,6 +6,7 @@ import McqAnswer from '../../../Components/AnsweredQuestion/McqAnswer';
 import EssayAnswer from '../../../Components/AnsweredQuestion/EssayAnswer';
 import HandleErrors from '../../../hooks/handleErrors';
 import { QuestionTypes } from '../../../constants/QuestionTypes';
+import FormulaAnswer from '../../../Components/AnsweredQuestion/FormulaAnswer';
 
 const QuestionViewScreen = () => {
     const { questionId } = useParams()
@@ -23,27 +24,25 @@ const QuestionViewScreen = () => {
 
     let QuestionMarkup = () => {
         if (question?.type === QuestionTypes.ESSAY) {
-
             return (
-                <EssayAnswer questionText={question?.questionText} correctAnswer={question?.question_option[0].option} />
+                <EssayAnswer questionText={question?.questionText} correctAnswer={question?.options[0]} />
             )
         }
         else if (question?.type === QuestionTypes.MCQ) {
-            console.log("ana 3mad y3m")
-            return (question?.mcq &&
-                <McqAnswer questionText={question?.questionText} choices={question?.mcq.mcq_answers} />
+            return (
+                <McqAnswer questionText={question?.questionText} choices={question?.options} />
+            )
+        }
+        else if (question?.type === QuestionTypes.FORMULA) {
+            return (
+                <FormulaAnswer formula_questions={question?.formula_questions} />
             )
         }
 
     }
     return <div className="row justify-content-center my-5">
         <div className="col-md-8 col-12">
-
             {QuestionMarkup()}
-
-            {/* {question?.mcq &&
-                <McqAnswer questionText={question?.questionText} choices={question?.mcq.mcq_answers} />
-            } */}
         </div>
     </div>
 };
