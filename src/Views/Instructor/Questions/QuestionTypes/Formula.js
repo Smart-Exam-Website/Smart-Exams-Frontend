@@ -25,6 +25,8 @@ const Formula = ({ initValues, getQuestionCreationRequest = () => { } }) => {
         numberOfQuestions: yup.number().required().max(50).min(1),
     });
 
+    const isEditMode = Boolean(initValues)
+
     const getRandomValue = useRandomValue();
     const [questionFormValue, setQuestionFormValue] = useState(null)
     const submitQuestionHandler = (values) => {
@@ -62,7 +64,7 @@ const Formula = ({ initValues, getQuestionCreationRequest = () => { } }) => {
     const [questionText, setQuestionText] = useState('')
 
     /** Creating tokens */
-    useEffect(() => {
+    const generateVars = () => {
         let tokenList = [...questionText?.matchAll(VAR_REGEX)]
         tokenList = tokenList?.map(item => item[0])
         tokenList = tokenList?.map(item => {
@@ -72,14 +74,41 @@ const Formula = ({ initValues, getQuestionCreationRequest = () => { } }) => {
         })
         const uniqueTokens = Array.from(new Set(tokenList))
         setUniqueTokensList(uniqueTokens)
+    }
+    useEffect(() => {
+        generateVars()
     }, [questionText])
 
     /** ONLY trigger unique tokens list changes  */
+    const [oldVarList, setOldVarList] = useState(null)
+
     useEffect(() => {
         let editedList = uniqueTokensList?.map(item => { return [item, '', ''] })
+        if (oldVarList) {
+            let varObject = {};
+            oldVarList.forEach(element => {
+                varObject[element[0]] = [element[1], element[2]]
+            });
+            editedList.forEach(element => {
+                if (varObject?.[element[0]]) {
+                    element[1] = varObject?.[element[0]][0]
+                    element[2] = varObject?.[element[0]][1]
+                }
+            })
+        }
         setVars(editedList)
+        setOldVarList(editedList)
         setGeneratedQuestions(null)
     }, [uniqueTokensList])
+
+    /** Trigger when get an init value */
+    useEffect(() => {
+        if (!initValues) return
+        setQuestionText(initValues?.questionText)
+
+        let initVarList = initValues?.variables?.map(item => [item['variable'], item['startVal'], item['endVal']])
+        setOldVarList(initVarList)
+    }, [initValues])
 
     const onChangeMin = (value, index) => {
         setVars(prevState => {
@@ -116,7 +145,14 @@ const Formula = ({ initValues, getQuestionCreationRequest = () => { } }) => {
             variables: vars,
             formulas: generatedFormulas
         })
-        getQuestionCreationRequest(creationRequest)
+
+        let editRequest = QuestionServices.editFormulaQuestion(initValues?.id, {
+            questionText: questionFormValue?.questionText,
+            formula: questionFormValue?.formula,
+            variables: vars,
+            formulas: generatedFormulas
+        })
+        getQuestionCreationRequest(isEditMode ? editRequest : creationRequest)
     }
 
     return (
@@ -125,8 +161,8 @@ const Formula = ({ initValues, getQuestionCreationRequest = () => { } }) => {
                 initialValues={{
                     questionText: initValues?.questionText || '',
                     correctAnswer: initValues?.correctAnswer || '',
-                    formula: initValues?.formula || '',
-                    numberOfQuestions: initValues?.numberOfQuestions || ''
+                    formula: initValues?.formula?.formula || '',
+                    numberOfQuestions: initValues?.formula_questions?.length || ''
                 }}
                 enableReinitialize={true}
                 validationSchema={EssaySchema}
@@ -251,7 +287,9 @@ const Formula = ({ initValues, getQuestionCreationRequest = () => { } }) => {
                     </form>
                 )}
             </Formik>
-            <button onClick={createQuestion} className="btn btn-primary mx-auto mt-4" type="button">ADD</button>
+            <button disabled={!generatedQuestions} onClick={createQuestion} className="btn btn-primary mx-auto mt-4" type="button">
+                {!isEditMode ? 'ADD' : 'Edit'}
+            </button>
         </>
     )
 
