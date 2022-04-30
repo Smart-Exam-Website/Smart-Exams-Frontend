@@ -114,8 +114,10 @@ const AddExamQuestions = () => {
     const removeQuestionFromListHandler = (id) => {
         dispatch(removeSavedQuestionFromExam(id))
         setQuestions(prevState => {
-            console.log(prevState, id)
-            return prevState.filter(item => item.id !== id)
+            return prevState?.filter(item => item.id !== id)
+        })
+        setGroupQuestions(prevState => {
+            return prevState?.filter(item => item.id !== id)
         })
     }
 
@@ -124,7 +126,7 @@ const AddExamQuestions = () => {
     const [groupQuestions, setGroupQuestions] = useState(null);
     const savedQroupQuestions = useSelector(state => state?.exam?.examGroups)
     useEffect(() => {
-        console.log("examOldQuestions:",examOldQuestions)
+        console.log("examOldQuestions:", examOldQuestions)
         console.log("GROUPS", savedQroupQuestions)
     }, [])
 
@@ -191,6 +193,7 @@ const AddExamQuestions = () => {
                                         </button>
                                         <BorderdGroupQuestion
                                             questionTitle={question?.groupName}
+                                            deleteFunction={() => removeQuestionFromListHandler(question?.id)}
                                             questionsMarkup={
                                                 question?.questions?.map(subQuestion => (
                                                     <BorderdQuestionController

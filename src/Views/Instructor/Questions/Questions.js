@@ -80,7 +80,8 @@ const Questions = () => {
             .catch(err => HandleErrors(err))
     }
     useEffect(() => {
-        getAllQuestions();
+        //Commented as it get from filter useeffect initially
+        //getAllQuestions();
     }, [])
 
     const GoToQuestionDetailsHandler = (questionId) => {
