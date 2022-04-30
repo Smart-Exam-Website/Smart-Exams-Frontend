@@ -72,7 +72,7 @@ const AddExamQuestions = () => {
     /** Stuff for editing mode */
     const isEditMode = Boolean(location.state?.exam)
     const examOldData = location.state?.exam
-    const examOldQuestions = examOldData?.questions || []
+    const [examOldQuestions, setExamOldQuestions] = useState(null)
     const [examId, setExamId] = useState(null)
 
     useEffect(() => {
@@ -82,6 +82,18 @@ const AddExamQuestions = () => {
         console.log(match.params.examId)
         setExamId(match.params.examId)
     }, [history.location.pathname])
+
+    /** Get Old Exam Questions */
+    useEffect(() => {
+        if (!examId) return;
+
+        ExamServices.getExamQuestions(examId)
+            .then(res => {
+                setExamOldQuestions(res?.questions)
+            })
+            .catch(err => HandleErrors(err))
+    }, [examId])
+
 
 
     /** Get Questions of this exam */
@@ -93,9 +105,10 @@ const AddExamQuestions = () => {
         setQuestions([...oldQuestionsOtherThanGroupQuestions, ...savedQuestions])
     }
     useEffect(() => {
+        if (!examOldQuestions) return
         getQuestions();
         // eslint-disable-next-line
-    }, []);
+    }, [examOldQuestions]);
 
 
     const submitExamHandler = () => {
@@ -129,12 +142,11 @@ const AddExamQuestions = () => {
     const [groupQuestions, setGroupQuestions] = useState(null);
     const savedQroupQuestions = useSelector(state => state?.exam?.examGroups)
     useEffect(() => {
+        if (!examOldQuestions) return
+
         let oldGroupQuestionsOnly = examOldQuestions?.filter(item => (item?.type === QuestionTypes.GROUP))
-        console.log("examOldQuestions:", oldGroupQuestionsOnly)
-        console.log("GROUPS", savedQroupQuestions)
-        console.log([...oldGroupQuestionsOnly, ...savedQroupQuestions])
         setGroupQuestions([...oldGroupQuestionsOnly, ...savedQroupQuestions])
-    }, [])
+    }, [examOldQuestions])
 
     const [showGroupCreationForm, setShowGroupCreationForm] = useState(false)
     const createGroupQuestion = (values) => {

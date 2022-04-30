@@ -172,6 +172,7 @@ const Questions = () => {
                     })
                 })
                 .then(res => {
+                    console.log("Edites Question:::=>>",res)
                     dispatch(saveAQuestion(selectedQuestions, selectedGroupQuestionId))
                     history.goBack()
                 })
