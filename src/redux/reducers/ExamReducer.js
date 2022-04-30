@@ -39,7 +39,7 @@ const ExamReducer = (state = initStates, action) => {
                 // currentGroup['questions'] = [...currentGroup['questions'], ...action.payload]
 
                 newGroupQuestions.forEach(group => {
-                    if (group.groupName === action.groupName) {
+                    if (group.id === action.groupId) {
                         group['questions'] = [...group['questions'], ...action.payload]
                     }
                 })

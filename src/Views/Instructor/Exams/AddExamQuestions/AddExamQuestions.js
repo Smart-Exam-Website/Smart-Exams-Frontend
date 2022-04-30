@@ -17,6 +17,7 @@ import { addNewGroup, removeAllSavedQuestions, removeSavedQuestionFromExam } fro
 
 import { TextField } from '@mui/material'
 import BorderdGroupQuestion from '../../../../Components/QuestionComponents/BorderdGroupQuestion'
+import { QuestionServices } from '../../../../apis/Services/QuestionService'
 
 
 const AddExamQuestions = () => {
@@ -25,26 +26,28 @@ const AddExamQuestions = () => {
     const dispatch = useDispatch()
 
     const [anchorEl, setAnchorEl] = useState(null);
-    const [selctedGroupName, setselctedGroupName] = useState(null);
+    const [groupQuestionAnchorEl, setGroupQuestionAnchorEl] = useState(null);
+    const [selctedGroupId, setselctedGroupId] = useState(null);
 
     const AddQuestionHandler = (event) => {
         setAnchorEl(event.currentTarget)
     }
 
     const goCreateNewQuestion = () => {
-        history.push('/questions/add', { fromExamCreation: true, isFromGroup: Boolean(selctedGroupName), groupName: selctedGroupName })
+        history.push('/questions/add', { fromExamCreation: true, isFromGroup: Boolean(selctedGroupId), groupId: selctedGroupId })
     }
     const selectQuestionFromQBank = () => {
-        history.push('/questions', { canSelectQuestionsForExam: true, isFromGroup: Boolean(selctedGroupName), groupName: selctedGroupName })
+        history.push('/questions', { canSelectQuestionsForExam: true, isFromGroup: Boolean(selctedGroupId), groupId: selctedGroupId })
     }
     const goCreateNewGroup = () => {
         setShowGroupCreationForm(true)
+
+        // Delay to give chance to be a static content to not distribute the scrolling
         setTimeout(() => {
             document.getElementById('scrollElementToGroupCreationForm').scrollIntoView({ behavior: 'smooth', block: 'center' })
         }, 100);
     }
-
-    const methods = [
+    const groupMethods = [
         {
             displayName: 'Create a new question',
             function: goCreateNewQuestion
@@ -54,12 +57,16 @@ const AddExamQuestions = () => {
             displayName: 'Select from question bank',
             function: selectQuestionFromQBank
         }
+    ]
+    const methods = [
+        ...groupMethods,
         ,
-        setselctedGroupName && {
+        {
             displayName: 'Create a new group',
             function: goCreateNewGroup
         }
     ]
+
 
     /** Stuff for editing mode */
     const isEditMode = Boolean(location.state?.exam)
@@ -90,7 +97,9 @@ const AddExamQuestions = () => {
 
     const submitExamHandler = () => {
         let submittedQuestions = [...questions]
-        submittedQuestions = submittedQuestions.map(item => { return { question_id: item.id } })
+        submittedQuestions = submittedQuestions?.map(item => { return { question_id: item.id } })
+        let qroupQuestionsId = savedQroupQuestions?.map(item => { return { question_id: item.id } })
+        submittedQuestions = [...(submittedQuestions || []), ...(qroupQuestionsId || [])]
         let request = !isEditMode ? ExamServices.addQuestionsToExam(examId, submittedQuestions) : ExamServices.editQuestionsOfExam(examId, submittedQuestions)
 
         request
@@ -112,33 +121,41 @@ const AddExamQuestions = () => {
 
 
     // QUESTION GROUP STUFF
+    const [groupQuestions, setGroupQuestions] = useState(null);
     const savedQroupQuestions = useSelector(state => state?.exam?.examGroups)
     useEffect(() => {
+        console.log("examOldQuestions:",examOldQuestions)
         console.log("GROUPS", savedQroupQuestions)
     }, [])
 
     const [showGroupCreationForm, setShowGroupCreationForm] = useState(false)
     const createGroupQuestion = (values) => {
-        let group = {
-            groupName: values?.groupName,
-            questions: []
-        }
-        dispatch(addNewGroup(group))
-        setShowGroupCreationForm(false)
+        QuestionServices.createGroupQuestion({ questionText: values?.groupName })
+            .then(res => {
+                console.log("QUESTION RES", res)
+                let group = {
+                    id: res.id,
+                    groupName: values?.groupName,
+                    questions: []
+                }
+                dispatch(addNewGroup(group))
+                setShowGroupCreationForm(false)
+            })
+            .catch(err => HandleErrors(err))
     }
     const cancelGroupCreation = () => {
         setShowGroupCreationForm(false)
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
+    const showGroupQuestionMenu = (e, selectedgroupId) => {
+        setGroupQuestionAnchorEl(e.currentTarget)
+        setselctedGroupId(selectedgroupId)
+    }
+    const hideGroupQuestionMenu = () => {
+        setGroupQuestionAnchorEl(null)
+        setselctedGroupId(null)
+    }
 
-    const showGroupQuestionMenu = (e, selectedName) => {
-        AddQuestionHandler(e)
-        setselctedGroupName(selectedName)
-    }
-    const hideGroupQuestionMenu = (ss) => {
-        setAnchorEl(ss)
-        setselctedGroupName(null)
-    }
     // Main Component
     return (
         <div className="row justify-content-center text-center my-5">
@@ -164,12 +181,12 @@ const AddExamQuestions = () => {
                             }
                         </div>
 
-                        <AddationMethodsMenu methods={methods} anchorEl={anchorEl} setAnchorEl={hideGroupQuestionMenu} />
+                        <AddationMethodsMenu methods={groupMethods} anchorEl={groupQuestionAnchorEl} setAnchorEl={hideGroupQuestionMenu} />
                         <div>
                             {
                                 savedQroupQuestions?.map(question =>
-                                    <div className='position-relative'>
-                                        <button onClick={(e) => showGroupQuestionMenu(e, question?.groupName)} className='btn btn-success position-absolute p-0 rounded-circle' style={{ top: -20, zIndex: 20, right: -10, width: 44, height: 44 }}>
+                                    <div key={question.id} className='position-relative'>
+                                        <button onClick={(e) => showGroupQuestionMenu(e, question?.id)} className='btn btn-success position-absolute p-0 rounded-circle' style={{ top: -20, zIndex: 20, right: -10, width: 44, height: 44 }}>
                                             <PlusCircleOutlined className='primaryColoredIcon' style={{ color: '#fff', transform: 'scale(0.8)' }} />
                                         </button>
                                         <BorderdGroupQuestion

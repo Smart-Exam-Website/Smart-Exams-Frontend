@@ -112,7 +112,7 @@ export class QuestionServices {
      * @returns {Promise<any>}
      */
     static editGroupQuestion(id, question) {
-        return _axios.post(`/questions/question-group/${id}`, { type: QuestionTypes.GROUP, ...question });
+        return _axios.put(`/questions/question-group/${id}`, { type: QuestionTypes.GROUP, ...question });
     }
 
 

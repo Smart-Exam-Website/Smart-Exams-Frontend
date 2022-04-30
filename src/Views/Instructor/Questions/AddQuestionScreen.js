@@ -86,9 +86,9 @@ const AddQuestionScreen = () => {
 
                 let isFromExamCreation = location?.state?.fromExamCreation
                 let isFromGroup = location?.state?.isFromGroup
-                let groupName = location?.state?.groupName
+                let groupId = location?.state?.groupId
 
-                dispatch(saveAQuestion([{ questionText: res?.questionText, id: res?.id }], groupName))
+                dispatch(saveAQuestion([{ questionText: res?.questionText, id: res?.id }], groupId))
 
                 showSuccessMsg("Request done successfully")
                 history.goBack()

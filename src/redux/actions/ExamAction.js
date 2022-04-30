@@ -5,16 +5,16 @@ import { actionTypes } from "../actionTypes"
  * @param {Array.<{questionText:string, id:string}>} questionData 
  * @returns 
  */
-export const saveAQuestion = (questionData, groupName='') => {
+export const saveAQuestion = (questionData, groupId='') => {
 
     console.log("Question data from Action: ", questionData)
-    if (groupName) {
+    if (groupId) {
         // then the questtion belongs to a group
         return {
 
             type: actionTypes.ADD_GROUP_QUESTION,
             payload: questionData,
-            groupName: groupName
+            groupId: groupId
 
         }
     }

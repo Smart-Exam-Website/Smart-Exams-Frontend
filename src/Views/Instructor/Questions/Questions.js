@@ -156,11 +156,30 @@ const Questions = () => {
             return newQuestions.map(item => { return { ...item, isSelected: false } })
         })
     }
-    const selectedGroupQuestionName = location.state?.groupName
+    const selectedGroupQuestionId = location.state?.groupId
     const sentSelectedQuestionHandler = () => {
-        console.log("testttt",selectedGroupQuestionName)
-        dispatch(saveAQuestion(selectedQuestions, selectedGroupQuestionName))
-        history.goBack()
+        console.log("testttt", selectedGroupQuestionId)
+        if (selectedGroupQuestionId) {
+            QuestionServices.getQuestionDetails(selectedGroupQuestionId)
+                .then(res => {
+                    let returnedQuestion = res?.question
+                    let groupReturnedQuestions = res?.question?.questions
+                    console.log(returnedQuestion)
+                    return QuestionServices.editGroupQuestion(selectedGroupQuestionId, {
+                        questionText: returnedQuestion?.questionText,
+                        questions: [...groupReturnedQuestions?.map(item => item.id), ...selectedQuestions?.map(item => item.id)]
+                    })
+                })
+                .then(res => {
+                    dispatch(saveAQuestion(selectedQuestions, selectedGroupQuestionId))
+                    history.goBack()
+                })
+                .catch(err => HandleErrors(err))
+        }
+        else {
+            dispatch(saveAQuestion(selectedQuestions, null))
+            history.goBack()
+        }
     }
 
 
