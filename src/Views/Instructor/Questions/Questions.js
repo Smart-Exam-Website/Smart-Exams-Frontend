@@ -21,7 +21,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import showSuccessMsg from '../../../hooks/showSuccessMsg';
 import { useDispatch } from 'react-redux';
 import { hideAlert, showAlert } from '../../../redux/actions/AppActions';
-import { saveAQuestion } from '../../../redux/actions/ExamAction';
+import { addNewGroup, saveAQuestion } from '../../../redux/actions/ExamAction';
 import NoContentComponent from '../../../Components/NoContentComponent/NoContentComponent';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -178,7 +178,10 @@ const Questions = () => {
                 .catch(err => HandleErrors(err))
         }
         else {
-            dispatch(saveAQuestion(selectedQuestions, null))
+            let normalQuestions = selectedQuestions?.filter(item=>item.type!==QuestionTypes.GROUP)
+            let groupQuestions = selectedQuestions?.filter(item=>item.type===QuestionTypes.GROUP)
+            dispatch(addNewGroup(groupQuestions))
+            dispatch(saveAQuestion(normalQuestions, null))
             history.goBack()
         }
     }

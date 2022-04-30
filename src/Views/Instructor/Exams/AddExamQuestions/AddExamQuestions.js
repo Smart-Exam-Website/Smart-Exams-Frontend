@@ -18,6 +18,7 @@ import { addNewGroup, removeAllSavedQuestions, removeSavedQuestionFromExam } fro
 import { TextField } from '@mui/material'
 import BorderdGroupQuestion from '../../../../Components/QuestionComponents/BorderdGroupQuestion'
 import { QuestionServices } from '../../../../apis/Services/QuestionService'
+import { QuestionTypes } from '../../../../constants/QuestionTypes'
 
 
 const AddExamQuestions = () => {
@@ -87,7 +88,9 @@ const AddExamQuestions = () => {
     const [questions, setQuestions] = useState(null);
     const savedQuestions = useSelector(state => state?.exam?.examQuestions)
     const getQuestions = () => {
-        setQuestions([...examOldQuestions, ...savedQuestions])
+        console.log(examOldQuestions)
+        let oldQuestionsOtherThanGroupQuestions = examOldQuestions?.filter(item => (item.type !== QuestionTypes.GROUP))
+        setQuestions([...oldQuestionsOtherThanGroupQuestions, ...savedQuestions])
     }
     useEffect(() => {
         getQuestions();
@@ -98,7 +101,7 @@ const AddExamQuestions = () => {
     const submitExamHandler = () => {
         let submittedQuestions = [...questions]
         submittedQuestions = submittedQuestions?.map(item => { return { question_id: item.id } })
-        let qroupQuestionsId = savedQroupQuestions?.map(item => { return { question_id: item.id } })
+        let qroupQuestionsId = groupQuestions?.map(item => { return { question_id: item.id } })
         submittedQuestions = [...(submittedQuestions || []), ...(qroupQuestionsId || [])]
         let request = !isEditMode ? ExamServices.addQuestionsToExam(examId, submittedQuestions) : ExamServices.editQuestionsOfExam(examId, submittedQuestions)
 
@@ -126,8 +129,11 @@ const AddExamQuestions = () => {
     const [groupQuestions, setGroupQuestions] = useState(null);
     const savedQroupQuestions = useSelector(state => state?.exam?.examGroups)
     useEffect(() => {
-        console.log("examOldQuestions:", examOldQuestions)
+        let oldGroupQuestionsOnly = examOldQuestions?.filter(item => (item?.type === QuestionTypes.GROUP))
+        console.log("examOldQuestions:", oldGroupQuestionsOnly)
         console.log("GROUPS", savedQroupQuestions)
+        console.log([...oldGroupQuestionsOnly, ...savedQroupQuestions])
+        setGroupQuestions([...oldGroupQuestionsOnly, ...savedQroupQuestions])
     }, [])
 
     const [showGroupCreationForm, setShowGroupCreationForm] = useState(false)
@@ -137,7 +143,8 @@ const AddExamQuestions = () => {
                 console.log("QUESTION RES", res)
                 let group = {
                     id: res.id,
-                    groupName: values?.groupName,
+                    questionText: values?.groupName,
+                    type: QuestionTypes.GROUP,
                     questions: []
                 }
                 dispatch(addNewGroup(group))
@@ -186,13 +193,13 @@ const AddExamQuestions = () => {
                         <AddationMethodsMenu methods={groupMethods} anchorEl={groupQuestionAnchorEl} setAnchorEl={hideGroupQuestionMenu} />
                         <div>
                             {
-                                savedQroupQuestions?.map(question =>
+                                groupQuestions?.map(question =>
                                     <div key={question.id} className='position-relative'>
                                         <button onClick={(e) => showGroupQuestionMenu(e, question?.id)} className='btn btn-success position-absolute p-0 rounded-circle' style={{ top: -20, zIndex: 20, right: -10, width: 44, height: 44 }}>
                                             <PlusCircleOutlined className='primaryColoredIcon' style={{ color: '#fff', transform: 'scale(0.8)' }} />
                                         </button>
                                         <BorderdGroupQuestion
-                                            questionTitle={question?.groupName}
+                                            questionTitle={question?.questionText}
                                             deleteFunction={() => removeQuestionFromListHandler(question?.id)}
                                             questionsMarkup={
                                                 question?.questions?.map(subQuestion => (

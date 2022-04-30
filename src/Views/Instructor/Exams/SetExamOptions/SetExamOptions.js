@@ -36,8 +36,11 @@ const SetExamOptions = () => {
         if (isEditMode && oldExamConfig) {
             ExamServices.editExamOptions(examId, submittedValues)
                 .then(res => {
+                    return ExamServices.getExamQuestions(examId)
+                })
+                .then(res => {
                     showSuccessMsg('Exam options has been edited!')
-                    history.push(`/exams/${examOldData?.id}/add-questions`, { exam: examOldData })
+                    history.push(`/exams/${examId}/add-questions`, { exam: { questions: res.questions } })
                 })
                 .catch(err => HandleErrors(err))
             return

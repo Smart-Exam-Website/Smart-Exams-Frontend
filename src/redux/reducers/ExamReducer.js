@@ -15,8 +15,10 @@ const ExamReducer = (state = initStates, action) => {
 
         case actionTypes.ADD_GROUP:
             {
-                let newGroup = [...state.examGroups]
-                newGroup.push(action.payload)
+                let addedGroupQuestions = action.payload?.length ? [...action.payload] : [action.payload]
+                console.log("ADDED ROUP",addedGroupQuestions)
+                let newGroup = [...state.examGroups, ...addedGroupQuestions]
+                console.log("newGroup", newGroup)
                 return {
                     ...state,
                     examGroups: newGroup,
