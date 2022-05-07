@@ -11,6 +11,7 @@ import showSuccessMsg from '../../../../hooks/showSuccessMsg'
 import { QuestionTypes } from '../../../../constants/QuestionTypes'
 import EssayAnswer from '../../../../Components/AnsweredQuestion/EssayAnswer'
 import FormulaAnswer from '../../../../Components/AnsweredQuestion/FormulaAnswer'
+import GroupAnswer from '../../../../Components/AnsweredQuestion/GroupAnswer'
 
 const StudentCard = ({ name, isVerified, numberOfFaces, image, markAutoFun, examConfigs }) => {
     const imageResolver = useImageResolver()
@@ -158,6 +159,13 @@ const StudentSolvedExam = () => {
                                         questionMark={item?.pivot?.mark}
                                         isMarked={item?.answer?.isMarked}
                                         correctAnswer={item?.formula_questions?.value}
+                                    />
+                                    :
+                                    null
+                                }
+                                {(item?.type === QuestionTypes.GROUP) ?
+                                    <GroupAnswer
+                                        questions={item?.questions}
                                     />
                                     :
                                     null

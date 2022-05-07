@@ -30,19 +30,48 @@ const GroupAnswer = ({
                         if (subQuestion?.type === QuestionTypes.MCQ) {
                             return (
                                 <div key={subQuestion?.id} className='m-4'>
-                                    <McqAnswer questionText={subQuestion?.questionText} choices={subQuestion?.options} />
+                                    <McqAnswer
+                                        markAsRight={() => markAsRight(subQuestion?.id, subQuestion?.pivot?.mark)}
+                                        markAsWrong={() => markAsWrong(subQuestion?.id)}
+                                        studentAnswer={{ id: subQuestion?.answers?.option_id, value: subQuestion?.answers?.studentAnswer }}
+                                        questionText={subQuestion?.questionText}
+                                        choices={subQuestion?.options}
+                                        studentMark={subQuestion?.answers?.questionMark}
+                                        questionMark={subQuestion?.pivot?.mark}
+                                        isMarked={subQuestion?.answers?.isMarked}
+                                    />
                                 </div>)
                         }
                         else if (subQuestion?.type === QuestionTypes.ESSAY) {
                             return (
                                 <div key={subQuestion?.id} className='m-4'>
-                                    <EssayAnswer questionText={subQuestion?.questionText} correctAnswer={subQuestion?.options?.[0]} />
+                                    <EssayAnswer
+                                        markAsRight={() => markAsRight(subQuestion?.id, subQuestion?.pivot?.mark)}
+                                        markAsWrong={() => markAsWrong(subQuestion?.id)}
+                                        studentAnswer={{ id: subQuestion?.answers?.option_id, value: subQuestion?.answers?.studentAnswer }}
+                                        questionText={subQuestion?.questionText}
+                                        studentMark={subQuestion?.answers?.questionMark}
+                                        questionMark={subQuestion?.pivot?.mark}
+                                        isMarked={subQuestion?.answers?.isMarked}
+                                        correctAnswer={subQuestion?.options[0]}
+                                    />
                                 </div>)
                         }
                         else if (subQuestion?.type === QuestionTypes.FORMULA) {
                             return (
                                 <div key={subQuestion?.id} className='m-4'>
-                                    <FormulaAnswer formula_questions={subQuestion?.questions} teacherMode questionHeader={subQuestion?.questionText} />
+                                    <FormulaAnswer
+                                        markAsRight={() => markAsRight(subQuestion?.id, subQuestion?.pivot?.mark)}
+                                        markAsWrong={() => markAsWrong(subQuestion?.id)}
+                                        studentAnswer={{ id: subQuestion?.answers?.option_id, value: subQuestion?.answers?.studentAnswer }}
+                                        formula_questions={subQuestion?.questions}
+                                        teacherMode
+                                        questionHeader={subQuestion?.questionText}
+                                        studentMark={subQuestion?.answers?.questionMark}
+                                        questionMark={subQuestion?.pivot?.mark}
+                                        isMarked={subQuestion?.answers?.isMarked}
+                                        correctAnswer={subQuestion?.formula_questions?.value}
+                                    />
                                 </div>)
                         }
                     })
