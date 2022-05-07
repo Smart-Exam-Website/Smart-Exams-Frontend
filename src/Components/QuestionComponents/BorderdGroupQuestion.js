@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import BorderdQuestionController from './BorderdQuestionController';
 import { TextField, Typography } from '@mui/material';
 import { Formik } from 'formik';
+import { QuestionTypes } from '../../constants/QuestionTypes';
 
 const Wrapper = styled.div`
     border: 1px solid ${Colors.primary};
@@ -23,7 +24,7 @@ const Text = styled.span`
     font-size: 21px;
   `
 
-const BorderdGroupQuestion = ({ isCreationMode, getCreationData, cancelCreationFunction = () => { }, questionTitle, id, deleteFunction = () => { }, questionsMarkup }) => {
+const BorderdGroupQuestion = ({ isCreationMode, getCreationData, cancelCreationFunction = () => { }, questionTitle, id, deleteFunction = () => { }, questionsMarkup, hasNoDelete, questionnType = QuestionTypes?.GROUP }) => {
     const history = useHistory();
 
     const goToQuestion = () => {
@@ -97,17 +98,25 @@ const BorderdGroupQuestion = ({ isCreationMode, getCreationData, cancelCreationF
                     className='fw-bolder'
                     color="primary"
                     style={headerTextStyle}
+                    textTransform='capitalize'
                 >
-                    Group
+                    {questionnType}
                 </Typography>
-                <div className='mb-4 mt-4 w-100 d-flex align-items-start justify-content-between'>
-                    <ClickableView onClick={goToQuestion}>
-                        <Text>{questionTitle}</Text>
-                    </ClickableView>
-                    <ClickableView onClick={deleteFunction}>
-                        <CloseIcon color={'error'} fontSize={'large'} />
-                    </ClickableView>
-                </div>
+                {hasNoDelete ?
+                    <div className='my-4'>
+                        <Text className='text-decoration-none'>{questionTitle}</Text>
+                    </div>
+                    :
+                    <div className='my-4 w-100 d-flex align-items-start justify-content-between'>
+                        <ClickableView onClick={goToQuestion}>
+                            <Text>{questionTitle}</Text>
+                        </ClickableView>
+                        <ClickableView onClick={deleteFunction}>
+                            <CloseIcon color={'error'} fontSize={'large'} />
+                        </ClickableView>
+                    </div>
+
+                }
                 <div className='mx-5'>
                     {questionsMarkup}
                 </div>

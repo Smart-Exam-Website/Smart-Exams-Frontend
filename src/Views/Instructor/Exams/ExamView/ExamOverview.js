@@ -19,6 +19,8 @@ import FactCheckIcon from '@mui/icons-material/FactCheck';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import PhotoCameraFrontIcon from '@mui/icons-material/PhotoCameraFront';
 import { QuestionTypes } from '../../../../constants/QuestionTypes'
+import FormulaAnswer from '../../../../Components/AnsweredQuestion/FormulaAnswer'
+import GroupAnswer from '../../../../Components/AnsweredQuestion/GroupAnswer'
 
 
 
@@ -173,25 +175,38 @@ export const ExamOverview = ({ questions, examConfigs }) => {
             </CardComponent>
             <br /><br />
             <CardComponent title={'Questions'}>
-                {questions?.map((item) => {
-
-
-                    if (item?.type === QuestionTypes.MCQ) {
-
-                        return (
-                            <div key={item?.id} className='m-4'>
-                                <McqAnswer questionText={item?.questionText} choices={item?.options} />
-                            </div>)
+                <div className='p-5'>
+                    {questions?.map((item) => {
+                        if (item?.type === QuestionTypes.MCQ) {
+                            return (
+                                <div key={item?.id} className='m-4 mt-5'>
+                                    <McqAnswer questionText={item?.questionText} choices={item?.options} />
+                                </div>)
+                        }
+                        else if (item?.type === QuestionTypes.ESSAY) {
+                            return (
+                                <div key={item?.id} className='m-4 mt-5'>
+                                    <EssayAnswer questionText={item?.questionText} correctAnswer={item?.options[0]} />
+                                </div>)
+                        }
+                        else if (item?.type === QuestionTypes.FORMULA) {
+                            return (
+                                <div key={item?.id} className='m-4 mt-5'>
+                                    <FormulaAnswer formula_questions={item?.questions} teacherMode questionHeader={item?.questionText} />
+                                </div>
+                            )
+                        }
+                        else if (item?.type === QuestionTypes.GROUP) {
+                            return (
+                                <div key={item?.id} className='m-4 mt-5'> 
+                                    <GroupAnswer questions={item?.questions} teacherMode questionHeader={item?.questionText} />
+                                </div>
+                            )
+                        }
+                        return null
                     }
-                    else if (item?.type === QuestionTypes.ESSAY) {
-                        return (
-                            <div key={item?.id} className='m-4'>
-                                <EssayAnswer questionText={item?.questionText} correctAnswer={item?.options[0]} />
-                            </div>)
-                    }
-                    return 0
-                }
-                )}
+                    )}
+                </div>
             </CardComponent>
         </>
     )

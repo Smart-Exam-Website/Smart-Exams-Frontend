@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, IconButton, Typography } from '@mui/mate
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import ShortAnswer from './ShortAnswer';
+import BorderdQuestionController from '../QuestionComponents/BorderdQuestionController';
+import { QuestionTypes } from '../../constants/QuestionTypes';
 
 const FormulaAnswer = ({
     formula_questions,
@@ -11,10 +13,16 @@ const FormulaAnswer = ({
     markAsWrong = () => { },
     isMarked,
     questionMark,
-    studentMark
+    studentMark,
+    teacherMode,
+    questionHeader
 }) => {
     return (
-        <div>
+        <BorderdQuestionController
+            questionTitle={questionHeader}
+            questionType={QuestionTypes.FORMULA}
+            hasNoDelete
+        >
             {formula_questions?.map(question => (
                 <ShortAnswer
                     questionText={question?.formulaText}
@@ -22,7 +30,7 @@ const FormulaAnswer = ({
                 />
             ))
             }
-        </div>
+        </BorderdQuestionController>
     )
 }
 
