@@ -172,15 +172,15 @@ const Questions = () => {
                     })
                 })
                 .then(res => {
-                    console.log("Edites Question:::=>>",res)
+                    console.log("Edites Question:::=>>", res)
                     dispatch(saveAQuestion(selectedQuestions, selectedGroupQuestionId))
                     history.goBack()
                 })
                 .catch(err => HandleErrors(err))
         }
         else {
-            let normalQuestions = selectedQuestions?.filter(item=>item.type!==QuestionTypes.GROUP)
-            let groupQuestions = selectedQuestions?.filter(item=>item.type===QuestionTypes.GROUP)
+            let normalQuestions = selectedQuestions?.filter(item => item.type !== QuestionTypes.GROUP)
+            let groupQuestions = selectedQuestions?.filter(item => item.type === QuestionTypes.GROUP)
             dispatch(addNewGroup(groupQuestions))
             dispatch(saveAQuestion(normalQuestions, null))
             history.goBack()
@@ -222,6 +222,7 @@ const Questions = () => {
         setFilterValue(prevState => { return { ...prevState, search: null } })
     }
     const clearFilter = () => {
+        setFilterValue(null)
         clearSearch()
         setFilterMenuEl(false)
     }
