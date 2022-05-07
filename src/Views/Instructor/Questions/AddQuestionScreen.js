@@ -80,18 +80,42 @@ const AddQuestionScreen = () => {
     )
 
     const createQuestionHandler = (request) => {
+        let addedQuestion;
         request
             .then(res => {
+                addedQuestion = res
                 console.log("Question request", res)
 
                 let isFromExamCreation = location?.state?.fromExamCreation
                 let isFromGroup = location?.state?.isFromGroup
                 let groupId = location?.state?.groupId
 
-                dispatch(saveAQuestion([{ questionText: res?.questionText, id: res?.id }], groupId))
-
-                showSuccessMsg("Request done successfully")
-                history.goBack()
+                if (groupId) {
+                    QuestionServices.getQuestionDetails(groupId)
+                        .then(res => {
+                            let returnedQuestion = res?.question
+                            let groupReturnedQuestions = res?.question?.questions
+                            console.log(returnedQuestion)
+                            return QuestionServices.editGroupQuestion(groupId, {
+                                questionText: returnedQuestion?.questionText,
+                                questions: [...groupReturnedQuestions?.map(item => item.id), addedQuestion?.id]
+                            })
+                        })
+                        .then(res => {
+                            console.log("Edites Question:::=>>", res)
+                            dispatch(saveAQuestion([addedQuestion], groupId))
+                            showSuccessMsg("Request done successfully")
+                            history.goBack()
+                        })
+                        .catch(err => HandleErrors(err))
+                }
+                else {
+                    if(isFromExamCreation){
+                        dispatch(saveAQuestion([addedQuestion], groupId))
+                    }
+                    showSuccessMsg("Request done successfully")
+                    history.goBack()
+                }
             })
             .catch(err => HandleErrors(err))
     }
