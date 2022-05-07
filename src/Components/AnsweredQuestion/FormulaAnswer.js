@@ -17,6 +17,8 @@ const FormulaAnswer = ({
     teacherMode,
     questionHeader
 }) => {
+
+    const isCorrectStudentAnswer = questionMark === studentMark
     return (
         <BorderdQuestionController
             questionTitle={questionHeader}
@@ -27,6 +29,12 @@ const FormulaAnswer = ({
                 <ShortAnswer
                     questionText={question?.formulaText}
                     correctAnswer={question?.value}
+                    studentAnswer={studentAnswer}
+                    markAsRight={markAsRight}
+                    markAsWrong={markAsWrong}
+                    isMarked={isMarked}
+                    questionMark={questionMark}
+                    studentMark={studentMark}
                 />
             ))
             }

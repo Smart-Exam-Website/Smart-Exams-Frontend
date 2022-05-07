@@ -10,6 +10,7 @@ import McqAnswer from '../../../../Components/AnsweredQuestion/McqAnswer'
 import showSuccessMsg from '../../../../hooks/showSuccessMsg'
 import { QuestionTypes } from '../../../../constants/QuestionTypes'
 import EssayAnswer from '../../../../Components/AnsweredQuestion/EssayAnswer'
+import FormulaAnswer from '../../../../Components/AnsweredQuestion/FormulaAnswer'
 
 const StudentCard = ({ name, isVerified, numberOfFaces, image, markAutoFun, examConfigs }) => {
     const imageResolver = useImageResolver()
@@ -143,6 +144,20 @@ const StudentSolvedExam = () => {
                                         questionMark={item?.pivot?.mark}
                                         isMarked={item?.answer?.isMarked}
                                         correctAnswer={item?.options[0]}
+                                    />
+                                    :
+                                    null
+                                }
+                                {(item?.type === QuestionTypes.FORMULA) ?
+                                    <FormulaAnswer
+                                        markAsRight={() => markAsRightHandler(item?.id, item?.pivot?.mark)}
+                                        markAsWrong={() => markAsWrongHandler(item?.id)}
+                                        studentAnswer={{ id: item?.answer?.option_id, value: item?.answer?.studentAnswer }}
+                                        formula_questions={[item?.formula_questions]}
+                                        studentMark={item?.answer?.questionMark}
+                                        questionMark={item?.pivot?.mark}
+                                        isMarked={item?.answer?.isMarked}
+                                        correctAnswer={item?.formula_questions?.value}
                                     />
                                     :
                                     null
