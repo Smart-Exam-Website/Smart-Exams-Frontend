@@ -181,8 +181,8 @@ const Questions = () => {
         else {
             let normalQuestions = selectedQuestions?.filter(item => item.type !== QuestionTypes.GROUP)
             let groupQuestions = selectedQuestions?.filter(item => item.type === QuestionTypes.GROUP)
-            dispatch(addNewGroup(groupQuestions))
-            dispatch(saveAQuestion(normalQuestions, null))
+            groupQuestions?.length && dispatch(addNewGroup(groupQuestions))
+            normalQuestions?.length && dispatch(saveAQuestion(normalQuestions, null))
             history.goBack()
         }
     }

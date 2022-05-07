@@ -110,6 +110,8 @@ const AddExamQuestions = () => {
         // eslint-disable-next-line
     }, [examOldQuestions]);
 
+   
+
 
     const submitExamHandler = () => {
         let submittedQuestions = [...questions]
@@ -175,6 +177,10 @@ const AddExamQuestions = () => {
         setselctedGroupId(null)
     }
 
+    useEffect(() => {
+        console.log("QUESTIOS", savedQroupQuestions)
+
+    }, [savedQroupQuestions])
     // Main Component
     return (
         <div className="row justify-content-center text-center my-5">
