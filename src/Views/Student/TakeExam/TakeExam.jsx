@@ -107,8 +107,7 @@ const TakeExam = (props) => {
                 if (examOptions?.questionsRandomOrder)
                     formatedQuestions = randomQuestions(formatedQuestions)
 
-                let ss = formatedQuestions?.reverse()
-                setQuestions([...ss])
+                setQuestions([...formatedQuestions])
             })
             .catch((error) => {
                 HandleErrors(error)

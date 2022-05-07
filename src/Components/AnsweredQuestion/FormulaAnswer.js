@@ -18,7 +18,6 @@ const FormulaAnswer = ({
     questionHeader
 }) => {
 
-    const isCorrectStudentAnswer = questionMark === studentMark
     return (
         <BorderdQuestionController
             questionTitle={questionHeader}
