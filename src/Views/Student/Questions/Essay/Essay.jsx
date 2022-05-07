@@ -12,11 +12,10 @@ import { QuestionTypes } from '../../../../constants/QuestionTypes'
 // import { saveAnswer } from '../../../../redux/actions/QuestionActions'
 
 const Essay = (props) => {
-
+    const isInGroupQuestion = Boolean(props?.sentAnswerChanges)
 
 
     const [essayAnswer, setEssayAnswer] = useState('');
-
     const essayChangedHandler = (event) => {
         setEssayAnswer(event.target.value);
     };
@@ -25,16 +24,24 @@ const Essay = (props) => {
         setEssayAnswer(props.question?.studentAnswer?.chosenAnswer || '')
         // console.log(props.question?.studentAnswer)
     }, []);
-    
+
     const retrieveOldAnswer = () => {
-        return essayAnswer  
+        return essayAnswer
     }
 
+    useEffect(() => {
+        if (!isInGroupQuestion) return
+
+        props?.sentAnswerChanges(
+            { chosenOptionID: null, chosenAnswer: essayAnswer, questionType: QuestionTypes.ESSAY },
+            props?.questionIndex - 1,
+            props?.questionId
+        )
+    }, [essayAnswer])
     return (
         <div className="m-5 text-start ">
             <Card className='shadow p-3 mb-5 bg-white rounded ' sx={{ minWidth: 275 }}>
                 <CardContent>
-
                     {/* Question Label */}
                     <Typography className='font-weight-bold' variant="h4" component="div">
                         {/* TODO, FETCH QUESTION NUMBER */}
@@ -42,14 +49,11 @@ const Essay = (props) => {
                         <hr />
                     </Typography>
 
-
                     {/* Question Text */}
                     <Typography className='m-3' variant='h5'>
                         {props.question?.questionText}
                     </Typography>
-
                 </CardContent>
-
 
                 {/* Essay Text Field */}
                 <CardContent className=''>
@@ -59,49 +63,44 @@ const Essay = (props) => {
                         multiline
                         rows={8}
                         fullWidth
-                        // value={essayAnswer === retrieveOldAnswer() ? essayAnswer : ''}
                         value={essayAnswer}
-
                         onChange={essayChangedHandler}
                     />
-
                 </CardContent>
 
+                {!isInGroupQuestion ?
+                    <CardActions className='d-flex m-2 p-2 justify-content-between'>
+                        <button
+                            className='btn m-2 p-auto btn-danger text-white'
+                            variant="contained"
+                            disabled={props.previousButtonDisabled}
+                            onClick={() => {
+                                props.clickedPrevious()
+                                retrieveOldAnswer()
+                            }}
+                        >
+                            Previous
+                        </button>
 
-                <CardActions className='d-flex m-2 p-2 justify-content-between'>
+                        <button
+                            className='btn m-2 p-auto btn-primary text-white'
+                            variant="contained"
+                            onClick={() => {
+                                const answer = essayAnswer
+                                props.clickedNext(null, answer, QuestionTypes.ESSAY)
+                                const nextAnswer = props.question?.studentAnswer?.chosenAnswer || ''
+                                setTimeout(() => {
+                                    setEssayAnswer(nextAnswer)
 
-                    <button
-                        className='btn m-2 p-auto btn-danger text-white'
-                        variant="contained"
-                        disabled={props.previousButtonDisabled}
-                        onClick={() => {
-                            props.clickedPrevious() 
-                            retrieveOldAnswer()
-                        }}
-                    >
-                        Previous
-                    </button>
-
-                    <button
-                        className='btn m-2 p-auto btn-primary text-white'
-                        variant="contained"
-                        onClick={() => {
-                            const answer = essayAnswer
-                            props.clickedNext(null, answer, QuestionTypes.ESSAY)
-                            const nextAnswer = props.question?.studentAnswer?.chosenAnswer || ''
-                            setTimeout(() => {
-                                setEssayAnswer(nextAnswer)
-                                
-                            },1000);
-                            // setEssayAnswer('')
-                            // props.studentAnswerFunction(props.questionIndex, chosenOptionID, chosenAnswer)
-                            // setEssayAnswer("")
-                        }}
-                    >
-                        {props.changeNextNameIntoFinish ? "Finish Exam" : "Next"}
-                    </button>
-
-                </CardActions>
+                                }, 1000);
+                            }}
+                        >
+                            {props.changeNextNameIntoFinish ? "Finish Exam" : "Next"}
+                        </button>
+                    </CardActions>
+                    :
+                    null
+                }
             </Card>
         </div>
 

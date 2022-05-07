@@ -17,6 +17,8 @@ import Webcam from 'react-webcam';
 import ExamCounter from '../../../Components/ExamCounter/ExamCounter';
 import { CheatServices } from '../../../apis/Services/CheatService';
 import moment from 'moment';
+import Formula from '../Questions/Formula/Formula';
+import Group from '../Questions/Group/Group';
 
 const MIN_INTERVAL_TIME_TO_DO_CHEAT_CHECK = 10
 const _getMinsFromDuration = (duration) => {
@@ -80,12 +82,11 @@ const TakeExam = (props) => {
                 setEndExamTime(res?.endTime)
 
                 // Formatting answer array stage
-                console.log("Student Anses")
-                console.log(res)
                 let formatedAnswers = {}
                 res?.answers.forEach((answer) => {
                     formatedAnswers[answer.question_id] = { chosenOptionID: answer.option_id, chosenAnswer: answer.studentAnswer }
                 })
+                console.log(formatedAnswers)
                 //formated question stage
                 let formatedQuestions = responseQuestions.map((question) => {
                     let thisQuestionAnswer = formatedAnswers?.[question.id]
@@ -95,13 +96,19 @@ const TakeExam = (props) => {
                     return formatedQuestion
                 })
                 /** Randomize choices */
-                formatedQuestions = formatedQuestions?.map(item => { return { ...item, answers: randomChoices(item?.options) } })
+                formatedQuestions = formatedQuestions?.map(item => {
+                    if (item?.type === QuestionTypes.MCQ)
+                        return { ...item, answers: randomChoices(item?.options) }
+                    else
+                        return item
+                })
 
                 /** Randomize Question */
                 if (examOptions?.questionsRandomOrder)
                     formatedQuestions = randomQuestions(formatedQuestions)
 
-                setQuestions([...formatedQuestions])
+                let ss = formatedQuestions?.reverse()
+                setQuestions([...ss])
             })
             .catch((error) => {
                 HandleErrors(error)
@@ -194,6 +201,28 @@ const TakeExam = (props) => {
         }
     }
 
+    /** Sending Answers and go to next question */
+    const _successSentAnswerResonse = () => {
+        // Go to next question by increasing currentQuestionNumber (if it's not in the last question) 
+        const newQuestionNumber = currentQuestionNumber + 1
+        // If we are in the last question, then we should refer to the Done Page
+        if (newQuestionNumber === questions.length) {
+            ExamServices.submitExam(exam.id)
+                .then(res => {
+                    showSuccessMsg("Exam has been submitted successfully")
+                    props.history.push({
+                        pathname: '/done',
+                        state: { examName: exam.name }
+                    })
+                })
+                .catch(err => HandleErrors(err))
+            return
+        }
+        showSuccessMsg("Answer Saved Successfully")
+
+        // advance to the next question
+        setCurrentQuestionNumber(newQuestionNumber)
+    }
     const clickedNextHandler = (chosenOptionID, chosenAnswer, questionType) => {
         let answerData = {}
         if (questionType === QuestionTypes.MCQ) {
@@ -212,34 +241,39 @@ const TakeExam = (props) => {
 
             }
         }
+        else if (questionType === QuestionTypes.FORMULA) {
+            answerData = {
+                "studentAnswer": chosenAnswer,
+                "question_id": questions[currentQuestionNumber].id,
+                "exam_id": exam.id
+            }
+        }
+        else if (questionType == QuestionTypes.GROUP) {
+            let questionPromises = chosenAnswer?.map(item => {
+                let answerData = {
+                    "studentAnswer": item?.answer?.chosenAnswer,
+                    "question_id": item?.questionId,
+                    "exam_id": exam.id
+                }
+                if (item?.answer?.chosenOptionID)
+                    answerData["option_id"] = item?.answer?.chosenOptionID
+
+                return ExamServices.addAnswer(answerData)
+            })
+
+            Promise.all(questionPromises)
+                .then(res => {
+                    _successSentAnswerResonse()
+                })
+                .catch(err => HandleErrors(err))
+
+            return
+        }
 
         ExamServices.addAnswer(answerData)
             .then(() => {
-                // Go to next question by increasing currentQuestionNumber (if it's not in the last question) 
-                const newQuestionNumber = currentQuestionNumber + 1
-                // If we are in the last question, then we should refer to the Done Page
-                if (newQuestionNumber === questions.length) {
-                    ExamServices.submitExam(exam.id)
-                        .then(res => {
-                            showSuccessMsg("Exam has been submitted successfully")
-                            props.history.push({
-                                pathname: '/done',
-                                state: { examName: exam.name }
-                            })
-                        })
-                        .catch(err => HandleErrors(err))
-                    return
-                }
-                showSuccessMsg("Answer Saved Successfully")
-
-                // advance to the next question
-                setCurrentQuestionNumber(newQuestionNumber)
-
-
-            }).catch((error) => {
-                HandleErrors(error)
-            })
-
+                _successSentAnswerResonse()
+            }).catch((err) => HandleErrors(err))
     }
 
     const clickedPreviousHandler = () => {
@@ -285,7 +319,6 @@ const TakeExam = (props) => {
                     previousButtonDisabled={currentQuestionNumber === 0}
                     changeNextNameIntoFinish={index === questions.length - 1}
 
-
                     key={props.questionIndex}
                 />
             );
@@ -313,7 +346,38 @@ const TakeExam = (props) => {
                 />
             )
         }
-        return null;
+        else if (question?.type === QuestionTypes.FORMULA) {
+            return (
+                <Formula
+                    questionIndex={index + 1}
+                    question={question}
+
+                    clickedNext={clickedNextHandler}
+                    clickedPrevious={clickedPreviousHandler}
+                    previousButtonDisabled={currentQuestionNumber === 0}
+                    changeNextNameIntoFinish={index === questions.length - 1}
+
+                    key={props.questionIndex}
+                />
+            )
+        }
+
+        else if (question?.type === QuestionTypes.GROUP) {
+            return (
+                <Group
+                    questionIndex={index + 1}
+                    question={question}
+
+                    clickedNext={clickedNextHandler}
+                    clickedPrevious={clickedPreviousHandler}
+                    previousButtonDisabled={currentQuestionNumber === 0}
+                    changeNextNameIntoFinish={index === questions.length - 1}
+
+                    key={props.questionIndex}
+                />
+            )
+        }
+        return null
     })
 
     const videoRecorderIsShown = examOptions?.faceDetection || examOptions?.faceRecognition
@@ -321,7 +385,7 @@ const TakeExam = (props) => {
     return (
         <div>
             {examDurationInSecs ?
-                <div className='bg-light p-2 rounded shadow' style={{ position: 'fixed', top: 0, left:'50%',zIndex:10, transform:'translateX(-50%)' }}>
+                <div className='bg-light p-2 rounded shadow' style={{ position: 'fixed', top: 0, left: '50%', zIndex: 10, transform: 'translateX(-50%)' }}>
                     <ExamCounter onFinish={onTimerFinishHanlder} numberOfSecs={examDurationInSecs} />
                 </div>
                 :
