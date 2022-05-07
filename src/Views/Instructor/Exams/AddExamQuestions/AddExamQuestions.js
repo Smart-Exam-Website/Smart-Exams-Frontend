@@ -142,11 +142,9 @@ const AddExamQuestions = () => {
     const [groupQuestions, setGroupQuestions] = useState(null);
     const savedQroupQuestions = useSelector(state => state?.exam?.examGroups)
     useEffect(() => {
-        if (!examOldQuestions) return
-
-        let oldGroupQuestionsOnly = examOldQuestions?.filter(item => (item?.type === QuestionTypes.GROUP))
+        let oldGroupQuestionsOnly = examOldQuestions?.filter(item => (item?.type === QuestionTypes.GROUP)) || []
         setGroupQuestions([...oldGroupQuestionsOnly, ...savedQroupQuestions])
-    }, [examOldQuestions])
+    }, [examOldQuestions, savedQroupQuestions])
 
     const [showGroupCreationForm, setShowGroupCreationForm] = useState(false)
     const createGroupQuestion = (values) => {
