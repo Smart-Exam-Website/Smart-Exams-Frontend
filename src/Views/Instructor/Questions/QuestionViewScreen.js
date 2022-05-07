@@ -7,6 +7,7 @@ import EssayAnswer from '../../../Components/AnsweredQuestion/EssayAnswer';
 import HandleErrors from '../../../hooks/handleErrors';
 import { QuestionTypes } from '../../../constants/QuestionTypes';
 import FormulaAnswer from '../../../Components/AnsweredQuestion/FormulaAnswer';
+import GroupAnswer from '../../../Components/AnsweredQuestion/GroupAnswer';
 
 const QuestionViewScreen = () => {
     const { questionId } = useParams()
@@ -36,6 +37,11 @@ const QuestionViewScreen = () => {
         else if (question?.type === QuestionTypes.FORMULA) {
             return (
                 <FormulaAnswer formula_questions={question?.formula_questions} />
+            )
+        }
+        else if (question?.type === QuestionTypes.GROUP) {
+            return (
+                <GroupAnswer questions={question?.questions} teacherMode questionHeader={question?.questionText} />
             )
         }
 
