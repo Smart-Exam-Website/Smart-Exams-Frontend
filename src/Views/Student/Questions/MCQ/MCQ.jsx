@@ -18,12 +18,10 @@ const MCQ = (props) => {
 
 
     useEffect(() => {
-        if (props.currentQuestionNumber !== props.questionIndex - 1) return
-
         setChosenOptionID(props.savedStudentAnswer?.chosenOptionID)
         setChosenAnswer(props.savedStudentAnswer?.chosenAnswer)
         // eslint-disable-next-line
-    }, [props.currentQuestionNumber]);
+    }, []);
 
 
 

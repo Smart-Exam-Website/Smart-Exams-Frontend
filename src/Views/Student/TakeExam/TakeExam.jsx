@@ -49,6 +49,10 @@ const TakeExam = (props) => {
     const [examOptions, setExamOptions] = useState(null)
 
     const [endExamTime, setEndExamTime] = useState(null)
+    useEffect(() => {
+        console.log(questions?.[currentQuestionNumber])
+    }, [currentQuestionNumber])
+
 
     /** getting exam config */
     useEffect(() => {
@@ -89,12 +93,30 @@ const TakeExam = (props) => {
                 console.log(formatedAnswers)
                 //formated question stage
                 let formatedQuestions = responseQuestions.map((question) => {
+                    if (question?.type === QuestionTypes.GROUP) {
+                        let newQuestionsForThisGroupQuestion = [];
+                        question?.questions?.forEach(element => {
+                            let thisQuestionAnswer = formatedAnswers?.[element.id]
+                            let formatedQuestion;
+
+                            if (!thisQuestionAnswer)
+                                formatedQuestion = element
+                            else
+                                formatedQuestion = { ...element, studentAnswer: thisQuestionAnswer }
+
+                            newQuestionsForThisGroupQuestion.push(formatedQuestion)
+                        });
+
+                        return { ...question, questions: newQuestionsForThisGroupQuestion }
+                    }
+
                     let thisQuestionAnswer = formatedAnswers?.[question.id]
                     if (!thisQuestionAnswer) return question
 
                     let formatedQuestion = { ...question, studentAnswer: thisQuestionAnswer }
                     return formatedQuestion
                 })
+                console.log(formatedQuestions)
                 /** Randomize choices */
                 formatedQuestions = formatedQuestions?.map(item => {
                     if (item?.type === QuestionTypes.MCQ)
@@ -306,7 +328,7 @@ const TakeExam = (props) => {
             .catch(err => HandleErrors(err))
     }
 
-    let My_Questions_Markup = questions?.map((question, index) => {
+    const My_Questions_Markup = questions?.map((question, index) => {
         if (question?.type === QuestionTypes.ESSAY) {
             return (
                 <Essay
@@ -328,7 +350,7 @@ const TakeExam = (props) => {
                     questionIndex={index + 1}
 
                     currentQuestionNumber={currentQuestionNumber}
-                    key={props.questionIndex}
+                    key={question?.id}
 
                     questionText={question.questionText}
                     answers={question.answers}
@@ -356,7 +378,7 @@ const TakeExam = (props) => {
                     previousButtonDisabled={currentQuestionNumber === 0}
                     changeNextNameIntoFinish={index === questions.length - 1}
 
-                    key={props.questionIndex}
+                    key={question?.id}
                 />
             )
         }
@@ -372,7 +394,7 @@ const TakeExam = (props) => {
                     previousButtonDisabled={currentQuestionNumber === 0}
                     changeNextNameIntoFinish={index === questions.length - 1}
 
-                    key={props.questionIndex}
+                    key={question?.id}
                 />
             )
         }

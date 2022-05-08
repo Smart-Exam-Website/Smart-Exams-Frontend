@@ -17,7 +17,7 @@ const Group = (props) => {
         if (!groupAnswers) return
         setGroupAnswers(prevState => {
             let newGroup = [...prevState]
-            newGroup[index] = {answer, questionId}
+            newGroup[index] = { answer, questionId }
             return newGroup
         }
         );
@@ -56,32 +56,30 @@ const Group = (props) => {
                                 sentAnswerChanges={groupAnswersChangesHandler}
                                 questionIndex={index + 1}
                                 question={subQuestion}
-                                key={props.questionIndex}
+                                key={subQuestion?.id}
                                 questionId={subQuestion?.id}
                             />
                         )
-
-                    if (subQuestion?.type === QuestionTypes.MCQ)
+                    else if (subQuestion?.type === QuestionTypes.MCQ)
                         return (
                             <MCQ
                                 sentAnswerChanges={groupAnswersChangesHandler}
                                 questionIndex={index + 1}
-                                key={props.questionIndex}
+                                key={subQuestion?.id}
                                 questionText={subQuestion.questionText}
-                                answers={subQuestion.answers}
+                                answers={subQuestion.options}
                                 questionId={subQuestion?.id}
-                            // studentAnswerFunction={getAnswer}
-                            // savedStudentAnswer={question?.studentAnswer}
+                                savedStudentAnswer={subQuestion?.studentAnswer}
                             />
                         )
 
-                    if (subQuestion?.type === QuestionTypes.FORMULA)
+                    else if (subQuestion?.type === QuestionTypes.FORMULA)
                         return (
                             <Formula
                                 sentAnswerChanges={groupAnswersChangesHandler}
                                 questionIndex={index + 1}
                                 question={subQuestion}
-                                key={props.questionIndex}
+                                key={subQuestion?.id}
                                 questionId={subQuestion?.id}
                             />
                         )
