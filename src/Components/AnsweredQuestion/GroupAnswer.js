@@ -20,6 +20,7 @@ const GroupAnswer = ({
     teacherMode,
     questionHeader
 }) => {
+    const specificQuestionMark = questionMark / (questions?.length)
     return (
         <div className="shadow">
             <BorderdGroupQuestion
@@ -31,13 +32,13 @@ const GroupAnswer = ({
                             return (
                                 <div key={subQuestion?.id} className='m-4'>
                                     <McqAnswer
-                                        markAsRight={() => markAsRight(subQuestion?.id, subQuestion?.pivot?.mark)}
+                                        markAsRight={() => markAsRight(subQuestion?.id, specificQuestionMark)}
                                         markAsWrong={() => markAsWrong(subQuestion?.id)}
-                                        studentAnswer={{ id: subQuestion?.answers?.option_id, value: subQuestion?.answers?.studentAnswer }}
+                                        studentAnswer={subQuestion?.answers ? { id: subQuestion?.answers?.option_id, value: subQuestion?.answers?.studentAnswer } : null}
                                         questionText={subQuestion?.questionText}
                                         choices={subQuestion?.options}
                                         studentMark={subQuestion?.answers?.questionMark}
-                                        questionMark={subQuestion?.pivot?.mark}
+                                        questionMark={specificQuestionMark}
                                         isMarked={subQuestion?.answers?.isMarked}
                                     />
                                 </div>)
@@ -46,12 +47,12 @@ const GroupAnswer = ({
                             return (
                                 <div key={subQuestion?.id} className='m-4'>
                                     <EssayAnswer
-                                        markAsRight={() => markAsRight(subQuestion?.id, subQuestion?.pivot?.mark)}
+                                        markAsRight={() => markAsRight(subQuestion?.id, specificQuestionMark)}
                                         markAsWrong={() => markAsWrong(subQuestion?.id)}
-                                        studentAnswer={{ id: subQuestion?.answers?.option_id, value: subQuestion?.answers?.studentAnswer }}
+                                        studentAnswer={subQuestion?.answers ? { id: subQuestion?.answers?.option_id, value: subQuestion?.answers?.studentAnswer } : null}
                                         questionText={subQuestion?.questionText}
                                         studentMark={subQuestion?.answers?.questionMark}
-                                        questionMark={subQuestion?.pivot?.mark}
+                                        questionMark={specificQuestionMark}
                                         isMarked={subQuestion?.answers?.isMarked}
                                         correctAnswer={subQuestion?.options[0]}
                                     />
@@ -61,14 +62,14 @@ const GroupAnswer = ({
                             return (
                                 <div key={subQuestion?.id} className='m-4'>
                                     <FormulaAnswer
-                                        markAsRight={() => markAsRight(subQuestion?.id, subQuestion?.pivot?.mark)}
+                                        markAsRight={() => markAsRight(subQuestion?.id, specificQuestionMark)}
                                         markAsWrong={() => markAsWrong(subQuestion?.id)}
-                                        studentAnswer={{ id: subQuestion?.answers?.option_id, value: subQuestion?.answers?.studentAnswer }}
+                                        studentAnswer={subQuestion?.answers ? { id: subQuestion?.answers?.option_id, value: subQuestion?.answers?.studentAnswer } : null}
                                         formula_questions={subQuestion?.questions}
                                         teacherMode
                                         questionHeader={subQuestion?.questionText}
                                         studentMark={subQuestion?.answers?.questionMark}
-                                        questionMark={subQuestion?.pivot?.mark}
+                                        questionMark={specificQuestionMark}
                                         isMarked={subQuestion?.answers?.isMarked}
                                         correctAnswer={subQuestion?.formula_questions?.value}
                                     />

@@ -166,6 +166,9 @@ const StudentSolvedExam = () => {
                                 {(item?.type === QuestionTypes.GROUP) ?
                                     <GroupAnswer
                                         questions={item?.questions}
+                                        markAsRight={markAsRightHandler}
+                                        markAsWrong={markAsWrongHandler}
+                                        questionMark={item?.pivot?.mark}
                                     />
                                     :
                                     null
