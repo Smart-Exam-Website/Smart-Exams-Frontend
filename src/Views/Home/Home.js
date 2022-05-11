@@ -5,7 +5,7 @@ const Home = () => {
     return (
         
         <div className='main' style={{minHeight:"80vh"}}>
-            {/* <h1>Hiii</h1> */}
+            <h1>Hiii</h1>
             {/* <Signupinquiry></Signupinquiry> */}
             {/* <Signup></Signup> */}
             {/* <Login></Login> */}
