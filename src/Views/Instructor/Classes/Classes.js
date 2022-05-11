@@ -18,7 +18,7 @@ const Classes = () => {
     
     return (
         <div>
-            <h1>Home</h1>
+            <h1>Homeeeeeeeeeeeeeeeeeeeeeeeeee</h1>
         </div>
     )
 }
