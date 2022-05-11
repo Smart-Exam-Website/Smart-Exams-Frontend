@@ -147,7 +147,7 @@ const TakeExam = (props) => {
             setTotalCountedMins(prevState => prevState + RandomMins)
             setLastRandomMin(RandomMins)
             callback()
-        }, RandomMins * 60 * 100);
+        }, RandomMins * 60 * 1000);
     }
     useEffect(() => {
         if (!examDurationInMins) return
