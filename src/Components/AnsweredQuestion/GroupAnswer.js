@@ -20,7 +20,7 @@ const GroupAnswer = ({
     teacherMode,
     questionHeader
 }) => {
-    const specificQuestionMark = questionMark / (questions?.length)
+    const specificQuestionMark = (questionMark / (questions?.length)).toFixed(2)
     return (
         <div className="shadow">
             <BorderdGroupQuestion

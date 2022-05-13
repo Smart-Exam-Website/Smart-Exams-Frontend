@@ -120,7 +120,7 @@ const StudentSolvedExam = () => {
                 <div className="col-12">
                     <>
                         {studentExamResult?.solution?.map(item =>
-                            <div key={item.id} className='my-2'>
+                            <div key={item.id} className='my-5'>
                                 {(item?.type === QuestionTypes.MCQ) ?
                                     <McqAnswer
                                         markAsRight={() => markAsRightHandler(item?.id, item?.pivot?.mark)}
