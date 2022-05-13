@@ -38,7 +38,34 @@ const AddExamQuestions = () => {
         history.push('/questions/add', { fromExamCreation: true, isFromGroup: Boolean(selctedGroupId), groupId: selctedGroupId })
     }
     const selectQuestionFromQBank = () => {
-        history.push('/questions', { canSelectQuestionsForExam: true, isFromGroup: Boolean(selctedGroupId), groupId: selctedGroupId })
+        let normalQuestionIds;
+        try {
+            normalQuestionIds = [...questions]
+            normalQuestionIds = normalQuestionIds.map(item => item.id)
+        } catch {
+            normalQuestionIds = []
+        }
+
+        let groupQuestionsIdList;
+        try {
+            groupQuestionsIdList = [...groupQuestions]
+            groupQuestionsIdList = groupQuestionsIdList.map(item => {
+                return [item.id, ...item.questions.map(item => item.id)]
+            })
+        } catch {
+            groupQuestionsIdList = []
+        }
+
+        let groupQuestionsIds = groupQuestionsIdList.flat()
+        let allQuestionsIds = [...normalQuestionIds, ...groupQuestionsIds]
+        console.log("seleced ids,", allQuestionsIds)
+
+        history.push('/questions', {
+            canSelectQuestionsForExam: true,
+            isFromGroup: Boolean(selctedGroupId),
+            groupId: selctedGroupId,
+            allSelectedQuestionIds: allQuestionsIds
+        })
     }
     const goCreateNewGroup = () => {
         setShowGroupCreationForm(true)
@@ -110,8 +137,6 @@ const AddExamQuestions = () => {
         // eslint-disable-next-line
     }, [examOldQuestions]);
 
-   
-
 
     const submitExamHandler = () => {
         let submittedQuestions = [...questions]
@@ -135,6 +160,9 @@ const AddExamQuestions = () => {
             return prevState?.filter(item => item.id !== id)
         })
         setGroupQuestions(prevState => {
+            return prevState?.filter(item => item.id !== id)
+        })
+        setExamOldQuestions(prevState => {
             return prevState?.filter(item => item.id !== id)
         })
     }
@@ -177,11 +205,6 @@ const AddExamQuestions = () => {
         setselctedGroupId(null)
     }
 
-    useEffect(() => {
-        console.log("QUESTIOS", savedQroupQuestions)
-
-    }, [savedQroupQuestions])
-    // Main Component
     return (
         <div className="row justify-content-center text-center my-5">
             <div className="col-md-8 col-12">

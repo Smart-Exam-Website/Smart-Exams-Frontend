@@ -346,6 +346,11 @@ const Questions = () => {
         </div>
     )
 
+    const allSelectedQuestionIds = location.state?.allSelectedQuestionIds
+    const isAlreadySelected = (id) => {
+        return allSelectedQuestionIds?.includes(id)
+    }
+    const alreadySelectedStyle = { backgroundColor: '#eee' }
     return (
         <div className='container'>
             <div className='d-flex mt-4 justify-content-end'>
@@ -369,11 +374,11 @@ const Questions = () => {
                                 <TableRow>
                                     {isSelectionMode &&
                                         <StyledTableCell>
-                                            <Checkbox
+                                            {/* <Checkbox
                                                 style={{ backgroundColor: '#fff' }}
                                                 checked={isAllSelected}
                                                 onChange={isAllSelected ? deselectAllQuestions : selectAllQuestions}
-                                            />
+                                            /> */}
                                         </StyledTableCell>
                                     }
                                     <StyledTableCell>Question Header</StyledTableCell>
@@ -387,10 +392,11 @@ const Questions = () => {
                             </TableHead>
                             <TableBody>
                                 {questions?.map((row, index) => (
-                                    <StyledTableRow onClick={() => GoToQuestionDetailsHandler(row.id)} key={row.id}>
+                                    <StyledTableRow style={isAlreadySelected(row.id) ? alreadySelectedStyle : null} onClick={() => GoToQuestionDetailsHandler(row.id)} key={row.id}>
                                         {isSelectionMode &&
                                             <StyledTableCell onClick={(e) => e.stopPropagation()} component="th" scope="row">
                                                 <Checkbox
+                                                    disabled={isAlreadySelected(row.id)}
                                                     color="primary"
                                                     checked={Boolean(row.isSelected)}
                                                     onChange={(e) => onCheckHandler(index, e.target.checked)}
