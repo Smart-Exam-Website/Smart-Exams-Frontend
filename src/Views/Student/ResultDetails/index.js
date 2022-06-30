@@ -14,7 +14,6 @@ const ResultDetails = () => {
     useEffect(() => {
         StudentServices.getSpecificExamResults(examId)
             .then(res => {
-                console.log(res)
                 setStudentExamResult(res.solution)
             })
             .catch(err => HandleErrors(err))

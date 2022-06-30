@@ -47,12 +47,7 @@ const TakeExam = (props) => {
 
     const [examInfo, setExamInfo] = useState(null)
     const [examOptions, setExamOptions] = useState(null)
-
     const [endExamTime, setEndExamTime] = useState(null)
-    useEffect(() => {
-        console.log(questions?.[currentQuestionNumber])
-    }, [currentQuestionNumber])
-
 
     /** getting exam config */
     useEffect(() => {
@@ -115,7 +110,6 @@ const TakeExam = (props) => {
                     let formatedQuestion = { ...question, studentAnswer: thisQuestionAnswer }
                     return formatedQuestion
                 })
-                console.log(formatedQuestions)
                 /** Randomize choices */
                 formatedQuestions = formatedQuestions?.map(item => {
                     if (item?.type === QuestionTypes.MCQ)

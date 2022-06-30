@@ -15,7 +15,6 @@ const MyResults = () => {
     useEffect(() => {
         ExamServices.getAllPublishedExams({ isMarked: true })
             .then(res => {
-                console.log(res)
                 setExams(res)
             })
             .catch(err => HandleErrors(err))

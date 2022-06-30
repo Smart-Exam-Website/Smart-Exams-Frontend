@@ -46,7 +46,6 @@ const ExamView = () => {
     const getStudentExams = () => {
         MarkExamServices.getAllStudentsAnswers(params.examId)
             .then(res => {
-                console.log(res.solvedExams)
                 setStudentAnswers(res.solvedExams)
             })
             .catch(err => HandleErrors(err))
@@ -60,7 +59,6 @@ const ExamView = () => {
     useEffect(() => {
         ExamServices.getExamConfig(examId)
             .then(res => {
-                console.log(res.configuration)
                 setExamConfigs(res.configuration)
             })
             .catch(err => HandleErrors(err))

@@ -10,7 +10,6 @@ const useSwitchBrowserDetector = () => {
             setIsBrowserHidden(false)
         })
         return () => {
-            console.log("hiiiiiiiiiiiiiiii")
             window.removeEventListener('blur', () => { })
             window.removeEventListener('focus', () => { })
         }

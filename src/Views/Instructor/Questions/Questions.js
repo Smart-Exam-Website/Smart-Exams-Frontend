@@ -74,7 +74,6 @@ const Questions = () => {
     const getAllQuestions = () => {
         QuestionServices.getMyQuestions()
             .then(res => {
-                console.log("Questions =>", res)
                 setQuestions(res)
             })
             .catch(err => HandleErrors(err))
@@ -102,7 +101,6 @@ const Questions = () => {
     };
 
     const editQuestionHandler = () => {
-        console.log(selectedQuestion)
         let question = questions.find(item => item.id === selectedQuestion)
         history.push('/questions/edit', { question })
         handleClose()
@@ -159,20 +157,17 @@ const Questions = () => {
     }
     const selectedGroupQuestionId = location.state?.groupId
     const sentSelectedQuestionHandler = () => {
-        console.log("testttt", selectedGroupQuestionId)
         if (selectedGroupQuestionId) {
             QuestionServices.getQuestionDetails(selectedGroupQuestionId)
                 .then(res => {
                     let returnedQuestion = res?.question
                     let groupReturnedQuestions = res?.question?.questions
-                    console.log(returnedQuestion)
                     return QuestionServices.editGroupQuestion(selectedGroupQuestionId, {
                         questionText: returnedQuestion?.questionText,
                         questions: [...groupReturnedQuestions?.map(item => item.id), ...selectedQuestions?.map(item => item.id)]
                     })
                 })
                 .then(res => {
-                    console.log("Edites Question:::=>>", res)
                     dispatch(saveAQuestion(selectedQuestions, selectedGroupQuestionId))
                     history.goBack()
                 })

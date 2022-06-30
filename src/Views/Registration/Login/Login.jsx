@@ -36,7 +36,6 @@ const Login = (props) => {
 
         AuthServices.login({ email, password })
             .then(res => {
-                console.log("result =>", res)
                 localStorage.setItem('token', res?.token)
                 localStorage.setItem('userType', res?.user?.type)
                 dispatch(signin(res?.token))

@@ -9,7 +9,6 @@ const initStates = {
 const AppReducer = (state = initStates, action) => {
     switch (action.type) {
         case actionTypes.SHOW_ERROR:
-            console.log(action.payload)
             return {
                 ...state,
                 errorMsg: action.payload,

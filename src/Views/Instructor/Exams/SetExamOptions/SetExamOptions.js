@@ -25,7 +25,6 @@ const SetExamOptions = () => {
         const match = matchPath(history.location.pathname, {
             path: '/exams/:examId/set-options'
         })
-        console.log(match.params.examId)
         setExamId(match.params.examId)
     }, [history.location.pathname])
 

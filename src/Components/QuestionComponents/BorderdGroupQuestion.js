@@ -43,7 +43,6 @@ const BorderdGroupQuestion = ({ isCreationMode, getCreationData, cancelCreationF
 
 
     const submitGroupQuesion = (values) => {
-        console.log(values)
         getCreationData(values)
     }
 

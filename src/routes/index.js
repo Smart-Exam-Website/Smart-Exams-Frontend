@@ -10,7 +10,6 @@ import UserRoutes from './UserRoutes'
 
 const Routes = () => {
     const userType = useSelector(state=>state.auth.userType) || localStorage.getItem('userType')
-    console.log(userType)
     return (
         <Switch>
             {MainRoutes.map((props, index) => <Route key={index} {...props} />)}

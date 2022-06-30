@@ -24,25 +24,11 @@ const Essay = ({ initValues, getQuestionCreationRequest = () => { } }) => {
         correctAnswer: yup.string().required('This is a required field'),
     });
     const submitQuestionHandler = (values) => {
-        // console.log(values)
         if (!initValues) {
             let creationRequest = QuestionServices.createEssayQuestion({
                 questionText: values?.questionText,
-                // correctAnswer: values?.correctAnswer,
                 answers: [values?.correctAnswer]
             })
-            // .then((response) => {
-            //     console.log("Success Response")
-            //     console.log(response)
-
-            // }).catch((error) => {
-            //     console.log("error")
-            //     console.log(error)
-
-
-            // })
-            // pass the request outside the component
-
             getQuestionCreationRequest(creationRequest)
         }
         //EDIT MODE
@@ -51,14 +37,11 @@ const Essay = ({ initValues, getQuestionCreationRequest = () => { } }) => {
                 questionText: values.questionText,
                 answers: [values.correctAnswer],
             })
-
             // pass the request outside the component
             getQuestionCreationRequest(editRequest)
         }
-
     }
 
-    console.log(initValues)
     return <Formik
         initialValues={{
             questionText: initValues?.questionText || '',

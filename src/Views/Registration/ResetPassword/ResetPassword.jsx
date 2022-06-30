@@ -25,15 +25,10 @@ const Resetpassword = (props) => {
 
         }
         _axios.put("/auth/forgotPassword", data).then((response) => {
-            console.log(response)
             localStorage.removeItem("email")
             showSuccessMsg("Password Reset Successfully")
             props.history.push('/login')
-        }).catch((error) => {
-            console.log(error)
-
-        })
-
+        }).catch(err => HandleErrors(err))
 
     }
     return (

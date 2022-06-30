@@ -8,8 +8,6 @@ const ResetReducer = (state = initialState, action) => {
     switch (action.type) {
 
         case actionTypes.ADD_EMAIL:
-            // console.log("this from reducer")
-            // console.log(action.email)
             return {
                 ...state,
                 email: action.email

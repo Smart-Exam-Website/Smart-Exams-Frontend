@@ -16,8 +16,6 @@ const QuestionViewScreen = () => {
     useEffect(() => {
         QuestionServices.getQuestionDetails(questionId)
             .then(res => {
-                console.log(res?.question)
-                // console.log(res?.question)
                 setQuestion(res?.question)
             })
             .catch(err => HandleErrors(err))

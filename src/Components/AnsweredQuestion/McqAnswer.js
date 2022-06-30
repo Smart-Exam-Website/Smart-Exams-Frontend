@@ -15,9 +15,6 @@ const McqAnswer = ({
     questionMark,
     studentMark
 }) => {
-    const submitHandler = (values) => {
-        console.log(values)
-    }
     const correctAnswer = choices?.find(item => item.isCorrect)
     const formatedAnswer = (answer) => {
         return {
@@ -68,8 +65,8 @@ const McqAnswer = ({
                 </CardContent>
 
                 {/* MCQ Content */}
-                <CardContent className=''>
-                    <form onSubmit={submitHandler}>
+                <CardContent>
+                    <form >
                         <FormControl>
                             <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"

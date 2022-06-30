@@ -38,8 +38,6 @@ const ShowExams = (props) => {
     useEffect(() => {
         ExamServices.getAllPublishedExams()
             .then(res => {
-                console.log("Published Exams")
-                console.log(res)
                 setExams(res)
             })
             .catch(err => HandleErrors(err))

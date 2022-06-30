@@ -97,7 +97,6 @@ const StudentSolvedExam = () => {
         MarkExamServices.getSpecificStudentAnswers(params?.examId, params?.studentId)
             .then(res => {
                 setStudentExamResult(res)
-                console.log(res)
             })
             .catch(err => HandleErrors(err))
     }

@@ -18,14 +18,9 @@ const ExamReport = () => {
     const [decrementDegree, setDecrementDegree] = useState(0);
     const params = useParams()
 
-
-
     useEffect(() => {
-
         CheatServices.getCheaters(params?.examId)
             .then((response) => {
-                console.log("response")
-                console.log(response)
                 setCheaters(response?.details)
 
             }).catch((error) => {
@@ -36,18 +31,7 @@ const ExamReport = () => {
 
     }, []);
 
-
-
     const actionHandler = (cheaterDetails, action) => {
-
-        // {
-        //     "cheatingDetailId": 1,
-        //     "action": "string",
-        //     "minusMarks": 3.5,
-        //     "type": "string"
-        // }
-
-        // Real TODO DATA
 
         if (action === CheatActions.DISMISS || action === CheatActions.ZERO) {
             setDecrementDegree(0);
@@ -62,14 +46,6 @@ const ExamReport = () => {
 
         }
 
-        // const ActionData = {
-
-        //     "cheatingDetailId": 85,
-        //     "action": action,
-        //     "minusMarks": decrementDegree,
-        //     "type": "SWITCH_BROWSER"
-
-        // }
         CheatServices.performStudentDecrement(ActionData)
             .then((response) => {
                 showSuccessMsg("ِAction Performed Successfully")
@@ -85,14 +61,7 @@ const ExamReport = () => {
 
     let imageResolver = useImageResolver()
 
-
-
-    // let Cheaters = cheaters.map((cheater, index) => {
-
     let CheatersMarkup = () => {
-
-
-
         const uniqueCheaters = [...new Map(cheaters.map(item => [item['student_id'], item])).values()];
 
         uniqueCheaters.forEach(unique_cheater => {
@@ -111,22 +80,17 @@ const ExamReport = () => {
             uniqueCheaters?.map((cheater_details) => {
                 return (
                     <Card className='shadow p-3 mb-5 bg-white rounded position-relative' sx={{ minWidth: 275 }}>
-
                         {/* <Stack spacing={2}/> */}
                         <div className="d-flex col-8 justify-content-start">
                             <div>
                                 <img
                                     style={{ width: 200 }}
-                                    // src={`${Mofty_Image}`}
                                     src={`${imageResolver(cheater_details?.profileImage)}`}
-                                    // src={`${cheaters[0]?.image}`}
                                     alt={'User'}
                                     loading="lazy"
                                 />
-
                             </div>
                             <div>
-
                                 <Typography className='m-3 font-weight-bold' variant='h5' sx={{ fontWeight: 'bold' }}>
                                     Name: {cheater_details?.studentName}
                                 </Typography>
@@ -136,10 +100,7 @@ const ExamReport = () => {
                                 <Typography className='m-3 font-weight-bold' variant='h5' sx={{ fontWeight: 'bold' }}>
                                     {cheater_details?.type !== CheatTypes.SWITCH_BROWSER ? 'Original Profile Photo ' : ''}
                                 </Typography>
-
-
                             </div>
-
                         </div>
 
                         <div className='m-4' />
@@ -149,27 +110,19 @@ const ExamReport = () => {
                                     <img
                                         style={{ width: 200 }}
                                         src={`${imageResolver(cheater_details?.image)}`}
-
-                                        // src={`${Mofty_Image_2}`}
-                                        // src={`${cheaters[0]?.image}`}
                                         alt={'no_photo'}
                                         loading="lazy"
                                     />
-
                                 </div>
                                 <div>
                                     <Typography className='m-3 font-weight-bold' variant='h5' sx={{ fontWeight: 'bold' }}>
                                         Suspect image (from his webcam)
                                     </Typography>
-
-
                                 </div>
-
                             </div>}
 
                         <hr />
-                        {/* Action Line */}
-
+                        
                         <Typography className=' text-danger font-weight-bold' variant='h5' sx={{ fontWeight: 'bold' }}>
                             Perform Action To This Student (Be Careful..!)
                         </Typography>
@@ -179,7 +132,6 @@ const ExamReport = () => {
                         <div className='m-5' />
 
                         <div className="d-flex m-3 justify-content-between">
-
                             <Button variant="contained" color="success" onClick={() => { actionHandler(cheater_details, CheatActions.DISMISS) }}>
                                 Dismiss This Issue
                             </Button>
@@ -202,14 +154,11 @@ const ExamReport = () => {
                                 Revoke Exam (Put Zero)
                             </Button>
                         </div>
-
                     </Card >
-
                 );
             })
         );
     }
-
 
     return (
         <div>
@@ -217,15 +166,9 @@ const ExamReport = () => {
                 Suspicious Cheaters
             </Typography>
             <hr />
-
             {
-
                 CheatersMarkup()
             }
-
-
-
-
         </div>
     );
 }

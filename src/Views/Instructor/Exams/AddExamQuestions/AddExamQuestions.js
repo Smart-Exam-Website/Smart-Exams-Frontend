@@ -58,7 +58,6 @@ const AddExamQuestions = () => {
 
         let groupQuestionsIds = groupQuestionsIdList.flat()
         let allQuestionsIds = [...normalQuestionIds, ...groupQuestionsIds]
-        console.log("seleced ids,", allQuestionsIds)
 
         history.push('/questions', {
             canSelectQuestionsForExam: true,
@@ -106,7 +105,6 @@ const AddExamQuestions = () => {
         const match = matchPath(history.location.pathname, {
             path: '/exams/:examId/add-questions'
         })
-        console.log(match.params.examId)
         setExamId(match.params.examId)
     }, [history.location.pathname])
 
@@ -127,7 +125,6 @@ const AddExamQuestions = () => {
     const [questions, setQuestions] = useState(null);
     const savedQuestions = useSelector(state => state?.exam?.examQuestions)
     const getQuestions = () => {
-        console.log(examOldQuestions)
         let oldQuestionsOtherThanGroupQuestions = examOldQuestions?.filter(item => (item.type !== QuestionTypes.GROUP))
         setQuestions([...oldQuestionsOtherThanGroupQuestions, ...savedQuestions])
     }
@@ -180,7 +177,6 @@ const AddExamQuestions = () => {
     const createGroupQuestion = (values) => {
         QuestionServices.createGroupQuestion({ questionText: values?.groupName })
             .then(res => {
-                console.log("QUESTION RES", res)
                 let group = {
                     id: res.id,
                     questionText: values?.groupName,

@@ -7,7 +7,6 @@ import AddQuestionScreen from '../Views/Instructor/Questions/AddQuestionScreen'
 import QuestionViewScreen from '../Views/Instructor/Questions/QuestionViewScreen'
 import ExamView from '../Views/Instructor/Exams/ExamView'
 import StudentSolvedExam from '../Views/Instructor/Exams/ExamView/StudentSolvedExam'
-import AddQuestionGroup from '../Views/Instructor/Exams/AddQuestionGroup/AddQuestionGroup'
 
 const InstructorRoutes =
     [
@@ -20,7 +19,6 @@ const InstructorRoutes =
         
         { path: '/questions', component: Questions, exact: true },
         { path: '/questions/add', component: AddQuestionScreen, exact: true },
-        { path: '/questions/add-group', component: AddQuestionGroup, exact: true },
         { path: '/questions/edit', component: AddQuestionScreen, exact: true },
         { path: '/questions/:questionId', component: QuestionViewScreen, exact: true },
 

@@ -33,7 +33,6 @@ class RegisterInstructor extends Component {
         this.setState({ lastName: event.target.value })
     }
     genderHandler = (event) => {
-        console.log(event.target.value)
         this.setState({ gender: event.target.value })
     }
     emailFormHandler = (event) => {
@@ -172,7 +171,6 @@ class RegisterInstructor extends Component {
     }
 
     handleUploadClick = event => {
-        console.log("hiiiii")
         var file = event.target.files[0];
         const reader = new FileReader();
         let url = reader.readAsDataURL(file)

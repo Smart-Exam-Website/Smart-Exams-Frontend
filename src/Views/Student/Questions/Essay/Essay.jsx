@@ -22,7 +22,6 @@ const Essay = (props) => {
 
     useEffect(() => {
         setEssayAnswer(props.question?.studentAnswer?.chosenAnswer || '')
-        // console.log(props.question?.studentAnswer)
     }, []);
 
     const retrieveOldAnswer = () => {

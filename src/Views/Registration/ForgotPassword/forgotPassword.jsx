@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import _axios from '../../../apis/axios-instance';
 import { connect } from 'react-redux';
 import { actionTypes } from '../../../redux/actionTypes';
+import HandleErrors from '../../../hooks/handleErrors';
+import showSuccessMsg from '../../../hooks/showSuccessMsg';
 const Forgotpassword = (props) => {
     const [email, setEmail] = useState(null)
 
@@ -12,17 +14,10 @@ const Forgotpassword = (props) => {
         }
 
         props.saveEmail(email)
-        localStorage.setItem("email",email)
-        console.log(data)
+        localStorage.setItem("email", email)
         _axios.post("/auth/forgotPassword", data).then((response) => {
-            console.log(response)
-            
-
-
-        }).catch((error) => {
-            console.log(error)
-
-        })
+            showSuccessMsg("Sent Email Successfully!")
+        }).catch(err => HandleErrors(err))
     }
     return (
 
@@ -70,7 +65,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        saveEmail: (email) => { return dispatch({ type: actionTypes.ADD_EMAIL, email: email  }) }
+        saveEmail: (email) => { return dispatch({ type: actionTypes.ADD_EMAIL, email: email }) }
 
     }
 

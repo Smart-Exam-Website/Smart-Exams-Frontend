@@ -30,10 +30,8 @@ const Examinstructions = (props) => {
     const { examId } = useParams()
     const [examConfigs, setExamConfigs] = useState(null)
     useEffect(() => {
-        console.log(examId)
         ExamServices.getExamConfig(examId)
             .then(res => {
-                console.log(res.configuration)
                 setExamConfigs(res.configuration)
             })
             .catch(err => HandleErrors(err))
@@ -41,7 +39,6 @@ const Examinstructions = (props) => {
 
     const [startDate, setstartDate] = useState(null)
     useEffect(() => {
-        console.log(examId)
         ExamServices.getExamInfo(examId)
             .then(res => {
                 setstartDate(res.exam.startAt)
@@ -60,9 +57,6 @@ const Examinstructions = (props) => {
         }
         ExamServices.startExam(exam.id, startExamData)
             .then((response) => {
-                console.log("Starting Exam")
-                console.log(response)
-
                 props.history.push({
                     pathname: `/exams/${exam.id}/start`,
                     state: { exam: exam }
@@ -110,7 +104,6 @@ const Examinstructions = (props) => {
 
     const mustVerifyFace = (examConfigs?.faceRecognition || examConfigs?.faceDetection)
     const hasStarted = startDate && moment(startDate).isBefore(moment())
-    console.log("cons", hasStarted, moment().format('yyyy-MM-DD HH:mm'))
     return ((examConfigs && startDate) ?
         <div>
             <div className="row justify-content-center text-center my-5">

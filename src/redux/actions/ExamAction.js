@@ -6,8 +6,6 @@ import { actionTypes } from "../actionTypes"
  * @returns 
  */
 export const saveAQuestion = (questionData, groupId='') => {
-
-    console.log("Question data from Action: ", questionData)
     if (groupId) {
         // then the questtion belongs to a group
         return {

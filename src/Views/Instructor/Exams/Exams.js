@@ -57,7 +57,6 @@ const Exams = () => {
     const dispatch = useDispatch();
 
     const addNewExamHandler = (e) => {
-        console.log(e)
         history.push('/exams/add')
     }
 
@@ -92,9 +91,7 @@ const Exams = () => {
     };
 
     const editExamHandler = () => {
-        console.log(selectedExam)
         let exam = exams.find(item => item.id === selectedExam)
-        console.log(exam)
         history.push('/exams/edit', { exam })
         handleClose()
     }
