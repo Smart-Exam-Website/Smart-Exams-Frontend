@@ -9,6 +9,8 @@ import HandleErrors from '../../../../hooks/handleErrors';
 import { ExamOverview } from './ExamOverview';
 import StudentsList from './StudentsList';
 import ExamReport from './ExamReport'
+import Statistics from './Statistics';
+import PlagiarismCheck from './PlagiarismCheck';
 const ExamView = () => {
     const history = useHistory()
     const location = useLocation()
@@ -58,7 +60,6 @@ const ExamView = () => {
     useEffect(() => {
         ExamServices.getExamConfig(examId)
             .then(res => {
-                console.log(res.configuration)
                 setExamConfigs(res.configuration)
             })
             .catch(err => HandleErrors(err))
@@ -79,6 +80,8 @@ const ExamView = () => {
                             <Tab value="Overview" label="Overview" />
                             <Tab value="StudentAnswers" label="Student Answers" />
                             <Tab value="ExamReport" label="Exam Report" />
+                            <Tab value="Statistics" label="Statistics" />
+                            <Tab value="Plagiarism" label="Plagiarism Check" />
                         </Tabs>
                     </Box>
                 </div>
@@ -96,8 +99,13 @@ const ExamView = () => {
                         />
                     }
                     {selectedTab === 'ExamReport' &&
-                        
-                       <ExamReport></ExamReport>
+                        <ExamReport />
+                    }
+                    {selectedTab === 'Statistics' &&
+                        <Statistics examId={examId} />
+                    }
+                    {selectedTab === 'Plagiarism' &&
+                        <PlagiarismCheck examId={examId} />
                     }
                 </div>
             </div>
