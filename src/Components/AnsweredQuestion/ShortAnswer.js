@@ -32,10 +32,10 @@ const ShortAnswer = ({
                             :
                             <div className={`me-3 d-flex shadow-sm p-2 border ${isCorrectStudentAnswer ? 'border-success' : 'border-danger'}`}>
                                 <Typography variant='h5' color={isCorrectStudentAnswer ? 'primary' : 'error'}>
-                                    {studentMark}
+                                    {studentMark.toFixed(2)}
                                 </Typography>
                                 <Typography variant='h5'>
-                                    {`/${questionMark}`}
+                                    {`/${questionMark.toFixed(2)}`}
                                 </Typography>
                             </div>
                     }
