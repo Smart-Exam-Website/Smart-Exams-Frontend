@@ -90,7 +90,6 @@ const TakeExam = (props) => {
                 res?.answers.forEach((answer) => {
                     formatedAnswers[answer.question_id] = { chosenOptionID: answer.option_id, chosenAnswer: answer.studentAnswer }
                 })
-                console.log(formatedAnswers)
                 //formated question stage
                 let formatedQuestions = responseQuestions.map((question) => {
                     if (question?.type === QuestionTypes.GROUP) {
@@ -244,6 +243,34 @@ const TakeExam = (props) => {
         // advance to the next question
         setCurrentQuestionNumber(newQuestionNumber)
     }
+    const _saveAnswer = (chosenOptionID, chosenAnswer) => {
+        if (!chosenAnswer) return
+        console.log(chosenAnswer)
+        let newQuestions = [...questions]
+        let currentQuestion = newQuestions[currentQuestionNumber]
+        // Normal Question
+        if (!Array.isArray(chosenAnswer)) {
+            currentQuestion = { ...currentQuestion, studentAnswer: { chosenOptionID, chosenAnswer } }
+            newQuestions[currentQuestionNumber] = { ...currentQuestion }
+        }
+        // Group Question
+        else {
+            let newQuestionsForThisGroupQuestion = [];
+            currentQuestion?.questions.forEach(element => {
+                let thisQuestionAnswer = chosenAnswer.find(item => item.questionId === element.id)
+                let formatedQuestion;
+
+                if (!thisQuestionAnswer)
+                    formatedQuestion = element
+                else
+                    formatedQuestion = { ...element, studentAnswer: thisQuestionAnswer.answer }
+
+                newQuestionsForThisGroupQuestion.push(formatedQuestion)
+            });
+            newQuestions[currentQuestionNumber]['questions'] = newQuestionsForThisGroupQuestion
+        }
+        setQuestions(newQuestions)
+    }
     const clickedNextHandler = (chosenOptionID, chosenAnswer, questionType) => {
         let answerData = {}
         if (questionType === QuestionTypes.MCQ) {
@@ -284,15 +311,16 @@ const TakeExam = (props) => {
 
             Promise.all(questionPromises)
                 .then(res => {
+                    _saveAnswer(null, chosenAnswer)
                     _successSentAnswerResonse()
                 })
                 .catch(err => HandleErrors(err))
 
             return
         }
-
         ExamServices.addAnswer(answerData)
             .then(() => {
+                _saveAnswer(chosenOptionID, chosenAnswer)
                 _successSentAnswerResonse()
             }).catch((err) => HandleErrors(err))
     }

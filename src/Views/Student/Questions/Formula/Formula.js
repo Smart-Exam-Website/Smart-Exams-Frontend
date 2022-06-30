@@ -30,7 +30,7 @@ const Formula = (props) => {
         props?.sentAnswerChanges(
             { chosenOptionID: null, chosenAnswer: formulaAnswer, questionType: QuestionTypes.FORMULA },
             props?.questionIndex - 1,
-            props?.quesitonId
+            props?.questionId
         )
     }, [formulaAnswer])
 
