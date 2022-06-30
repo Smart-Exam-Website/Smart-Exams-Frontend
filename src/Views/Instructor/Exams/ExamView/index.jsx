@@ -60,6 +60,7 @@ const ExamView = () => {
     useEffect(() => {
         ExamServices.getExamConfig(examId)
             .then(res => {
+                console.log(res.configuration)
                 setExamConfigs(res.configuration)
             })
             .catch(err => HandleErrors(err))
@@ -81,7 +82,7 @@ const ExamView = () => {
                             <Tab value="StudentAnswers" label="Student Answers" />
                             <Tab value="ExamReport" label="Exam Report" />
                             <Tab value="Statistics" label="Statistics" />
-                            <Tab value="Plagiarism" label="Plagiarism Check" />
+                            {examConfigs?.plagiarismCheck && <Tab value="Plagiarism" label="Plagiarism Check" />}
                         </Tabs>
                     </Box>
                 </div>

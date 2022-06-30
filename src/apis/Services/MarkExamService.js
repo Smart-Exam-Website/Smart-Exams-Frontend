@@ -25,4 +25,7 @@ export class MarkExamServices {
         return _axios.post(`exams/mark/${examId}/${studentId}`)
     }
 
+    static getPlagiarismResults(examId) {
+        return _axios.post(`/plagiarism`, { examId })
+    }
 }
