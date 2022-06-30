@@ -68,7 +68,7 @@ const PlagiarismCheck = ({ examId }) => {
         <TableHead>
           <TableRow>
             <StyledTableCell>Student Name</StyledTableCell>
-            <StyledTableCell align="right">Most Similar Collage</StyledTableCell>
+            <StyledTableCell align="right">Most Similar Colleague</StyledTableCell>
             <StyledTableCell align="right">{'Percentage of similarity (%)'}</StyledTableCell>
           </TableRow>
         </TableHead>
