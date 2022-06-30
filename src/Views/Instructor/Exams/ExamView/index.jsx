@@ -14,15 +14,7 @@ import PlagiarismCheck from './PlagiarismCheck';
 const ExamView = () => {
     const history = useHistory()
     const location = useLocation()
-    const [selectedTab, setSelectedTab] = React.useState('Overview');
-    /**
-     * Auto Select tab based on query params
-     */
-    useEffect(() => {
-        let selectedTab = new URLSearchParams(location.search).get('selectedTab')
-        setSelectedTab(selectedTab || 'Overview')
-    }, [location.search?.selectedTab])
-
+    const [selectedTab, setSelectedTab] = React.useState('Overview')
 
     const handleChange = (event, newValue) => {
         setSelectedTab(newValue);
@@ -63,6 +55,16 @@ const ExamView = () => {
             })
             .catch(err => HandleErrors(err))
     }, [])
+
+    /**
+     * Auto Select tab based on query params
+     */
+    useEffect(() => {
+        if (!examConfigs) return
+
+        let selectedTab = new URLSearchParams(location.search).get('selectedTab')
+        setSelectedTab(selectedTab || 'Overview')
+    }, [location.search?.selectedTab, examConfigs])
 
     return (
         <div className="container">
