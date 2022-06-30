@@ -14,7 +14,7 @@ import PlagiarismCheck from './PlagiarismCheck';
 const ExamView = () => {
     const history = useHistory()
     const location = useLocation()
-    const [selectedTab, setSelectedTab] = React.useState('Overview')
+    const [selectedTab, setSelectedTab] = React.useState(null)
 
     const handleChange = (event, newValue) => {
         setSelectedTab(newValue);
@@ -66,7 +66,7 @@ const ExamView = () => {
         setSelectedTab(selectedTab || 'Overview')
     }, [location.search?.selectedTab, examConfigs])
 
-    return (
+    return (selectedTab &&
         <div className="container">
             <div className="row">
                 <div className="col-12 mt-5">

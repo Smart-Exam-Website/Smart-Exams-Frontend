@@ -76,11 +76,11 @@ const PlagiarismCheck = ({ examId }) => {
           {plagResult?.map((row) => (
             <StyledTableRow key={row.id}>
               {/* NAME */}
-              <StyledTableCell onClick={()=>goToStudentExam(row.id)} className='text-dark' component="th" scope="row">
+              <StyledTableCell onClick={()=>goToStudentExam(row.id)} className='text-dark pointer' component="th" scope="row">
                 {row.name}
               </StyledTableCell>
               {/* Collage Name */}
-              <StyledTableCell onClick={()=>goToStudentExam(row.similarStudents?.id)} className='text-dark' align="right">
+              <StyledTableCell onClick={()=>goToStudentExam(row.similarStudents?.id)} className='text-dark pointer' align="right">
                 {row.similarStudents?.name}
               </StyledTableCell>
               {/* Plgrism Percentage */}
