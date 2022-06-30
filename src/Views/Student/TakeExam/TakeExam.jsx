@@ -244,8 +244,6 @@ const TakeExam = (props) => {
         setCurrentQuestionNumber(newQuestionNumber)
     }
     const _saveAnswer = (chosenOptionID, chosenAnswer) => {
-        if (!chosenAnswer) return
-        console.log(chosenAnswer)
         let newQuestions = [...questions]
         let currentQuestion = newQuestions[currentQuestionNumber]
         // Normal Question
@@ -272,6 +270,11 @@ const TakeExam = (props) => {
         setQuestions(newQuestions)
     }
     const clickedNextHandler = (chosenOptionID, chosenAnswer, questionType) => {
+        if(!chosenAnswer) {
+            _successSentAnswerResonse()
+            return
+        } //has no answer
+        
         let answerData = {}
         if (questionType === QuestionTypes.MCQ) {
             answerData = {
@@ -298,6 +301,8 @@ const TakeExam = (props) => {
         }
         else if (questionType == QuestionTypes.GROUP) {
             let questionPromises = chosenAnswer?.map(item => {
+                if (!item?.answer?.chosenAnswer) return // has no answer
+
                 let answerData = {
                     "studentAnswer": item?.answer?.chosenAnswer,
                     "question_id": item?.questionId,
@@ -308,7 +313,8 @@ const TakeExam = (props) => {
 
                 return ExamServices.addAnswer(answerData)
             })
-
+            
+            questionPromises = questionPromises.filter(item => Boolean(item))
             Promise.all(questionPromises)
                 .then(res => {
                     _saveAnswer(null, chosenAnswer)
