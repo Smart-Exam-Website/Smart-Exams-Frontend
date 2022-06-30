@@ -11,47 +11,18 @@ const VerifyEmail = (props) => {
     const onsubmit = (e) => {
         verifyEmail(e);
     }
-    // const resend = () => {
-    //     const data = props.location.state.userInfo
-    //     const type = data['type'];
-    //     if (type === 'instructor') {
-    //         _axios.post('/instructors/register', data).then((response) => {
-    //             console.log(response)
-    //             console.log("lol")
-
-    //         }).catch((error) => {
-    //             console.log(error);
-
-    //         })
-    //     } else if (type === 'student') {
-    //         _axios.post('/students/register', data).then((response) => {
-    //             console.log(response)
-    //             console.log("lol")
-
-    //         }).catch((error) => {
-    //             console.log(error);
-
-    //         })
-
-    //     }
-    // }
 
     const verifyEmail = (codeValue) => {
         //sent to server
-        // console.log(codeValue)
-        // console.log(props.location.state.email)
         var data = {
             email: props.location.state.email,
             code: codeValue
         }
         _axios.post("/verifyEmail", data).then((response) => {
-            // console.log(response)
-            // console.log("Success ya wlaaa")
             showSuccessMsg("Verified Successfully!")
             props.history.push({
                 pathname: '/login',
             })
-
         }).catch((err) => HandleErrors(err))
 
     }
