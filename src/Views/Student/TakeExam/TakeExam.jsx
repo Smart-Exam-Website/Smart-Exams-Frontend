@@ -143,12 +143,12 @@ const TakeExam = (props) => {
         }, RandomMins * 60 * 1000);
     }
     useEffect(() => {
-        console.log("hiii",totalCountedMins,examDurationInMins)
+        console.log("hiii", totalCountedMins, examDurationInMins)
         if (!examDurationInMins) return
         if (totalCountedMins >= examDurationInMins) return
         let randomMins = _getRandomNumber(1, Math.min(MIN_INTERVAL_TIME_TO_DO_CHEAT_CHECK, (examDurationInMins - lastRandomMin + 1)))
         console.log("RANDOM MIN AFTER FACE CHECKING", randomMins)
-        
+
         activateJobWithRandomTriggerTimer(randomMins, () => {
             examOptions?.faceDetection && reportFaceDetectionCheater()
             examOptions?.faceRecognition && reportFaceRecognationCheater()
@@ -267,11 +267,11 @@ const TakeExam = (props) => {
         setQuestions(newQuestions)
     }
     const clickedNextHandler = (chosenOptionID, chosenAnswer, questionType) => {
-        if(!chosenAnswer) {
+        if (!chosenAnswer) {
             _successSentAnswerResonse()
             return
         } //has no answer
-        
+
         let answerData = {}
         if (questionType === QuestionTypes.MCQ) {
             answerData = {
@@ -310,7 +310,7 @@ const TakeExam = (props) => {
 
                 return ExamServices.addAnswer(answerData)
             })
-            
+
             questionPromises = questionPromises.filter(item => Boolean(item))
             Promise.all(questionPromises)
                 .then(res => {

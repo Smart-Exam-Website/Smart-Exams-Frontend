@@ -52,7 +52,7 @@ const Header = () => {
                             </>
                             :
                             <>
-                                <NavLink className="nav-link p-0" activeclassname={'active'} to="/classes">
+                                <NavLink className="nav-link p-0" activeclassname={'active'} to="/">
                                     <li className="nav-item px-5 mx-2">
                                         <span>Home</span>
                                     </li>
