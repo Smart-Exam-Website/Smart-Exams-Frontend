@@ -20,13 +20,13 @@ const theme = createTheme({
 })
 
 const ColorButton = styled(Button)(({ theme }) => ({
-        borderRadius: 20,
-    
+    borderRadius: 20,
+
     backgroundColor: Colors.primary,
     '&:hover': {
-      backgroundColor: Colors.primaryHover,
+        backgroundColor: Colors.primaryHover,
     },
-  }));
+}));
 
 const Home = () => {
     const isAuth = useSelector(state => state.auth.userToken)
@@ -107,10 +107,6 @@ const Home = () => {
 
             </div>
 
-            {/* <img src={studyImage}  alt="" /> */}
-            {/* <Signupinquiry></Signupinquiry> */}
-            {/* <Signup></Signup> */}
-            {/* <Login></Login> */}
         </div>
     )
 }
