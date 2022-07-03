@@ -139,20 +139,25 @@ const Formula = ({ initValues, getQuestionCreationRequest = () => { } }) => {
             return [questionTextAfterGeneration, item.finalValue]
         })
 
-        let creationRequest = QuestionServices.createFormulaQuestion({
-            questionText: questionFormValue?.questionText,
-            formula: questionFormValue?.formula,
-            variables: vars,
-            formulas: generatedFormulas
-        })
-
-        let editRequest = QuestionServices.editFormulaQuestion(initValues?.id, {
-            questionText: questionFormValue?.questionText,
-            formula: questionFormValue?.formula,
-            variables: vars,
-            formulas: generatedFormulas
-        })
-        getQuestionCreationRequest(isEditMode ? editRequest : creationRequest)
+        if (!isEditMode) {
+            let creationRequest = QuestionServices.createFormulaQuestion({
+                questionText: questionFormValue?.questionText,
+                formula: questionFormValue?.formula,
+                variables: vars,
+                formulas: generatedFormulas
+            })
+            getQuestionCreationRequest(creationRequest)
+        }
+        //EDIT MODE
+        else {
+            let editRequest = QuestionServices.editFormulaQuestion(initValues?.id, {
+                questionText: questionFormValue?.questionText,
+                formula: questionFormValue?.formula,
+                variables: vars,
+                formulas: generatedFormulas
+            })
+            getQuestionCreationRequest(editRequest)
+        }
     }
 
     return (
