@@ -52,7 +52,7 @@ const Formula = ({ initValues, getQuestionCreationRequest = () => { } }) => {
             let formula = values.formula + ''
             let vars = item.variables
             vars.forEach(element => {
-                formula = formula.replace(element.var, element.value)
+                formula = formula.replaceAll(element.var, element.value)
             })
             return { ...item, finalValue: mexp.eval(formula) }
         })
