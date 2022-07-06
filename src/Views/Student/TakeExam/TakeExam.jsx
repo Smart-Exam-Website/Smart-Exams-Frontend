@@ -146,7 +146,7 @@ const TakeExam = (props) => {
         console.log("hiii", totalCountedMins, examDurationInMins)
         if (!examDurationInMins) return
         if (totalCountedMins >= examDurationInMins) return
-        let randomMins = _getRandomNumber(1, Math.min(MIN_INTERVAL_TIME_TO_DO_CHEAT_CHECK, (examDurationInMins - lastRandomMin + 1)))
+        let randomMins = 1 /*_getRandomNumber(1, Math.min(MIN_INTERVAL_TIME_TO_DO_CHEAT_CHECK, (examDurationInMins - lastRandomMin + 1)))*/
         console.log("RANDOM MIN AFTER FACE CHECKING", randomMins)
 
         activateJobWithRandomTriggerTimer(randomMins, () => {
