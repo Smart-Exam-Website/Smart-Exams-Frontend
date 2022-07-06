@@ -189,10 +189,10 @@ const TakeExam = (props) => {
         try {
             let response = await ExamServices.applyFaceDetection(faceDetectionData)
             if (Number(response.numberOfFaces) === 1) return
-            await CheatServices.sentFaceDetectionCheatAttempt(exam.id, response?.image)
+            let faceDetectionResult = await CheatServices.sentFaceDetectionCheatAttempt(exam.id, response?.image)
             setCheaterImage(capturePhotoFromWebcam)
             setIsCheaterPopVisible(true)
-            setCheatReasons(prevState => Array.from(new Set([...prevState, 'Multi face detection'])))
+            setCheatReasons(prevState => Array.from(new Set([...prevState, faceDetectionResult?.numberOfFaces? 'Multi face detection':'Cannot detect any face'])))
 
         } catch (error) {
             console.log(error)
