@@ -23,7 +23,7 @@ const McqAnswer = ({
         }
     }
 
-    const isCorrectStudentAnswer = questionMark === studentMark
+    const isCorrectStudentAnswer = !((questionMark / 2) > studentMark)
     return (
         <BorderdQuestionController
             hasNoDelete
