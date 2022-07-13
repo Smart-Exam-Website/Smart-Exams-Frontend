@@ -16,8 +16,10 @@ import { MarkExamServices } from '../../../../apis/Services/MarkExamService';
 import { useParams } from 'react-router-dom';
 import showSuccessMsg from '../../../../hooks/showSuccessMsg';
 import HandleErrors from '../../../../hooks/handleErrors';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
-const StudentsList = ({ students, getStudentExams = () => { }, examConfigs }) => {
+const StudentsList = ({ examConfigs, examId }) => {
     const imageResolver = useImageResolver()
 
     const history = useHistory()
@@ -27,6 +29,18 @@ const StudentsList = ({ students, getStudentExams = () => { }, examConfigs }) =>
         history.push(`${location.pathname}/${id}`, { examConfigs })
     }
 
+    const [studentsAnswers, setStudentAnswers] = useState(null)
+    const getStudentExams = () => {
+        MarkExamServices.getAllStudentsAnswers(params.examId)
+        .then(res => {
+                setStudentAnswers(res.solvedExams)
+            })
+            .catch(err => HandleErrors(err))
+        }
+    useEffect(() => {
+        getStudentExams()
+    }, [])
+    
     const markAllHandler = () => {
         MarkExamServices.markAllAutomatic(params?.examId)
             .then(res => {
@@ -43,7 +57,7 @@ const StudentsList = ({ students, getStudentExams = () => { }, examConfigs }) =>
             </div>
             <Paper className='mt-3' elevation={3}>
                 <List>
-                    {students?.map(item => (
+                    {studentsAnswers?.map(item => (
                         <ListItem key={`${item.student_id}_${item.attempt}`} onClick={() => goToThisStudent(item.student_id)}>
                             <ListItemButton>
                                 <ListItemAvatar>
@@ -58,7 +72,7 @@ const StudentsList = ({ students, getStudentExams = () => { }, examConfigs }) =>
                         </ListItem>
                     ))
                     }
-                    {!students?.length ?
+                    {!studentsAnswers?.length ?
                         <NoContentComponent text={"No submittion yet"} />
                         :
                         null

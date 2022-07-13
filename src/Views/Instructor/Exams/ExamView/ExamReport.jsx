@@ -18,43 +18,62 @@ const ExamReport = () => {
     const [decrementDegree, setDecrementDegree] = useState(0);
     const params = useParams()
 
-    useEffect(() => {
+    const getCheaters = () => {
         CheatServices.getCheaters(params?.examId)
             .then((response) => {
-                setCheaters(response?.details)
+                let cheatersResults = response?.details
+                if(!cheatersResults?.length) return []
 
-            }).catch((error) => {
-                HandleErrors(error)
+                let cheatersObjects = {}
+                cheatersResults.forEach(item => {
+                    if (cheatersObjects[item.student_id]?.length) {
+                        cheatersObjects[item.student_id].push(item)
+                    }
+                    else {
+                        cheatersObjects[item.student_id] = [item]
+                    }
+                })
+                let editedCheaterList = []
+                for (const property in cheatersObjects) {
+                    editedCheaterList.push(cheatersObjects[property])
+                }
 
-            })
+                editedCheaterList = editedCheaterList.map(item=>{
+                    let specificStudentCheatMethods = item.filter(el=>el.type!==CheatTypes.SWITCH_BROWSER)
+                    let numberOfSwitchBrowserMethods = item.length - specificStudentCheatMethods.length
+                    if(numberOfSwitchBrowserMethods===0) return item
 
+                    let oneOfSwitchBrowserCases = item.find(el=>el.type===CheatTypes.SWITCH_BROWSER)
+                    return [...specificStudentCheatMethods, {...oneOfSwitchBrowserCases, typeCounter: numberOfSwitchBrowserMethods}]
+                })
 
+                let finalCheaterList = editedCheaterList.flat()
+
+                setCheaters(finalCheaterList)
+                
+            }).catch((error) => HandleErrors(error))
+    }
+    useEffect(() => {
+        getCheaters()
     }, []);
 
     const actionHandler = (cheaterDetails, action) => {
 
         if (action === CheatActions.DISMISS || action === CheatActions.ZERO) {
             setDecrementDegree(0);
-
         }
         const ActionData = {
-
             "cheatingDetailId": cheaterDetails?.id,
             "action": action,
             "minusMarks": decrementDegree,
             "type": cheaterDetails?.type
-
         }
 
         CheatServices.performStudentDecrement(ActionData)
             .then((response) => {
-                showSuccessMsg("ِAction Performed Successfully")
-
-            }).catch((error) => {
-                HandleErrors(error)
-
-
-            })
+                showSuccessMsg("Action Performed Successfully")
+                getCheaters()
+            }).catch((error) => HandleErrors(error))
 
         return
     }
@@ -62,24 +81,11 @@ const ExamReport = () => {
     let imageResolver = useImageResolver()
 
     let CheatersMarkup = () => {
-        const uniqueCheaters = [...new Map(cheaters.map(item => [item['student_id'], item])).values()];
-
-        uniqueCheaters.forEach(unique_cheater => {
-            let typeCounter = 0;
-            cheaters.forEach(c => {
-                if (c?.type === unique_cheater?.type) {
-                    typeCounter++;
-                }
-
-            });
-            unique_cheater['typeCounter'] = typeCounter;
-        });
-
 
         return (
-            uniqueCheaters?.map((cheater_details) => {
+            cheaters?.map((cheater_details) => {
                 return (
-                    <Card className='shadow p-3 mb-5 bg-white rounded position-relative' sx={{ minWidth: 275 }}>
+                    <Card key={cheater_details?.id} className='shadow p-3 mb-5 bg-white rounded position-relative' sx={{ minWidth: 275 }}>
                         {/* <Stack spacing={2}/> */}
                         <div className="d-flex col-8 justify-content-start">
                             <div>
@@ -122,7 +128,7 @@ const ExamReport = () => {
                             </div>}
 
                         <hr />
-                        
+
                         <Typography className=' text-danger font-weight-bold' variant='h5' sx={{ fontWeight: 'bold' }}>
                             Perform Action To This Student (Be Careful..!)
                         </Typography>

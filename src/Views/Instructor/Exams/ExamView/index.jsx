@@ -34,18 +34,6 @@ const ExamView = () => {
             .catch(err => HandleErrors(err))
     }, [])
 
-    const [studentAnswers, setStudentAnswers] = useState(null)
-    const getStudentExams = () => {
-        MarkExamServices.getAllStudentsAnswers(params.examId)
-            .then(res => {
-                setStudentAnswers(res.solvedExams)
-            })
-            .catch(err => HandleErrors(err))
-    }
-    useEffect(() => {
-        getStudentExams()
-    }, [])
-
     const { examId } = useParams()
     const [examConfigs, setExamConfigs] = useState(null)
     useEffect(() => {
@@ -94,8 +82,7 @@ const ExamView = () => {
                     }
                     {selectedTab === 'StudentAnswers' &&
                         <StudentsList
-                            students={studentAnswers}
-                            getStudentExams={getStudentExams}
+                            examId={examId}
                             examConfigs={examConfigs}
                         />
                     }
