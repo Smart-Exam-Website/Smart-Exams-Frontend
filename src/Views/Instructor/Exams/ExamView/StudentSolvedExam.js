@@ -12,20 +12,28 @@ import { QuestionTypes } from '../../../../constants/QuestionTypes'
 import EssayAnswer from '../../../../Components/AnsweredQuestion/EssayAnswer'
 import FormulaAnswer from '../../../../Components/AnsweredQuestion/FormulaAnswer'
 import GroupAnswer from '../../../../Components/AnsweredQuestion/GroupAnswer'
+import styles from './ExamView.module.css';
 
-const StudentCard = ({ name, isVerified, numberOfFaces, image, markAutoFun, examConfigs }) => {
+const StudentCard = ({ name, isVerified, numberOfFaces, image, markAutoFun, examConfigs, isCheater }) => {
     const imageResolver = useImageResolver()
 
     return (
         <div className="row mt-5">
             <div className="col-md-6 col-12">
                 <div className="d-flex">
-                    <img
-                        className='shadow-sm'
-                        src={imageResolver(image)}
-                        style={{ height: 200, width: 200, objectFit: 'cover', borderRadius: 15 }}
-                        alt="student Photo"
-                    />
+                    <div className='position-relative'>
+                        <img
+                            className='shadow-sm'
+                            src={imageResolver(image)}
+                            style={{ height: 200, width: 200, objectFit: 'cover', borderRadius: 15 }}
+                            alt="student Photo"
+                        />
+                        {isCheater ?
+                            <div className={styles.cheaterOverlay}><span>CHEATER!</span></div>
+                            :
+                            null
+                        }
+                    </div>
                     <div className='ms-3'>
                         <Typography variant="h4" fontWeight={'bold'} color={'primary'}>{name}</Typography>
                         {examConfigs?.faceDetection ?
@@ -113,6 +121,7 @@ const StudentSolvedExam = () => {
                 image={studentExamResult?.image}
                 markAutoFun={autoMarkThisStudentHandler}
                 examConfigs={examConfigs}
+                isCheater={studentExamResult?.isCheater}
             />
             <hr />
             <div className="row mt-5 justify-content-center">
