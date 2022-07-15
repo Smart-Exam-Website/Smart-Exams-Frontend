@@ -5,6 +5,8 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { MarkExamServices } from '../../../../apis/Services/MarkExamService'
 import { Colors } from '../../../../constants/Colors';
 import HandleErrors from '../../../../hooks/handleErrors'
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import styles from './ExamView.module.css'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -18,12 +20,12 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}:first-of-type`]: {
     fontWeight: 700
   },
+  '&:hover': {
+    textDecoration: 'underline'
+  },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:hover': {
-    backgroundColor: theme.palette.action.hover
-  },
   // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,
@@ -58,8 +60,17 @@ const PlagiarismCheck = ({ examId }) => {
 
   const history = useHistory()
   const location = useLocation()
-  const goToStudentExam = (studentId) => {
-    history.push(`${location.pathname}/${studentId}`)
+  const goToStudentExam = (studentId, cheatedQuestionId, newTapName) => {
+    if(newTapName){
+      window.open(`${location.pathname}/${studentId}?questionId=${cheatedQuestionId}`, newTapName);
+      return
+    }
+    history.push(`${location.pathname}/${studentId}?questionId=${cheatedQuestionId}`)
+  }
+
+  const openTaps = (firstStudentId, secondStuentId, questionId) => {
+    goToStudentExam(firstStudentId, questionId, 'tap1')
+    goToStudentExam(secondStuentId, questionId, 'tap2')
   }
 
   return (
@@ -70,22 +81,27 @@ const PlagiarismCheck = ({ examId }) => {
             <StyledTableCell>Student Name</StyledTableCell>
             <StyledTableCell align="right">Most Similar Colleague</StyledTableCell>
             <StyledTableCell align="right">{'Percentage of similarity (%)'}</StyledTableCell>
+            <StyledTableCell align="right"></StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {plagResult?.map((row) => (
             <StyledTableRow key={row.id}>
               {/* NAME */}
-              <StyledTableCell onClick={()=>goToStudentExam(row.id)} className='text-dark pointer' component="th" scope="row">
+              <StyledTableCell onClick={() => goToStudentExam(row.id, row.similarStudents?.questionId)} className='text-dark pointer' component="th" scope="row">
                 {row.name}
               </StyledTableCell>
               {/* Collage Name */}
-              <StyledTableCell onClick={()=>goToStudentExam(row.similarStudents?.id)} className='text-dark pointer' align="right">
+              <StyledTableCell onClick={() => goToStudentExam(row.similarStudents?.id, row.similarStudents?.questionId)} className='text-dark pointer' align="right">
                 {row.similarStudents?.name}
               </StyledTableCell>
               {/* Plgrism Percentage */}
-              <StyledTableCell className='text-danger' align="right">
+              <StyledTableCell className={`text-danger ${styles.preventHoverEffect}`} align="right">
                 {(row.similarStudents?.similarity * 100).toFixed(2)} %
+              </StyledTableCell>
+              {/* ViewQuestion */}
+              <StyledTableCell onClick={() => openTaps(row.id, row.similarStudents?.id, row.similarStudents?.questionId)} className='pointer' align="right">
+                <RemoveRedEyeOutlinedIcon color='primary' />
               </StyledTableCell>
             </StyledTableRow>
           ))}

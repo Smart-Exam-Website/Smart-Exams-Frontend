@@ -66,6 +66,15 @@ const StudentSolvedExam = () => {
 
     const [studentExamResult, setStudentExamResult] = useState(null)
 
+    const mostSimilarQuestionIdFromPlagarism = new URLSearchParams(location.search).get("questionId")
+    useEffect(() => {
+        if(!studentExamResult) return
+        const questionCheatedRef = document.getElementById(mostSimilarQuestionIdFromPlagarism)
+        setTimeout(() => {
+            questionCheatedRef?.scrollIntoView({behavior:'smooth', block:'center'})
+        }, 200);
+    }, [studentExamResult])
+
     const autoMarkThisStudentHandler = () => {
         MarkExamServices.markSpecificStudentAutomatic(params?.examId, params?.studentId)
             .then(res => {
@@ -128,7 +137,7 @@ const StudentSolvedExam = () => {
                 <div className="col-12">
                     <>
                         {studentExamResult?.solution?.map(item =>
-                            <div key={item.id} className='my-5'>
+                            <div id={item.id} key={item.id} className={`my-5 rounded ${(item.id==mostSimilarQuestionIdFromPlagarism)? 'bg-danger':''}`}>
                                 {(item?.type === QuestionTypes.MCQ) ?
                                     <McqAnswer
                                         markAsRight={() => markAsRightHandler(item?.id, item?.pivot?.mark)}
