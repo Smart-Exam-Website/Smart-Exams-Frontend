@@ -78,10 +78,10 @@ const PlagiarismCheck = ({ examId }) => {
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Student Name</StyledTableCell>
-            <StyledTableCell align="right">Most Similar Colleague</StyledTableCell>
-            <StyledTableCell align="right">{'Percentage of similarity (%)'}</StyledTableCell>
-            <StyledTableCell align="right"></StyledTableCell>
+            <StyledTableCell className={styles.preventHoverEffect}>Student Name</StyledTableCell>
+            <StyledTableCell className={styles.preventHoverEffect} align="right">Most Similar Colleague</StyledTableCell>
+            <StyledTableCell className={styles.preventHoverEffect} align="right">{'Percentage of similarity (%)'}</StyledTableCell>
+            <StyledTableCell className={styles.preventHoverEffect} align="right"></StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
